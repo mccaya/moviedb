@@ -91,6 +91,10 @@ export function MovieCard({
     setShowMovieModal(true)
   }
 
+  const handleCloseModal = () => {
+    setShowMovieModal(false)
+  }
+
   const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : 'TBA'
 
   if (viewMode === 'list') {
