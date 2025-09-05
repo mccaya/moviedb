@@ -71,6 +71,17 @@ export function MovieResult({
     setShowMovieModal(false)
   }
 
+  const handleAddFromModal = async (movieToAdd: TMDBMovie) => {
+    try {
+      await onAdd(movieToAdd)
+      // Close modal after successful add
+      setShowMovieModal(false)
+    } catch (error) {
+      console.error('Failed to add movie from modal:', error)
+      // Keep modal open on error so user can try again
+    }
+  }
+
   const genres = tmdbAPI.getGenreNames(movie.genre_ids || [])
   const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : 'TBA'
 
@@ -164,7 +175,7 @@ export function MovieResult({
         onClose={handleCloseModal}
         movie={movie}
         isInWatchlist={isAdded}
-        onAddToWatchlist={onAdd}
+        onAddToWatchlist={handleAddFromModal}
         onRemoveFromWatchlist={onRemoveMovie}
       />
     </>
