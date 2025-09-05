@@ -22,9 +22,14 @@ const COMPREHENSIVE_STREAMING_SERVICES: StreamingService[] = [
   { id: 384, name: 'HBO Max', logo: 'HBO', category: 'premium', color: 'bg-purple-600' },
   { id: 531, name: 'Paramount Plus', logo: 'P+', category: 'premium', color: 'bg-blue-700' },
   { id: 386, name: 'Peacock Premium', logo: 'PC', category: 'premium', color: 'bg-purple-500' },
+  { id: 34, name: 'MGM+', logo: 'MGM', category: 'premium', color: 'bg-yellow-600' },
   { id: 387, name: 'Starz', logo: 'ST', category: 'premium', color: 'bg-black' },
   { id: 43, name: 'Showtime', logo: 'SH', category: 'premium', color: 'bg-red-700' },
   { id: 1899, name: 'Max', logo: 'MAX', category: 'premium', color: 'bg-purple-700' },
+  { id: 257, name: 'fuboTV', logo: 'fubo', category: 'premium', color: 'bg-green-600' },
+  { id: 1773, name: 'AMC+', logo: 'AMC', category: 'premium', color: 'bg-red-600' },
+  { id: 1774, name: 'Discovery+', logo: 'D+', category: 'premium', color: 'bg-blue-500' },
+  { id: 1775, name: 'Epix', logo: 'EPX', category: 'premium', color: 'bg-gray-700' },
   
   // Free Services
   { id: 613, name: 'Tubi', logo: 'TB', category: 'free', color: 'bg-orange-500' },
@@ -34,18 +39,29 @@ const COMPREHENSIVE_STREAMING_SERVICES: StreamingService[] = [
   { id: 1796, name: 'Freevee', logo: 'FV', category: 'free', color: 'bg-gray-600' },
   { id: 1818, name: 'Crackle', logo: 'CR', category: 'free', color: 'bg-orange-600' },
   { id: 279, name: 'Plex', logo: 'PX', category: 'free', color: 'bg-yellow-600' },
+  { id: 1777, name: 'IMDb TV', logo: 'IMDb', category: 'free', color: 'bg-yellow-500' },
+  { id: 1778, name: 'Redbox', logo: 'RB', category: 'free', color: 'bg-red-500' },
+  { id: 1779, name: 'Kanopy', logo: 'KN', category: 'free', color: 'bg-blue-400' },
+  { id: 1780, name: 'Hoopla', logo: 'HL', category: 'free', color: 'bg-green-500' },
   
   // Sports
   { id: 1759, name: 'ESPN Plus', logo: 'E+', category: 'sports', color: 'bg-red-500' },
   { id: 1770, name: 'NFL Plus', logo: 'NFL', category: 'sports', color: 'bg-blue-800' },
   { id: 1767, name: 'MLB.TV', logo: 'MLB', category: 'sports', color: 'bg-blue-700' },
   { id: 1768, name: 'NBA League Pass', logo: 'NBA', category: 'sports', color: 'bg-orange-700' },
+  { id: 1781, name: 'NHL.TV', logo: 'NHL', category: 'sports', color: 'bg-blue-800' },
+  { id: 1782, name: 'MLS Season Pass', logo: 'MLS', category: 'sports', color: 'bg-green-600' },
+  { id: 1783, name: 'DAZN', logo: 'DZN', category: 'sports', color: 'bg-yellow-500' },
   
   // International
   { id: 1875, name: 'BritBox', logo: 'BB', category: 'international', color: 'bg-blue-800' },
   { id: 1853, name: 'Acorn TV', logo: 'AC', category: 'international', color: 'bg-green-700' },
   { id: 1871, name: 'MHz Choice', logo: 'MH', category: 'international', color: 'bg-red-600' },
   { id: 1852, name: 'Walter Presents', logo: 'WP', category: 'international', color: 'bg-gray-700' },
+  { id: 1784, name: 'Viki', logo: 'VK', category: 'international', color: 'bg-orange-500' },
+  { id: 1785, name: 'AsianCrush', logo: 'AC', category: 'international', color: 'bg-red-500' },
+  { id: 1786, name: 'Kocowa', logo: 'KW', category: 'international', color: 'bg-blue-600' },
+  { id: 1787, name: 'Hi-YAH!', logo: 'HY', category: 'international', color: 'bg-yellow-600' },
   
   // Niche/Specialty
   { id: 283, name: 'Crunchyroll', logo: 'CR', category: 'niche', color: 'bg-orange-500' },
@@ -56,12 +72,22 @@ const COMPREHENSIVE_STREAMING_SERVICES: StreamingService[] = [
   { id: 1876, name: 'Hallmark Movies Now', logo: 'HM', category: 'niche', color: 'bg-pink-600' },
   { id: 1877, name: 'Pure Flix', logo: 'PF', category: 'niche', color: 'bg-blue-600' },
   { id: 1878, name: 'UP Faith & Family', logo: 'UP', category: 'niche', color: 'bg-green-600' },
+  { id: 1788, name: 'Gaia', logo: 'GA', category: 'niche', color: 'bg-green-500' },
+  { id: 1789, name: 'Dove Channel', logo: 'DV', category: 'niche', color: 'bg-blue-400' },
+  { id: 1790, name: 'BET+', logo: 'BET', category: 'niche', color: 'bg-purple-600' },
+  { id: 1791, name: 'Allblk', logo: 'AB', category: 'niche', color: 'bg-black' },
+  { id: 1792, name: 'Brown Sugar', logo: 'BS', category: 'niche', color: 'bg-yellow-700' },
+  { id: 1793, name: 'Screambox', logo: 'SB', category: 'niche', color: 'bg-red-700' },
+  { id: 1794, name: 'Full Moon Features', logo: 'FM', category: 'niche', color: 'bg-purple-700' },
+  { id: 1795, name: 'Midnight Pulp', logo: 'MP', category: 'niche', color: 'bg-gray-800' },
   
   // Additional Major Services
   { id: 1796, name: 'YouTube Premium', logo: 'YT', category: 'major', color: 'bg-red-600' },
   { id: 192, name: 'YouTube', logo: 'Y', category: 'free', color: 'bg-red-500' },
   { id: 3, name: 'Google Play Movies', logo: 'GP', category: 'major', color: 'bg-green-600' },
   { id: 68, name: 'Microsoft Store', logo: 'MS', category: 'major', color: 'bg-blue-600' },
+  { id: 1797, name: 'Sling TV', logo: 'SL', category: 'major', color: 'bg-orange-600' },
+  { id: 1798, name: 'Philo', logo: 'PH', category: 'major', color: 'bg-purple-500' },
 ]
 
 const CATEGORY_LABELS = {
