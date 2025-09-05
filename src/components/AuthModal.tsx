@@ -36,6 +36,10 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           setError('An account with this email already exists. Try signing in instead.')
         } else if (error.message.includes('Password should be at least')) {
           setError('Password must be at least 6 characters long.')
+        } else if (error.message.includes('Supabase URL not configured') || error.message.includes('Supabase anonymous key not configured')) {
+          setError(`Configuration Error: ${error.message}`)
+        } else if (error.message.includes('Cannot connect to Supabase')) {
+          setError(`Connection Error: ${error.message}`)
         } else {
           setError(error.message)
         }

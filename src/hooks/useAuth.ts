@@ -25,15 +25,80 @@ export function useAuth() {
   }, [])
 
   const signIn = async (email: string, password: string) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password
-    })
-    return { data, error }
+    try {
+      // Check if Supabase is properly configured before attempting signin
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+      const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+      
+      if (!supabaseUrl || supabaseUrl === 'https://your-project.supabase.co' || !supabaseUrl.includes('supabase.co')) {
+        return { 
+          data: null, 
+          error: { 
+            message: 'Supabase URL not configured. Please set VITE_SUPABASE_URL in your .env file with your actual Supabase project URL.' 
+          } 
+        }
+      }
+      
+      if (!supabaseAnonKey || supabaseAnonKey === 'your-anon-key' || supabaseAnonKey.length < 100) {
+        return { 
+          data: null, 
+          error: { 
+            message: 'Supabase anonymous key not configured. Please set VITE_SUPABASE_ANON_KEY in your .env file with your actual Supabase anonymous key.' 
+          } 
+        }
+      }
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      })
+      return { data, error }
+    } catch (err) {
+      console.error('Signin error:', err)
+      
+      // Handle network/connection errors specifically
+      if (err instanceof Error && err.message.includes('Failed to fetch')) {
+        return { 
+          data: null, 
+          error: { 
+            message: 'Cannot connect to Supabase. Please check your internet connection and verify that your VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are correctly set in your .env file.' 
+          } 
+        }
+      }
+      
+      return { 
+        data: null, 
+        error: { 
+          message: err instanceof Error ? err.message : 'Sign in failed. Please check your Supabase configuration.' 
+        } 
+      }
+    }
   }
 
   const signUp = async (email: string, password: string) => {
     try {
+      // Check if Supabase is properly configured before attempting signup
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+      const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+      
+      if (!supabaseUrl || supabaseUrl === 'https://your-project.supabase.co' || !supabaseUrl.includes('supabase.co')) {
+        return { 
+          data: null, 
+          error: { 
+            message: 'Supabase URL not configured. Please set VITE_SUPABASE_URL in your .env file with your actual Supabase project URL.' 
+          } 
+        }
+      }
+      
+      if (!supabaseAnonKey || supabaseAnonKey === 'your-anon-key' || supabaseAnonKey.length < 100) {
+        return { 
+          data: null, 
+          error: { 
+            message: 'Supabase anonymous key not configured. Please set VITE_SUPABASE_ANON_KEY in your .env file with your actual Supabase anonymous key.' 
+          } 
+        }
+      }
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -44,10 +109,21 @@ export function useAuth() {
       return { data, error }
     } catch (err) {
       console.error('Signup error:', err)
+      
+      // Handle network/connection errors specifically
+      if (err instanceof Error && err.message.includes('Failed to fetch')) {
+        return { 
+          data: null, 
+          error: { 
+            message: 'Cannot connect to Supabase. Please check your internet connection and verify that your VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are correctly set in your .env file.' 
+          } 
+        }
+      }
+      
       return { 
         data: null, 
         error: { 
-          message: 'Signup failed. Please check your Supabase configuration.' 
+          message: err instanceof Error ? err.message : 'Signup failed. Please check your Supabase configuration.' 
         } 
       }
     }
