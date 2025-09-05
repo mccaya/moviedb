@@ -190,6 +190,16 @@ export function MovieModal({
     }).format(amount)
   }
 
+  const getStreamingServices = () => {
+    if (!streamingProviders?.US?.flatrate) return []
+    
+    return streamingProviders.US.flatrate.map((provider: any) => ({
+      provider_id: provider.provider_id,
+      provider_name: provider.provider_name,
+      logo_url: tmdbAPI.getImageUrl(provider.logo_path)
+    }))
+  }
+
   if (!isOpen) return null
 
   const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : 'TBA'
@@ -441,6 +451,60 @@ export function MovieModal({
                   ) : (
                     <p className="text-gray-400">Cast information not available.</p>
                   )}
+                </div>
+              )}
+
+              {activeTab === 'streaming' && (
+                <div>
+                  {(() => {
+                    const services = getStreamingServices()
+                    return services.length > 0 ? (
+                      <div>
+                        <h3 className="text-lg font-semibold text-white mb-4">Available on these streaming services</h3>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                          {services.map((service: any) => (
+                            <div 
+                              key={service.provider_id} 
+                              className="flex items-center gap-3 p-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
+                            >
+                              <div className="w-12 h-12 bg-white rounded-lg overflow-hidden flex-shrink-0">
+                                <img
+                                  src={service.logo_url}
+                                  alt={service.provider_name}
+                                  className="w-full h-full object-contain"
+                                  onError={(e) => {
+                                    const target = e.target as HTMLImageElement
+                                    target.style.display = 'none'
+                                  }}
+                                />
+                              </div>
+                              <div className="min-w-0">
+                                <p className="text-white font-medium text-sm">{service.provider_name}</p>
+                                <p className="text-green-400 text-xs">Included with subscription</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="mt-4 p-3 bg-blue-900/20 border border-blue-500/20 rounded-lg">
+                          <p className="text-blue-300 text-sm">
+                            <strong>Note:</strong> Availability may vary by region and can change over time. 
+                            Check the streaming service directly to confirm current availability.
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="text-center py-8">
+                        <div className="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                          <span className="text-2xl">📺</span>
+                        </div>
+                        <h3 className="text-lg font-semibold text-white mb-2">Not available on major streaming services</h3>
+                        <p className="text-gray-400 text-sm">
+                          This movie may be available for rent or purchase on digital platforms like 
+                          Amazon Prime Video, Apple TV, Google Play, or Vudu.
+                        </p>
+                      </div>
+                    )
+                  })()}
                 </div>
               )}
 
