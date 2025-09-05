@@ -3,15 +3,6 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-// Check if environment variables are properly configured
-if (!supabaseUrl || supabaseUrl === 'https://your-project.supabase.co' || !supabaseUrl.includes('supabase.co')) {
-  console.error('❌ VITE_SUPABASE_URL is not properly configured. Please check your .env file.')
-}
-
-if (!supabaseAnonKey || supabaseAnonKey === 'your-anon-key' || supabaseAnonKey.length < 100) {
-  console.error('❌ VITE_SUPABASE_ANON_KEY is not properly configured. Please check your .env file.')
-}
-
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 export interface Movie {
@@ -25,77 +16,100 @@ export interface Movie {
   rating: number | null
   genres: string[]
   watched: boolean
+  personal_rating: number | null
   added_at: string
-  user_preference?: 'thumbs_up' | 'thumbs_down' | null
-  streaming_providers?: number[]
+  user_preference: 'thumbs_up' | 'thumbs_down' | null
+  // New Emby integration fields
+  emby_item_id?: string | null
+  emby_available?: boolean
+  last_emby_check?: string | null
+}
+
+interface CreateMovieData {
+  tmdb_id: number
+  title: string
+  poster_path: string | null
+  overview: string | null
+  release_date: string | null
+  rating: number | null
+  genres: string[]
+  watched: boolean
 }
 
 export const movieService = {
-  async addToWatchlist(movie: Omit<Movie, 'id' | 'user_id' | 'added_at'>) {
+  async getWatchlist() {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) throw new Error('User not authenticated')
 
-    const { data, error } = await supabase
+    return supabase
       .from('watchlist_items')
-      .insert({
-        user_id: user.id,
-        tmdb_id: movie.tmdb_id,
-        title: movie.title,
-        poster_path: movie.poster_path,
-        overview: movie.overview,
-        release_date: movie.release_date,
-        rating: movie.rating,
-        genres: Array.isArray(movie.genres) ? movie.genres : [],
-        watched: movie.watched,
-        user_preference: movie.user_preference
-      })
-      .select()
-      .single()
-
-    return { data, error }
-  },
-
-  async getWatchlist() {
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return { data: [], error: null }
-
-    const { data, error } = await supabase
-      .from('watchlist_items')
-      .select('id, user_id, tmdb_id, title, poster_path, overview, release_date, rating, genres, watched, added_at, user_preference')
+      .select('*')
       .eq('user_id', user.id)
       .order('added_at', { ascending: false })
+  },
 
-    return { data, error }
+  async addToWatchlist(movieData: CreateMovieData) {
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) throw new Error('User not authenticated')
+
+    return supabase
+      .from('watchlist_items')
+      .insert([{ ...movieData, user_id: user.id }])
+      .select()
+      .single()
   },
 
   async removeFromWatchlist(id: string) {
-    const { error } = await supabase
+    return supabase
       .from('watchlist_items')
       .delete()
       .eq('id', id)
-
-    return { error }
   },
 
   async updateWatchedStatus(id: string, watched: boolean) {
-    const { data, error } = await supabase
+    return supabase
       .from('watchlist_items')
       .update({ watched })
       .eq('id', id)
       .select()
       .single()
-
-    return { data, error }
   },
 
   async updateUserPreference(id: string, preference: 'thumbs_up' | 'thumbs_down' | null) {
-    const { data, error } = await supabase
+    return supabase
       .from('watchlist_items')
       .update({ user_preference: preference })
       .eq('id', id)
       .select()
       .single()
+  },
 
-    return { data, error }
+  // New Emby integration methods
+  async updateEmbyStatus(id: string, embyItemId: string | null, available: boolean) {
+    return supabase
+      .from('watchlist_items')
+      .update({ 
+        emby_item_id: embyItemId,
+        emby_available: available,
+        last_emby_check: new Date().toISOString()
+      })
+      .eq('id', id)
+      .select()
+      .single()
+  },
+
+  async getMoviesNeedingEmbyCheck() {
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) throw new Error('User not authenticated')
+
+    // Get movies that haven't been checked in the last 24 hours or never checked
+    const yesterday = new Date()
+    yesterday.setDate(yesterday.getDate() - 1)
+
+    return supabase
+      .from('watchlist_items')
+      .select('*')
+      .eq('user_id', user.id)
+      .or(`last_emby_check.is.null,last_emby_check.lt.${yesterday.toISOString()}`)
   }
 }
