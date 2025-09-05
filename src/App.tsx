@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Film, User, LogOut, Upload, Grid, List, Server, Sync, Loader2 } from 'lucide-react'
+import { Film, User, LogOut, Upload, Grid, List, Server, WifiSync as Sync, Loader2 } from 'lucide-react'
 import { useAuth } from './hooks/useAuth'
 import { useEmbySync } from './hooks/useEmbySync'
 import { movieService, Movie } from './lib/supabase'
