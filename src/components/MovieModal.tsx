@@ -175,7 +175,7 @@ export function MovieModal({
   if (!isOpen) return null
 
   const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : 'TBA'
-  const genres = movieDetails?.genres || tmdbAPI.getGenreNames(movie.genre_ids || [])
+  const genres = movieDetails?.genres?.map(genre => genre.name) || tmdbAPI.getGenreNames(movie.genre_ids || [])
   const director = movieDetails?.credits?.crew?.find(person => person.job === 'Director')
   const trailerUrl = getTrailerUrl()
 
