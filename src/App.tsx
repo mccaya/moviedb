@@ -8,6 +8,8 @@ import { WatchlistGrid } from './components/WatchlistGrid'
 import { FilterBar } from './components/FilterBar'
 import { AuthModal } from './components/AuthModal'
 import { ImportModal } from './components/ImportModal'
+import { ShareButton } from './components/ShareButton'
+import { SharePreview } from './components/SharePreview'
 
 function App() {
   const { user, loading: authLoading, signOut } = useAuth()
@@ -18,14 +20,32 @@ function App() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [showImportModal, setShowImportModal] = useState(false)
+  const [showSharePreview, setShowSharePreview] = useState(false)
 
   useEffect(() => {
+    // Check if this is a shared link
+    const urlParams = new URLSearchParams(window.location.search)
+    if (urlParams.get('shared') === 'true') {
+      setShowSharePreview(true)
+    }
+    
     if (user) {
       loadWatchlist()
     } else {
       setLoading(false)
     }
   }, [user])
+
+  const handleCloseSharePreview = () => {
+    setShowSharePreview(false)
+    // Clean up URL
+    const url = new URL(window.location.href)
+    url.searchParams.delete('shared')
+    url.searchParams.delete('movies')
+    url.searchParams.delete('watched')
+    url.searchParams.delete('total')
+    window.history.replaceState({}, '', url.toString())
+  }
 
   const loadWatchlist = async () => {
     try {
@@ -211,6 +231,11 @@ function App() {
                       <List className="h-4 w-4" />
                     </button>
                   </div>
+                  
+                  <ShareButton 
+                    movies={movies} 
+                    userName={user.email?.split('@')[0] || 'Movie Lover'} 
+                  />
                 </>
               )}
               
@@ -389,6 +414,10 @@ function App() {
         onClose={() => setShowImportModal(false)}
         onImport={handleImport}
       />
+      
+      {showSharePreview && (
+        <SharePreview onClose={handleCloseSharePreview} />
+      )}
     </div>
   )
 }
