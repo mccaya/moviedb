@@ -3,18 +3,19 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-if (!supabaseUrl || !supabaseAnonKey || 
-    supabaseUrl === 'https://your-project.supabase.co' || 
-    supabaseAnonKey === 'your-supabase-anon-key') {
-  throw new Error(
-    'Missing Supabase configuration. Please set up your environment variables:\n' +
-    '1. Copy .env.example to .env\n' +
-    '2. Replace the placeholder values with your actual Supabase URL and anonymous key\n' +
-    '3. Get these values from your Supabase project dashboard'
-  )
+// Check if Supabase is properly configured
+export const isSupabaseConfigured = () => {
+  return supabaseUrl && 
+         supabaseAnonKey && 
+         supabaseUrl !== 'https://your-project.supabase.co' && 
+         supabaseAnonKey !== 'your-supabase-anon-key'
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// Create client with fallback values to prevent crashes
+export const supabase = createClient(
+  supabaseUrl || 'https://placeholder.supabase.co', 
+  supabaseAnonKey || 'placeholder-key'
+)
 
 export interface Movie {
   id: string
