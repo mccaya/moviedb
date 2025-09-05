@@ -243,137 +243,132 @@ function App() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {user ? (
-          <>
-            <SearchBar 
-              onAddMovie={addToWatchlist} 
-              watchlistMovies={movies}
-              onRemoveMovie={removeFromWatchlist}
-            />
-            
-            {/* Stats Overview - 5 tiles */}
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
-              <button 
-                onClick={() => setFilter('all')}
-                className={`bg-gray-800 hover:bg-gray-700 rounded-xl p-6 transition-colors text-left w-full ${
-                  filter === 'all' ? 'ring-2 ring-blue-500' : ''
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-400">Total Movies</p>
-                    <p className="text-2xl font-bold text-white">{movies.length}</p>
-                  </div>
-                  <Film className="h-8 w-8 text-blue-500" />
-                </div>
-              </button>
-              
-              <button 
-                onClick={() => setFilter('watched')}
-                className={`bg-gray-800 hover:bg-gray-700 rounded-xl p-6 transition-colors text-left w-full ${
-                  filter === 'watched' ? 'ring-2 ring-green-500' : ''
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-400">Watched</p>
-                    <p className="text-2xl font-bold text-white">
-                      {movies.filter(m => m.watched).length}
-                    </p>
-                  </div>
-                  <div className="h-8 w-8 bg-green-500 rounded-full flex items-center justify-center">
-                    <span className="text-white text-sm font-bold">✓</span>
-                  </div>
-                </div>
-              </button>
-              
-              <button 
-                onClick={() => setFilter('unwatched')}
-                className={`bg-gray-800 hover:bg-gray-700 rounded-xl p-6 transition-colors text-left w-full ${
-                  filter === 'unwatched' ? 'ring-2 ring-orange-500' : ''
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-400">To Watch</p>
-                    <p className="text-2xl font-bold text-white">
-                      {movies.filter(m => !m.watched).length}
-                    </p>
-                  </div>
-                  <div className="h-8 w-8 bg-orange-500 rounded-full flex items-center justify-center">
-                    <span className="text-white text-sm font-bold">•</span>
-                  </div>
-                </div>
-              </button>
-              
-              <div className="bg-gray-750 rounded-xl p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-400">Watched %</p>
-                    <p className="text-2xl font-bold text-white">
-                      {movies.length > 0 ? Math.round((movies.filter(m => m.watched).length / movies.length) * 100) : 0}%
-                    </p>
-                  </div>
-                  <div className="h-8 w-8 bg-purple-500 rounded-full flex items-center justify-center">
-                    <span className="text-white text-sm font-bold">%</span>
-                  </div>
-                </div>
+        <SearchBar 
+          onAddMovie={addToWatchlist} 
+          watchlistMovies={movies}
+          onRemoveMovie={removeFromWatchlist}
+        />
+        
+        {/* Stats Overview - 5 tiles */}
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
+          <button 
+            onClick={() => setFilter('all')}
+            className={`bg-gray-800 hover:bg-gray-700 rounded-xl p-6 transition-colors text-left w-full ${
+              filter === 'all' ? 'ring-2 ring-blue-500' : ''
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-400">Total Movies</p>
+                <p className="text-2xl font-bold text-white">{movies.length}</p>
               </div>
-              
-              <div className="bg-gray-750 rounded-xl p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-400">Avg Rating</p>
-                    <p className="text-2xl font-bold text-white">
-                      {(() => {
-                        const moviesWithRating = movies.filter(m => m.rating && m.rating > 0)
-                        if (moviesWithRating.length === 0) return 'N/A'
-                        const avg = moviesWithRating.reduce((sum, m) => sum + (m.rating || 0), 0) / moviesWithRating.length
-                        return avg.toFixed(1)
-                      })()}
-                    </p>
-                  </div>
-                  <div className="h-8 w-8 bg-yellow-500 rounded-full flex items-center justify-center">
-                    <span className="text-white text-sm font-bold">★</span>
-                  </div>
-                </div>
+              <Film className="h-8 w-8 text-blue-500" />
+            </div>
+          </button>
+          
+          <button 
+            onClick={() => setFilter('watched')}
+            className={`bg-gray-800 hover:bg-gray-700 rounded-xl p-6 transition-colors text-left w-full ${
+              filter === 'watched' ? 'ring-2 ring-green-500' : ''
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-400">Watched</p>
+                <p className="text-2xl font-bold text-white">
+                  {movies.filter(m => m.watched).length}
+                </p>
+              </div>
+              <div className="h-8 w-8 bg-green-500 rounded-full flex items-center justify-center">
+                <span className="text-white text-sm font-bold">✓</span>
               </div>
             </div>
-            
-            {movies.length > 0 && (
-              <FilterBar
-                filter={filter}
-                sortBy={sortBy}
-                onFilterChange={setFilter}
-                onSortChange={setSortBy}
-                totalMovies={filteredMovies.length}
-              />
-            )}
-            
-            <WatchlistGrid
-              movies={filteredMovies}
-              viewMode={viewMode}
-              loading={loading}
-              onRemove={removeFromWatchlist}
-              onToggleWatched={toggleWatchedStatus}
-              onUpdatePreference={updateUserPreference}
-            />
-          </>
-        ) : (
+          </button>
+          
+          <button 
+            onClick={() => setFilter('unwatched')}
+            className={`bg-gray-800 hover:bg-gray-700 rounded-xl p-6 transition-colors text-left w-full ${
+              filter === 'unwatched' ? 'ring-2 ring-orange-500' : ''
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-400">To Watch</p>
+                <p className="text-2xl font-bold text-white">
+                  {movies.filter(m => !m.watched).length}
+                </p>
+              </div>
+              <div className="h-8 w-8 bg-orange-500 rounded-full flex items-center justify-center">
+                <span className="text-white text-sm font-bold">•</span>
+              </div>
+            </div>
+          </button>
+          
+          <div className="bg-gray-750 rounded-xl p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-400">Watched %</p>
+                <p className="text-2xl font-bold text-white">
+                  {movies.length > 0 ? Math.round((movies.filter(m => m.watched).length / movies.length) * 100) : 0}%
+                </p>
+              </div>
+              <div className="h-8 w-8 bg-purple-500 rounded-full flex items-center justify-center">
+                <span className="text-white text-sm font-bold">%</span>
+              </div>
+            </div>
+          </div>
+          
+          <div className="bg-gray-750 rounded-xl p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-400">Avg Rating</p>
+                <p className="text-2xl font-bold text-white">
+                  {(() => {
+                    const moviesWithRating = movies.filter(m => m.rating && m.rating > 0)
+                    if (moviesWithRating.length === 0) return 'N/A'
+                    const avg = moviesWithRating.reduce((sum, m) => sum + (m.rating || 0), 0) / moviesWithRating.length
+                    return avg.toFixed(1)
+                  })()}
+                </p>
+              </div>
+              <div className="h-8 w-8 bg-yellow-500 rounded-full flex items-center justify-center">
+                <span className="text-white text-sm font-bold">★</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {movies.length > 0 && (
+          <FilterBar
+            filter={filter}
+            sortBy={sortBy}
+            onFilterChange={setFilter}
+            onSortChange={setSortBy}
+            totalMovies={filteredMovies.length}
+          />
+        )}
+        
+        <WatchlistGrid
+          movies={filteredMovies}
+          viewMode={viewMode}
+          loading={loading}
+          onRemove={removeFromWatchlist}
+          onToggleWatched={toggleWatchedStatus}
+          onUpdatePreference={updateUserPreference}
+        />
+        
+        {!user && movies.length === 0 && (
           <div className="text-center py-16">
             <Film className="h-16 w-16 text-gray-600 mx-auto mb-6" />
-            <h2 className="text-2xl font-bold text-gray-300 mb-4">
-              Welcome to Movie Watchlist
-            </h2>
-            <p className="text-gray-500 mb-8 max-w-md mx-auto">
-              Keep track of movies you want to watch and rate the ones you've seen. 
-              Sign in to get started!
+            <h3 className="text-xl font-semibold text-gray-300 mb-2">Start Building Your Watchlist</h3>
+            <p className="text-gray-500 mb-6">
+              Search for movies above to get started. Sign in to save your watchlist permanently!
             </p>
             <button
               onClick={() => setShowAuthModal(true)}
               className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
             >
-              Get Started
+              Sign In to Save Movies
             </button>
           </div>
         )}
