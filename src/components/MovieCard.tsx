@@ -16,6 +16,7 @@ import { tmdbAPI } from '../lib/tmdb'
 import { cn, formatDate, getGenreColor } from '../lib/utils'
 import { DeleteConfirmDialog } from './DeleteConfirmDialog'
 import { MovieModal } from './MovieModal'
+import { Tv } from 'lucide-react'
 
 interface MovieCardProps {
   movie: Movie
@@ -23,6 +24,7 @@ interface MovieCardProps {
   onRemove: (id: string) => Promise<void>
   onToggleWatched: (id: string, watched: boolean) => Promise<void>
   onUpdatePreference: (id: string, preference: 'thumbs_up' | 'thumbs_down' | null) => Promise<void>
+  streamingProviders?: number[]
 }
 
 export function MovieCard({ 
@@ -30,7 +32,8 @@ export function MovieCard({
   viewMode, 
   onRemove, 
   onToggleWatched, 
-  onUpdatePreference 
+  onUpdatePreference,
+  streamingProviders = []
 }: MovieCardProps) {
   const [showActions, setShowActions] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -285,6 +288,12 @@ export function MovieCard({
           </div>
         )}
 
+        {/* Streaming indicator */}
+        {streamingProviders.length > 0 && (
+          <div className="absolute bottom-3 right-3 bg-green-600/80 backdrop-blur-sm rounded-full p-1">
+            <Tv className="h-3 w-3 text-white" />
+          </div>
+        )}
         {/* Action buttons */}
         <div className="absolute bottom-3 left-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <button

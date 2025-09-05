@@ -9,7 +9,6 @@ import { FilterBar } from './components/FilterBar'
 import { AuthModal } from './components/AuthModal'
 import { ImportModal } from './components/ImportModal'
 import { ShareButton } from './components/ShareButton'
-import { SharePreview } from './components/SharePreview'
 
 function App() {
   const { user, loading: authLoading, signOut } = useAuth()
@@ -21,6 +20,8 @@ function App() {
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [showImportModal, setShowImportModal] = useState(false)
   const [showSharePreview, setShowSharePreview] = useState(false)
+  const [selectedStreamingServices, setSelectedStreamingServices] = useState<number[]>([])
+  const [movieStreamingData, setMovieStreamingData] = useState<Record<number, number[]>>({})
 
   useEffect(() => {
     // Check if this is a shared link
@@ -36,6 +37,39 @@ function App() {
     }
   }, [user])
 
+  // Load streaming data for movies
+  useEffect(() => {
+    const loadStreamingData = async () => {
+      if (movies.length === 0) return
+      
+      const streamingData: Record<number, number[]> = {}
+      
+      // Load streaming data for each movie (with rate limiting)
+      for (let i = 0; i < movies.length; i++) {
+        const movie = movies[i]
+        try {
+          const providers = await tmdbAPI.getStreamingProviders(movie.tmdb_id)
+          if (providers?.US?.flatrate) {
+            streamingData[movie.tmdb_id] = providers.US.flatrate.map((p: any) => p.provider_id)
+          } else {
+            streamingData[movie.tmdb_id] = []
+          }
+          
+          // Rate limiting: wait 100ms between requests
+          if (i < movies.length - 1) {
+            await new Promise(resolve => setTimeout(resolve, 100))
+          }
+        } catch (error) {
+          console.error(`Failed to load streaming data for ${movie.title}:`, error)
+          streamingData[movie.tmdb_id] = []
+        }
+      }
+      
+      setMovieStreamingData(streamingData)
+    }
+    
+    loadStreamingData()
+  }, [movies])
   const handleCloseSharePreview = () => {
     setShowSharePreview(false)
     // Clean up URL
@@ -168,6 +202,13 @@ function App() {
       if (filter === 'unwatched') return !movie.watched
       return true
     })
+    .filter(movie => {
+      // Filter by streaming services if any are selected
+      if (selectedStreamingServices.length === 0) return true
+      
+      const movieProviders = movieStreamingData[movie.tmdb_id] || []
+      return selectedStreamingServices.some(serviceId => movieProviders.includes(serviceId))
+    })
     .sort((a, b) => {
       switch (sortBy) {
         case 'title':
@@ -184,6 +225,13 @@ function App() {
       }
     })
 
+  // Count movies available on selected streaming services
+  const availableStreamingMovies = selectedStreamingServices.length === 0 
+    ? movies.length 
+    : movies.filter(movie => {
+        const movieProviders = movieStreamingData[movie.tmdb_id] || []
+        return selectedStreamingServices.some(serviceId => movieProviders.includes(serviceId))
+      }).length
   if (authLoading) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
@@ -372,6 +420,9 @@ function App() {
                 onFilterChange={setFilter}
                 onSortChange={setSortBy}
                 totalMovies={filteredMovies.length}
+                selectedStreamingServices={selectedStreamingServices}
+                onStreamingServicesChange={setSelectedStreamingServices}
+                availableStreamingMovies={availableStreamingMovies}
               />
             )}
             
@@ -382,6 +433,7 @@ function App() {
               onRemove={removeFromWatchlist}
               onToggleWatched={toggleWatchedStatus}
               onUpdatePreference={updateUserPreference}
+              movieStreamingData={movieStreamingData}
             />
           </>
         ) : (

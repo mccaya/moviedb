@@ -10,6 +10,7 @@ interface WatchlistGridProps {
   onRemove: (id: string) => Promise<void>
   onToggleWatched: (id: string, watched: boolean) => Promise<void>
   onUpdatePreference: (id: string, preference: 'thumbs_up' | 'thumbs_down' | null) => Promise<void>
+  movieStreamingData: Record<number, number[]>
 }
 
 export function WatchlistGrid({ 
@@ -18,7 +19,8 @@ export function WatchlistGrid({
   loading, 
   onRemove, 
   onToggleWatched, 
-  onUpdatePreference 
+  onUpdatePreference,
+  movieStreamingData
 }: WatchlistGridProps) {
   if (loading) {
     return (
@@ -55,6 +57,7 @@ export function WatchlistGrid({
           onRemove={onRemove}
           onToggleWatched={onToggleWatched}
           onUpdatePreference={onUpdatePreference}
+          streamingProviders={movieStreamingData[movie.tmdb_id] || []}
         />
       ))}
     </div>
