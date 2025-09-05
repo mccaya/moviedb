@@ -156,9 +156,7 @@ export function MovieResult({
       
       <MovieModal
         isOpen={showMovieModal}
-        onClose={() => {
-          setShowMovieModal(false)
-        }}
+        onClose={handleCloseModal}
         movie={movie}
         isInWatchlist={isAdded}
         onAddToWatchlist={onAdd}
