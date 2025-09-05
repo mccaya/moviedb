@@ -85,10 +85,14 @@ function App() {
 
   const checkEmbyConnection = async () => {
     try {
+      console.log('Checking Emby connection...')
       const connected = await embyAPI.checkConnection()
+      console.log('Emby connection result:', connected)
       setEmbyConnected(connected)
       if (!connected) {
         console.warn('Emby server not accessible')
+      } else {
+        console.log('✅ Emby server connected successfully')
       }
     } catch (error) {
       console.error('Error checking Emby connection:', error)
