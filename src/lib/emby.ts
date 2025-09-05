@@ -44,14 +44,21 @@ export const embyAPI = {
 
       const searchUrl = `${EMBY_SERVER_URL}/emby/Items?${searchParams}`
       console.log('Emby search URL:', searchUrl.replace(EMBY_API_KEY, '[API_KEY]'))
-      const response = await fetch(
-        searchUrl
-      )
+      const response = await fetch(searchUrl, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        mode: 'cors',
+        credentials: 'omit'
+      })
 
       if (!response.ok) {
         console.error('Emby search API error:', {
           status: response.status,
-          statusText: response.statusText
+          statusText: response.statusText,
+          url: searchUrl.replace(EMBY_API_KEY, '[API_KEY]')
         })
         return null
       }
@@ -136,24 +143,54 @@ export const embyAPI = {
       const testUrl = `${EMBY_SERVER_URL}/emby/System/Info/Public?api_key=${EMBY_API_KEY}`
       console.log('Testing Emby connection to:', testUrl.replace(EMBY_API_KEY, '[API_KEY]'))
       
-      const response = await fetch(
-        testUrl
-      )
+      const response = await fetch(testUrl, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        mode: 'cors',
+        credentials: 'omit'
+      })
       
       console.log('Emby connection response:', {
         status: response.status,
         statusText: response.statusText,
-        ok: response.ok
+        ok: response.ok,
+        headers: Object.fromEntries(response.headers.entries())
       })
       
       if (response.ok) {
         const data = await response.json()
-        console.log('Emby server info:', data)
+        console.log('✅ Emby server connected successfully:', {
+          serverName: data.ServerName,
+          version: data.Version,
+          id: data.Id
+        })
+      } else {
+        console.error('❌ Emby connection failed:', {
+          status: response.status,
+          statusText: response.statusText
+        })
       }
       
       return response.ok
     } catch (error) {
-      console.error('Cannot connect to Emby server:', error)
+      console.error('❌ Cannot connect to Emby server:', {
+        error: error.message,
+        type: error.name,
+        stack: error.stack
+      })
+      
+      // Check if it's a CORS error
+      if (error.message.includes('CORS') || error.message.includes('fetch')) {
+        console.error('🚫 CORS Error: Your Emby server needs to allow requests from this domain.')
+        console.log('💡 To fix CORS issues:')
+        console.log('1. In Emby Dashboard → Network → Advanced')
+        console.log('2. Add your domain to "CORS hosts" (e.g., localhost:5173)')
+        console.log('3. Or add "*" to allow all origins (less secure)')
+      }
+      
       return false
     }
   }
