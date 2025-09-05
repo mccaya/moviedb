@@ -233,7 +233,9 @@ export function MovieCard({
       
       <MovieModal
         isOpen={showMovieModal}
-        onClose={() => setShowMovieModal(false)}
+        onClose={() => {
+          setShowMovieModal(false)
+        }}
         movie={movie}
         isInWatchlist={true}
         onToggleWatched={onToggleWatched}
@@ -389,7 +391,9 @@ export function MovieCard({
       
       <MovieModal
         isOpen={showMovieModal}
-        onClose={() => setShowMovieModal(false)}
+        onClose={() => {
+          setShowMovieModal(false)
+        }}
         movie={movie}
         isInWatchlist={true}
         onToggleWatched={onToggleWatched}

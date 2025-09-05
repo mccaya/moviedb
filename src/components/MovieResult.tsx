@@ -156,10 +156,12 @@ export function MovieResult({
       
       <MovieModal
         isOpen={showMovieModal}
-        onClose={() => setShowMovieModal(false)}
+        onClose={() => {
+          setShowMovieModal(false)
+        }}
         movie={movie}
         isInWatchlist={isAdded}
-        onAddToWatchlist={onAddToWatchlist}
+        onAddToWatchlist={onAdd}
         onRemoveFromWatchlist={onRemoveMovie}
       />
     </>
