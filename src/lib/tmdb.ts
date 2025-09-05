@@ -87,6 +87,26 @@ export const tmdbAPI = {
     }
   },
 
+  async getStreamingProviders(tmdbId: number): Promise<any> {
+    if (!TMDB_API_KEY) {
+      console.error('TMDB API key is missing')
+      return null
+    }
+    
+    try {
+      const response = await fetch(
+        `${BASE_URL}/movie/${tmdbId}/watch/providers?api_key=${TMDB_API_KEY}`
+      )
+      
+      if (!response.ok) return null
+      
+      const data = await response.json()
+      return data.results || {}
+    } catch (error) {
+      console.error('Error fetching streaming providers:', error)
+      return null
+    }
+  },
   async getTrendingMovies(): Promise<TMDBMovie[]> {
     if (!TMDB_API_KEY) {
       console.error('TMDB API key is missing')

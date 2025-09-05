@@ -15,6 +15,8 @@ import { Movie } from '../lib/supabase'
 import { tmdbAPI } from '../lib/tmdb'
 import { cn, formatDate, getGenreColor } from '../lib/utils'
 import { DeleteConfirmDialog } from './DeleteConfirmDialog'
+import { MovieModal } from './MovieModal'
+import { Tv } from 'lucide-react'
 
 interface MovieCardProps {
   movie: Movie
@@ -22,6 +24,7 @@ interface MovieCardProps {
   onRemove: (id: string) => Promise<void>
   onToggleWatched: (id: string, watched: boolean) => Promise<void>
   onUpdatePreference: (id: string, preference: 'thumbs_up' | 'thumbs_down' | null) => Promise<void>
+  streamingProviders?: number[]
 }
 
 export function MovieCard({ 
@@ -29,11 +32,13 @@ export function MovieCard({
   viewMode, 
   onRemove, 
   onToggleWatched, 
-  onUpdatePreference 
+  onUpdatePreference,
+  streamingProviders = []
 }: MovieCardProps) {
   const [showActions, setShowActions] = useState(false)
   const [loading, setLoading] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [showMovieModal, setShowMovieModal] = useState(false)
 
   const handleRemove = async () => {
     setLoading(true)
@@ -81,11 +86,27 @@ export function MovieCard({
     }
   }
 
+  const handleMovieClick = (e: React.MouseEvent) => {
+    // Don't open modal if clicking on action buttons
+    if ((e.target as HTMLElement).closest('button')) {
+      return
+    }
+    setShowMovieModal(true)
+  }
+
+  const handleCloseModal = () => {
+    setShowMovieModal(false)
+  }
+
   const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : 'TBA'
 
   if (viewMode === 'list') {
     return (
-      <div className="bg-gray-800 rounded-xl p-4 flex gap-4 hover:bg-gray-750 transition-colors">
+      <>
+      <div 
+        className="bg-gray-800 rounded-xl p-4 flex gap-4 hover:bg-gray-750 transition-colors cursor-pointer"
+        onClick={handleMovieClick}
+      >
         <div className="w-16 h-24 flex-shrink-0">
           <img
             src={tmdbAPI.getImageUrl(movie.poster_path)}
@@ -216,12 +237,26 @@ export function MovieCard({
           </div>
         )}
       </div>
+      
+      <MovieModal
+        isOpen={showMovieModal}
+        onClose={handleCloseModal}
+        movie={movie}
+        isInWatchlist={true}
+        onToggleWatched={onToggleWatched}
+        onUpdatePreference={onUpdatePreference}
+        onRemoveFromWatchlist={onRemove}
+      />
+      </>
     )
   }
 
   return (
     <>
-      <div className="group relative bg-gray-800 rounded-xl overflow-hidden hover:bg-gray-750 transition-all duration-300 hover:scale-105 hover:shadow-xl">
+      <div 
+        className="group relative bg-gray-800 rounded-xl overflow-hidden hover:bg-gray-750 transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer"
+        onClick={handleMovieClick}
+      >
       <div className="aspect-[2/3] relative overflow-hidden">
         <img
           src={tmdbAPI.getImageUrl(movie.poster_path)}
@@ -253,6 +288,12 @@ export function MovieCard({
           </div>
         )}
 
+        {/* Streaming indicator */}
+        {streamingProviders.length > 0 && (
+          <div className="absolute bottom-3 right-3 bg-green-600/80 backdrop-blur-sm rounded-full p-1">
+            <Tv className="h-3 w-3 text-white" />
+          </div>
+        )}
         {/* Action buttons */}
         <div className="absolute bottom-3 left-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <button
@@ -357,6 +398,16 @@ export function MovieCard({
         onClose={() => setShowDeleteDialog(false)}
         onConfirm={handleRemove}
         movieTitle={movie.title}
+      />
+      
+      <MovieModal
+        isOpen={showMovieModal}
+        onClose={handleCloseModal}
+        movie={movie}
+        isInWatchlist={true}
+        onToggleWatched={onToggleWatched}
+        onUpdatePreference={onUpdatePreference}
+        onRemoveFromWatchlist={onRemove}
       />
     </>
   )

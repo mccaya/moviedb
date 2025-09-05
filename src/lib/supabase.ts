@@ -27,6 +27,7 @@ export interface Movie {
   watched: boolean
   added_at: string
   user_preference?: 'thumbs_up' | 'thumbs_down' | null
+  streaming_providers?: number[]
 }
 
 export const movieService = {

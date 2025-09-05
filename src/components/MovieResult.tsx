@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Plus, Calendar, Star, Loader2 } from 'lucide-react'
 import { tmdbAPI, TMDBMovie } from '../lib/tmdb'
 import { cn, formatRating, getGenreColor } from '../lib/utils'
+import { MovieModal } from './MovieModal'
 
 interface Movie {
   id: string
@@ -37,6 +38,7 @@ export function MovieResult({
   onShowCollection 
 }: MovieResultProps) {
   const [adding, setAdding] = useState(false)
+  const [showMovieModal, setShowMovieModal] = useState(false)
 
   const handleAdd = async () => {
     if (isAdded) return
@@ -57,12 +59,38 @@ export function MovieResult({
     }
   }
 
+  const handleMovieClick = (e: React.MouseEvent) => {
+    // Don't open modal if clicking on the add button
+    if ((e.target as HTMLElement).closest('button')) {
+      return
+    }
+    setShowMovieModal(true)
+  }
+
+  const handleCloseModal = () => {
+    setShowMovieModal(false)
+  }
+
+  const handleAddFromModal = async (movieToAdd: TMDBMovie) => {
+    try {
+      await onAdd(movieToAdd)
+      // Close modal after successful add
+      setShowMovieModal(false)
+    } catch (error) {
+      console.error('Failed to add movie from modal:', error)
+      // Keep modal open on error so user can try again
+    }
+  }
+
   const genres = tmdbAPI.getGenreNames(movie.genre_ids || [])
   const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : 'TBA'
 
   return (
     <>
-      <div className="group relative bg-gray-800 rounded-xl overflow-hidden hover:bg-gray-750 transition-all duration-300 hover:scale-105 hover:shadow-xl">
+      <div 
+        className="group relative bg-gray-800 rounded-xl overflow-hidden hover:bg-gray-750 transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer"
+        onClick={handleMovieClick}
+      >
       <div className="aspect-[2/3] relative overflow-hidden">
         <img
           src={tmdbAPI.getImageUrl(movie.poster_path)}
@@ -141,6 +169,15 @@ export function MovieResult({
         )}
       </div>
       </div>
+      
+      <MovieModal
+        isOpen={showMovieModal}
+        onClose={handleCloseModal}
+        movie={movie}
+        isInWatchlist={isAdded}
+        onAddToWatchlist={handleAddFromModal}
+        onRemoveFromWatchlist={onRemoveMovie}
+      />
     </>
   )
 }
