@@ -42,7 +42,7 @@ export interface EmbySearchResult {
 export const embyAPI = {
   async searchMovie(title: string, year?: number): Promise<EmbyItem | null> {
     if (!EMBY_SERVER_URL || !EMBY_API_KEY) {
-      console.warn('Emby server URL or API key not configured for search')
+      console.warn('⚠️ Emby server URL or API key not configured for search')
       return null
     }
 
@@ -147,7 +147,7 @@ export const embyAPI = {
 
   async checkConnection(): Promise<boolean> {
     if (!EMBY_SERVER_URL || !EMBY_API_KEY) {
-      console.warn('Emby configuration missing:', {
+      console.warn('⚠️ Emby configuration missing - skipping connection test:', {
         serverUrl: !!EMBY_SERVER_URL,
         apiKey: !!EMBY_API_KEY
       })
@@ -158,15 +158,20 @@ export const embyAPI = {
       const testUrl = `${EMBY_SERVER_URL}/emby/System/Info/Public?api_key=${EMBY_API_KEY}`
       console.log('Testing Emby connection to:', testUrl.replace(EMBY_API_KEY, '[API_KEY]'))
       
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
+      
       const response = await fetch(testUrl, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json',
         },
         mode: 'cors',
-        credentials: 'omit'
+        credentials: 'omit',
+        signal: controller.signal
       })
+      
+      clearTimeout(timeoutId)
       
       console.log('Emby connection response:', {
         status: response.status,
@@ -191,19 +196,25 @@ export const embyAPI = {
       
       return response.ok
     } catch (error) {
-      console.error('❌ Cannot connect to Emby server:', {
+      if (error.name === 'AbortError') {
+        console.error('❌ Emby connection timeout - server may be unreachable')
+        return false
+      }
+      
+      console.warn('⚠️ Cannot connect to Emby server - this is optional functionality')
+      console.log('📋 Emby connection details:', {
+        serverUrl: EMBY_SERVER_URL,
         error: error.message,
-        type: error.name,
-        stack: error.stack
+        type: error.name
       })
       
-      // Check if it's a CORS error
-      if (error.message.includes('CORS') || error.message.includes('fetch')) {
-        console.error('🚫 CORS Error: Your Emby server needs to allow requests from this domain.')
-        console.log('💡 To fix CORS issues:')
-        console.log('1. In Emby Dashboard → Network → Advanced')
-        console.log('2. Add your domain to "CORS hosts" (e.g., localhost:5173)')
-        console.log('3. Or add "*" to allow all origins (less secure)')
+      if (error.message.includes('fetch') || error.name === 'TypeError') {
+        console.log('💡 This appears to be a CORS or network issue.')
+        console.log('🔧 To enable Emby integration:')
+        console.log('   1. Open Emby Dashboard → Settings → Network → Advanced')
+        console.log('   2. Add this domain to "CORS hosts": ' + window.location.origin)
+        console.log('   3. Save settings and restart Emby server')
+        console.log('   4. The app will work without Emby - this feature is optional')
       }
       
       return false
