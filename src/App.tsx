@@ -44,7 +44,9 @@ function App() {
       for (const movie of movies) {
         try {
           const providers = await tmdbAPI.getStreamingProviders(movie.tmdb_id)
-          streamingData[movie.tmdb_id] = providers
+          // Extract US flatrate providers and map to provider IDs
+          const usProviders = providers?.US?.flatrate || []
+          streamingData[movie.tmdb_id] = usProviders.map((provider: any) => provider.provider_id)
         } catch (error) {
           console.error(`Failed to fetch streaming data for ${movie.title}:`, error)
           streamingData[movie.tmdb_id] = []
