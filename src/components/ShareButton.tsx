@@ -54,6 +54,7 @@ export function ShareButton({ movies, userName = 'Someone' }: ShareButtonProps) 
         console.log('Share cancelled or failed')
       }
     } else {
+      // If native share is not available, show the share menu
       setShowShareMenu(true)
     }
   }
