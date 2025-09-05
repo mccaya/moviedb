@@ -201,7 +201,7 @@ export const embyAPI = {
         return false
       }
       
-      console.warn('⚠️ Cannot connect to Emby server - this is optional functionality')
+      console.warn('⚠️ Cannot connect to Emby server - this may be due to WebContainer network restrictions')
       console.log('📋 Emby connection details:', {
         serverUrl: EMBY_SERVER_URL,
         error: error.message,
@@ -209,12 +209,14 @@ export const embyAPI = {
       })
       
       if (error.message.includes('fetch') || error.name === 'TypeError') {
-        console.log('💡 This appears to be a CORS or network issue.')
+        console.log('💡 This appears to be a network restriction or CORS issue.')
+        console.log('🌐 WebContainer environments may not be able to access external IPs directly.')
         console.log('🔧 To enable Emby integration:')
-        console.log('   1. Open Emby Dashboard → Settings → Network → Advanced')
-        console.log('   2. Add this domain to "CORS hosts": ' + window.location.origin)
-        console.log('   3. Save settings and restart Emby server')
-        console.log('   4. The app will work without Emby - this feature is optional')
+        console.log('   1. Deploy this app to a regular web server (not WebContainer)')
+        console.log('   2. Or use a local development environment')
+        console.log('   3. Configure CORS in Emby: Dashboard → Network → Advanced')
+        console.log('   4. Add your domain to "CORS hosts"')
+        console.log('   5. The app works perfectly without Emby - this is optional')
       }
       
       return false
