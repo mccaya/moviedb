@@ -17,6 +17,7 @@ import { tmdbAPI } from '../lib/tmdb'
 import { cn, formatDate, getGenreColor } from '../lib/utils'
 import { DeleteConfirmDialog } from './DeleteConfirmDialog'
 import { PlayButton, EmbyStatusIndicator } from './PlayButton'
+import { MovieModal } from './MovieModal'
 
 interface MovieCardProps {
   movie: Movie
@@ -38,6 +39,7 @@ export function MovieCard({
   const [showActions, setShowActions] = useState(false)
   const [loading, setLoading] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [showMovieModal, setShowMovieModal] = useState(false)
 
   const handleRemove = async () => {
     setLoading(true)
@@ -85,11 +87,33 @@ export function MovieCard({
     }
   }
 
+  const handleMovieClick = (e: React.MouseEvent) => {
+    // Don't open modal if clicking on action buttons
+    if ((e.target as HTMLElement).closest('button')) {
+      return
+    }
+    setShowMovieModal(true)
+  }
+
+  const handleCloseModal = () => {
+    setShowMovieModal(false)
+  }
+
+  const handleUpdateEmbyStatus = async (id: string, embyItemId: string | null, available: boolean) => {
+    // This would typically update the database, but for now we'll just update local state
+    // You might want to add this functionality to your movieService
+    console.log('Update Emby status:', { id, embyItemId, available })
+  }
+
   const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : 'TBA'
 
   if (viewMode === 'list') {
     return (
-      <div className="bg-gray-800 rounded-xl p-4 flex gap-4 hover:bg-gray-750 transition-colors">
+      <>
+        <div 
+          className="bg-gray-800 rounded-xl p-4 flex gap-4 hover:bg-gray-750 transition-colors cursor-pointer"
+          onClick={handleMovieClick}
+        >
         <div className="w-16 h-24 flex-shrink-0">
           <img
             src={tmdbAPI.getImageUrl(movie.poster_path)}
@@ -236,12 +260,34 @@ export function MovieCard({
           </div>
         )}
       </div>
+        
+        <MovieModal
+          isOpen={showMovieModal}
+          onClose={handleCloseModal}
+          movie={movie}
+          isInWatchlist={true}
+          onRemoveFromWatchlist={onRemove}
+          onToggleWatched={onToggleWatched}
+          onUpdatePreference={onUpdatePreference}
+          onUpdateEmbyStatus={handleUpdateEmbyStatus}
+        />
+        
+        <DeleteConfirmDialog
+          isOpen={showDeleteDialog}
+          onClose={() => setShowDeleteDialog(false)}
+          onConfirm={handleRemove}
+          movieTitle={movie.title}
+        />
+      </>
     )
   }
 
   return (
     <>
-      <div className="group relative bg-gray-800 rounded-xl overflow-hidden hover:bg-gray-750 transition-all duration-300 hover:scale-105 hover:shadow-xl">
+      <div 
+        className="group relative bg-gray-800 rounded-xl overflow-hidden hover:bg-gray-750 transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer"
+        onClick={handleMovieClick}
+      >
         <div className="aspect-[2/3] relative overflow-hidden">
           <img
             src={tmdbAPI.getImageUrl(movie.poster_path)}
@@ -409,6 +455,17 @@ export function MovieCard({
           )}
         </div>
       </div>
+      
+      <MovieModal
+        isOpen={showMovieModal}
+        onClose={handleCloseModal}
+        movie={movie}
+        isInWatchlist={true}
+        onRemoveFromWatchlist={onRemove}
+        onToggleWatched={onToggleWatched}
+        onUpdatePreference={onUpdatePreference}
+        onUpdateEmbyStatus={handleUpdateEmbyStatus}
+      />
       
       <DeleteConfirmDialog
         isOpen={showDeleteDialog}
