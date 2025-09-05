@@ -95,6 +95,14 @@ export function MovieModal({
     }
   }
 
+  const handleClose = () => {
+    setMovieDetails(null)
+    setLoading(false)
+    setActionLoading(false)
+    setActiveTab('overview')
+    onClose()
+  }
+
   const handleAddToWatchlist = async () => {
     if (!onAddToWatchlist || isInWatchlist) return
     
@@ -196,7 +204,7 @@ export function MovieModal({
           )}
           
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="absolute top-4 right-4 p-2 bg-black/50 hover:bg-black/70 text-white rounded-full transition-colors backdrop-blur-sm"
           >
             <X className="h-5 w-5" />
