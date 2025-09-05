@@ -42,7 +42,7 @@ export const movieService = {
     if (!user) throw new Error('User not authenticated')
 
     return supabase
-      .from('movies')
+      .from('watchlist_items')
       .select('*')
       .eq('user_id', user.id)
       .order('added_at', { ascending: false })
@@ -53,7 +53,7 @@ export const movieService = {
     if (!user) throw new Error('User not authenticated')
 
     return supabase
-      .from('movies')
+      .from('watchlist_items')
       .insert([{ ...movieData, user_id: user.id }])
       .select()
       .single()
@@ -61,14 +61,14 @@ export const movieService = {
 
   async removeFromWatchlist(id: string) {
     return supabase
-      .from('movies')
+      .from('watchlist_items')
       .delete()
       .eq('id', id)
   },
 
   async updateWatchedStatus(id: string, watched: boolean) {
     return supabase
-      .from('movies')
+      .from('watchlist_items')
       .update({ watched })
       .eq('id', id)
       .select()
@@ -77,7 +77,7 @@ export const movieService = {
 
   async updateUserPreference(id: string, preference: 'thumbs_up' | 'thumbs_down' | null) {
     return supabase
-      .from('movies')
+      .from('watchlist_items')
       .update({ user_preference: preference })
       .eq('id', id)
       .select()
@@ -87,7 +87,7 @@ export const movieService = {
   // New Emby integration methods
   async updateEmbyStatus(id: string, embyItemId: string | null, available: boolean) {
     return supabase
-      .from('movies')
+      .from('watchlist_items')
       .update({ 
         emby_item_id: embyItemId,
         emby_available: available,
@@ -107,7 +107,7 @@ export const movieService = {
     yesterday.setDate(yesterday.getDate() - 1)
 
     return supabase
-      .from('movies')
+      .from('watchlist_items')
       .select('*')
       .eq('user_id', user.id)
       .or(`last_emby_check.is.null,last_emby_check.lt.${yesterday.toISOString()}`)
