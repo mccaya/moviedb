@@ -66,6 +66,11 @@ export function MovieResult({
     }
     setShowMovieModal(true)
   }
+
+  const handleCloseModal = () => {
+    setShowMovieModal(false)
+  }
+
   const genres = tmdbAPI.getGenreNames(movie.genre_ids || [])
   const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : 'TBA'
 
