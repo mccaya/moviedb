@@ -206,6 +206,10 @@ export function MovieModal({
           <button
             onClick={handleClose}
             className="absolute top-4 right-4 p-2 bg-black/50 hover:bg-black/70 text-white rounded-full transition-colors backdrop-blur-sm"
+            onClick={(e) => {
+              e.stopPropagation()
+              handleClose()
+            }}
           >
             <X className="h-5 w-5" />
           </button>
