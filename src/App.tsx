@@ -22,6 +22,8 @@ function App() {
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [showImportModal, setShowImportModal] = useState(false)
   const [embyConnected, setEmbyConnected] = useState(false)
+  const [selectedStreamingServices, setSelectedStreamingServices] = useState<number[]>([])
+  const [movieStreamingData, setMovieStreamingData] = useState<Record<number, number[]>>({})
 
   useEffect(() => {
     if (user) {
@@ -32,6 +34,28 @@ function App() {
     }
   }, [user])
 
+  // Fetch streaming data for movies
+  useEffect(() => {
+    const fetchStreamingData = async () => {
+      if (movies.length === 0) return
+      
+      const streamingData: Record<number, number[]> = {}
+      
+      for (const movie of movies) {
+        try {
+          const providers = await tmdbAPI.getStreamingProviders(movie.tmdb_id)
+          streamingData[movie.tmdb_id] = providers
+        } catch (error) {
+          console.error(`Failed to fetch streaming data for ${movie.title}:`, error)
+          streamingData[movie.tmdb_id] = []
+        }
+      }
+      
+      setMovieStreamingData(streamingData)
+    }
+    
+    fetchStreamingData()
+  }, [movies])
   // Auto-sync with Emby when movies are loaded
   useEffect(() => {
     if (movies.length > 0 && embyConnected && !isChecking) {
@@ -209,6 +233,11 @@ function App() {
       if (filter === 'unwatched') return !movie.watched
       return true
     })
+    .filter(movie => {
+      if (selectedStreamingServices.length === 0) return true
+      const movieProviders = movieStreamingData[movie.tmdb_id] || []
+      return selectedStreamingServices.some(serviceId => movieProviders.includes(serviceId))
+    })
     .sort((a, b) => {
       switch (sortBy) {
         case 'title':
@@ -224,6 +253,13 @@ function App() {
       }
     })
 
+  // Calculate available streaming movies
+  const availableStreamingMovies = selectedStreamingServices.length === 0 
+    ? 0 
+    : movies.filter(movie => {
+        const movieProviders = movieStreamingData[movie.tmdb_id] || []
+        return selectedStreamingServices.some(serviceId => movieProviders.includes(serviceId))
+      }).length
   if (authLoading) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
@@ -449,6 +485,9 @@ function App() {
                 onFilterChange={setFilter}
                 onSortChange={setSortBy}
                 totalMovies={filteredMovies.length}
+                selectedStreamingServices={selectedStreamingServices}
+                onStreamingServicesChange={setSelectedStreamingServices}
+                availableStreamingMovies={availableStreamingMovies}
               />
             )}
             
@@ -459,6 +498,7 @@ function App() {
               onRemove={removeFromWatchlist}
               onToggleWatched={toggleWatchedStatus}
               onUpdatePreference={updateUserPreference}
+              movieStreamingData={movieStreamingData}
             />
           </>
         ) : (

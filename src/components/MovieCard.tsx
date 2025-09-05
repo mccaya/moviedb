@@ -24,6 +24,7 @@ interface MovieCardProps {
   onRemove: (id: string) => Promise<void>
   onToggleWatched: (id: string, watched: boolean) => Promise<void>
   onUpdatePreference: (id: string, preference: 'thumbs_up' | 'thumbs_down' | null) => Promise<void>
+  streamingProviders: number[]
 }
 
 export function MovieCard({ 
@@ -31,7 +32,8 @@ export function MovieCard({
   viewMode, 
   onRemove, 
   onToggleWatched, 
-  onUpdatePreference 
+  onUpdatePreference,
+  streamingProviders
 }: MovieCardProps) {
   const [showActions, setShowActions] = useState(false)
   const [loading, setLoading] = useState(false)
