@@ -306,3 +306,114 @@ export function MovieCard({
                 {movie.watched ? 'Unwatch' : 'Watched'}
               </button>
             )}
+            
+            <button
+              onClick={handleThumbsUp}
+              disabled={loading}
+              className={cn(
+                "p-2 rounded-lg transition-colors",
+                movie.user_preference === 'thumbs_up'
+                  ? "bg-green-600 hover:bg-green-700 text-white"
+                  : "bg-gray-600 hover:bg-gray-500 text-white"
+              )}
+            >
+              <ThumbsUp className="h-3 w-3" />
+            </button>
+            
+            <button
+              onClick={handleThumbsDown}
+              disabled={loading}
+              className={cn(
+                "p-2 rounded-lg transition-colors",
+                movie.user_preference === 'thumbs_down'
+                  ? "bg-red-600 hover:bg-red-700 text-white"
+                  : "bg-gray-600 hover:bg-gray-500 text-white"
+              )}
+            >
+              <ThumbsDown className="h-3 w-3" />
+            </button>
+            
+            <button
+              onClick={() => setShowDeleteDialog(true)}
+              disabled={loading}
+              className="p-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+            >
+              <Trash2 className="h-3 w-3" />
+            </button>
+          </div>
+        </div>
+
+        <div className="p-4">
+          <div className="flex items-start justify-between mb-2">
+            <h3 className="font-semibold text-white text-sm line-clamp-2 leading-tight">
+              {movie.title}
+            </h3>
+            
+            {/* Emby Play Button in card footer */}
+            {movie.emby_available && movie.emby_item_id && (
+              <PlayButton 
+                embyItemId={movie.emby_item_id}
+                movieTitle={movie.title}
+                size="sm"
+                className="ml-2"
+              />
+            )}
+          </div>
+          
+          <div className="flex items-center gap-2 text-xs text-gray-400 mb-3">
+            <Calendar className="h-3 w-3" />
+            <span>{releaseYear}</span>
+            {movie.user_preference && (
+              <>
+                <span>•</span>
+                <div className="flex items-center gap-1">
+                  {movie.user_preference === 'thumbs_up' ? (
+                    <ThumbsUp className="h-3 w-3 text-green-400 fill-current" />
+                  ) : (
+                    <ThumbsDown className="h-3 w-3 text-red-400 fill-current" />
+                  )}
+                  <span>{movie.user_preference === 'thumbs_up' ? 'Liked' : 'Disliked'}</span>
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Emby Status in footer */}
+          <EmbyStatusIndicator 
+            available={!!movie.emby_available}
+            lastChecked={movie.last_emby_check}
+            className="mb-3"
+          />
+
+          {movie.genres && movie.genres.length > 0 && (
+            <div className="flex flex-wrap gap-1">
+              {movie.genres.slice(0, 2).map((genre) => (
+                <span
+                  key={genre}
+                  className={cn(
+                    "px-2 py-1 rounded-full text-xs text-white font-medium",
+                    getGenreColor(genre)
+                  )}
+                >
+                  {genre}
+                </span>
+              ))}
+              {movie.genres.length > 2 && (
+                <span className="px-2 py-1 rounded-full text-xs text-gray-400 bg-gray-700">
+                  +{movie.genres.length - 2}
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+      
+      <DeleteConfirmDialog
+        isOpen={showDeleteDialog}
+        onClose={() => setShowDeleteDialog(false)}
+        onConfirm={handleRemove}
+        movieTitle={movie.title}
+      />
+    </>
+  )
+}
