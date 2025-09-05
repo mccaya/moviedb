@@ -1,4 +1,4 @@
-const EMBY_SERVER_URL = import.meta.env.VITE_EMBY_SERVER_URL
+const EMBY_SERVER_URL = import.meta.env.VITE_EMBY_URL
 const EMBY_API_KEY = import.meta.env.VITE_EMBY_API_KEY
 
 export interface EmbyItem {
