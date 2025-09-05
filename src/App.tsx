@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import { Film, User, LogOut, Upload, Grid, List, Server } from 'lucide-react'
+import { Film, User, LogOut, Upload, Grid, List, Server, Sync, Loader2 } from 'lucide-react'
 import { useAuth } from './hooks/useAuth'
+import { useEmbySync } from './hooks/useEmbySync'
 import { movieService, Movie } from './lib/supabase'
 import { tmdbAPI, TMDBMovie } from './lib/tmdb'
+import { embyAPI } from './lib/emby'
 import { SearchBar } from './components/SearchBar'
 import { WatchlistGrid } from './components/WatchlistGrid'
 import { FilterBar } from './components/FilterBar'
 import { AuthModal } from './components/AuthModal'
 import { ImportModal } from './components/ImportModal'
-import { ShareButton } from './components/ShareButton'
 
 function App() {
   const { user, loading: authLoading, signOut } = useAuth()
+  const { isChecking, checkAllMovies, checkMovie, syncProgress } = useEmbySync()
   const [movies, setMovies] = useState<Movie[]>([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<'all' | 'watched' | 'unwatched'>('all')
@@ -19,66 +21,53 @@ function App() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [showImportModal, setShowImportModal] = useState(false)
-  const [showSharePreview, setShowSharePreview] = useState(false)
-  const [selectedStreamingServices, setSelectedStreamingServices] = useState<number[]>([])
-  const [movieStreamingData, setMovieStreamingData] = useState<Record<number, number[]>>({})
+  const [embyConnected, setEmbyConnected] = useState(false)
 
   useEffect(() => {
-    // Check if this is a shared link
-    const urlParams = new URLSearchParams(window.location.search)
-    if (urlParams.get('shared') === 'true') {
-      setShowSharePreview(true)
-    }
-    
     if (user) {
       loadWatchlist()
+      checkEmbyConnection()
     } else {
       setLoading(false)
     }
   }, [user])
 
-  // Load streaming data for movies
+  // Auto-sync with Emby when movies are loaded
   useEffect(() => {
-    const loadStreamingData = async () => {
-      if (movies.length === 0) return
-      
-      const streamingData: Record<number, number[]> = {}
-      
-      // Load streaming data for each movie (with rate limiting)
-      for (let i = 0; i < movies.length; i++) {
-        const movie = movies[i]
-        try {
-          const providers = await tmdbAPI.getStreamingProviders(movie.tmdb_id)
-          if (providers?.US?.flatrate) {
-            streamingData[movie.tmdb_id] = providers.US.flatrate.map((p: any) => p.provider_id)
-          } else {
-            streamingData[movie.tmdb_id] = []
-          }
-          
-          // Rate limiting: wait 100ms between requests
-          if (i < movies.length - 1) {
-            await new Promise(resolve => setTimeout(resolve, 100))
-          }
-        } catch (error) {
-          console.error(`Failed to load streaming data for ${movie.title}:`, error)
-          streamingData[movie.tmdb_id] = []
-        }
+    if (movies.length > 0 && embyConnected && !isChecking) {
+      // Check for movies that need Emby sync (haven't been checked recently)
+      const needsCheck = movies.filter(movie => {
+        if (!movie.last_emby_check) return true
+        
+        const lastCheck = new Date(movie.last_emby_check)
+        const now = new Date()
+        const hoursSinceCheck = (now.getTime() - lastCheck.getTime()) / (1000 * 60 * 60)
+        
+        // Re-check after 24 hours
+        return hoursSinceCheck > 24
+      })
+
+      if (needsCheck.length > 0) {
+        console.log(`Auto-syncing ${needsCheck.length} movies with Emby`)
+        checkAllMovies(needsCheck).then(() => {
+          // Reload the watchlist to get updated Emby statuses
+          loadWatchlist()
+        })
       }
-      
-      setMovieStreamingData(streamingData)
     }
-    
-    loadStreamingData()
-  }, [movies])
-  const handleCloseSharePreview = () => {
-    setShowSharePreview(false)
-    // Clean up URL
-    const url = new URL(window.location.href)
-    url.searchParams.delete('shared')
-    url.searchParams.delete('movies')
-    url.searchParams.delete('watched')
-    url.searchParams.delete('total')
-    window.history.replaceState({}, '', url.toString())
+  }, [movies.length, embyConnected, isChecking, checkAllMovies])
+
+  const checkEmbyConnection = async () => {
+    try {
+      const connected = await embyAPI.checkConnection()
+      setEmbyConnected(connected)
+      if (!connected) {
+        console.warn('Emby server not accessible')
+      }
+    } catch (error) {
+      console.error('Error checking Emby connection:', error)
+      setEmbyConnected(false)
+    }
   }
 
   const loadWatchlist = async () => {
@@ -127,6 +116,11 @@ function App() {
 
       if (data) {
         setMovies(prev => [data, ...prev])
+        
+        // Check Emby availability for the new movie
+        if (embyConnected) {
+          setTimeout(() => checkMovie(data), 500)
+        }
       }
     } catch (error) {
       console.error('Error adding movie:', error)
@@ -195,6 +189,19 @@ function App() {
     }
   }
 
+  const handleManualEmbySync = async () => {
+    if (!embyConnected) {
+      await checkEmbyConnection()
+      if (!embyConnected) {
+        alert('Cannot connect to Emby server. Please check your configuration.')
+        return
+      }
+    }
+
+    await checkAllMovies(movies)
+    await loadWatchlist() // Refresh to show updated statuses
+  }
+
   // Filter and sort movies
   const filteredMovies = movies
     .filter(movie => {
@@ -202,19 +209,11 @@ function App() {
       if (filter === 'unwatched') return !movie.watched
       return true
     })
-    .filter(movie => {
-      // Filter by streaming services if any are selected
-      if (selectedStreamingServices.length === 0) return true
-      
-      const movieProviders = movieStreamingData[movie.tmdb_id] || []
-      return selectedStreamingServices.some(serviceId => movieProviders.includes(serviceId))
-    })
     .sort((a, b) => {
       switch (sortBy) {
         case 'title':
           return a.title.localeCompare(b.title)
         case 'preference':
-          // Sort by preference: thumbs_up first, then no preference, then thumbs_down
           const aValue = a.user_preference === 'thumbs_up' ? 2 : a.user_preference === 'thumbs_down' ? 0 : 1
           const bValue = b.user_preference === 'thumbs_up' ? 2 : b.user_preference === 'thumbs_down' ? 0 : 1
           return bValue - aValue
@@ -225,13 +224,6 @@ function App() {
       }
     })
 
-  // Count movies available on selected streaming services
-  const availableStreamingMovies = selectedStreamingServices.length === 0 
-    ? movies.length 
-    : movies.filter(movie => {
-        const movieProviders = movieStreamingData[movie.tmdb_id] || []
-        return selectedStreamingServices.some(serviceId => movieProviders.includes(serviceId))
-      }).length
   if (authLoading) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
@@ -252,11 +244,38 @@ function App() {
             <div className="flex items-center gap-3">
               <Film className="h-8 w-8 text-blue-500" />
               <h1 className="text-xl font-bold">Movie Watchlist</h1>
+              
+              {/* Emby Status Indicator */}
+              {user && (
+                <div className="flex items-center gap-2 ml-4">
+                  <div className={`w-2 h-2 rounded-full ${embyConnected ? 'bg-green-400' : 'bg-red-400'}`} />
+                  <span className="text-xs text-gray-400">
+                    Emby {embyConnected ? 'Connected' : 'Disconnected'}
+                  </span>
+                </div>
+              )}
             </div>
             
             <div className="flex items-center gap-4">
               {user && (
                 <>
+                  {/* Emby Sync Button */}
+                  <button
+                    onClick={handleManualEmbySync}
+                    disabled={isChecking}
+                    className="flex items-center gap-2 px-3 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 rounded-lg transition-colors"
+                    title={`Sync with Emby${!embyConnected ? ' (Server Disconnected)' : ''}`}
+                  >
+                    {isChecking ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Server className="h-4 w-4" />
+                    )}
+                    <span className="hidden sm:inline">
+                      {isChecking ? `Syncing ${syncProgress.current}/${syncProgress.total}` : 'Sync Emby'}
+                    </span>
+                  </button>
+                  
                   <button
                     onClick={() => setShowImportModal(true)}
                     className="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 rounded-lg transition-colors"
@@ -279,11 +298,6 @@ function App() {
                       <List className="h-4 w-4" />
                     </button>
                   </div>
-                  
-                  <ShareButton 
-                    movies={movies} 
-                    userName={user.email?.split('@')[0] || 'Movie Lover'} 
-                  />
                 </>
               )}
               
@@ -324,8 +338,8 @@ function App() {
               onRemoveMovie={removeFromWatchlist}
             />
             
-            {/* Stats Overview - 5 tiles */}
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
+            {/* Stats Overview - Enhanced with Emby stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-8">
               <button 
                 onClick={() => setFilter('all')}
                 className={`bg-gray-800 hover:bg-gray-700 rounded-xl p-6 transition-colors text-left w-full ${
@@ -379,6 +393,21 @@ function App() {
                 </div>
               </button>
               
+              {/* Emby Available */}
+              <div className="bg-gray-750 rounded-xl p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-400">On Emby</p>
+                    <p className="text-2xl font-bold text-white">
+                      {movies.filter(m => m.emby_available).length}
+                    </p>
+                  </div>
+                  <div className="h-8 w-8 bg-purple-500 rounded-full flex items-center justify-center">
+                    <Server className="h-4 w-4 text-white" />
+                  </div>
+                </div>
+              </div>
+              
               <div className="bg-gray-750 rounded-xl p-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -420,9 +449,6 @@ function App() {
                 onFilterChange={setFilter}
                 onSortChange={setSortBy}
                 totalMovies={filteredMovies.length}
-                selectedStreamingServices={selectedStreamingServices}
-                onStreamingServicesChange={setSelectedStreamingServices}
-                availableStreamingMovies={availableStreamingMovies}
               />
             )}
             
@@ -433,7 +459,6 @@ function App() {
               onRemove={removeFromWatchlist}
               onToggleWatched={toggleWatchedStatus}
               onUpdatePreference={updateUserPreference}
-              movieStreamingData={movieStreamingData}
             />
           </>
         ) : (
@@ -443,8 +468,7 @@ function App() {
               Welcome to Movie Watchlist
             </h2>
             <p className="text-gray-500 mb-8 max-w-md mx-auto">
-              Keep track of movies you want to watch and rate the ones you've seen. 
-              Sign in to get started!
+              Keep track of movies you want to watch and play them directly from your Emby server!
             </p>
             <button
               onClick={() => setShowAuthModal(true)}
@@ -466,10 +490,6 @@ function App() {
         onClose={() => setShowImportModal(false)}
         onImport={handleImport}
       />
-      
-      {showSharePreview && (
-        <SharePreview onClose={handleCloseSharePreview} />
-      )}
     </div>
   )
 }
