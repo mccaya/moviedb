@@ -9,6 +9,21 @@ console.log('Emby Configuration:', {
   apiKeyLength: EMBY_API_KEY ? EMBY_API_KEY.length : 0
 })
 
+// Additional debugging for environment variables
+console.log('All Emby environment variables:', {
+  VITE_EMBY_URL: import.meta.env.VITE_EMBY_URL,
+  VITE_EMBY_API_KEY: import.meta.env.VITE_EMBY_API_KEY ? '[HIDDEN]' : 'Not set'
+})
+
+if (!EMBY_SERVER_URL) {
+  console.error('❌ EMBY SERVER URL NOT CONFIGURED!')
+  console.log('💡 To fix this:')
+  console.log('1. Check your .env file in the project root')
+  console.log('2. Make sure you have: VITE_EMBY_URL=http://your-emby-server:8096')
+  console.log('3. Restart the development server after making changes')
+  console.log('4. The URL should NOT have quotes around it')
+}
+
 export interface EmbyItem {
   Id: string
   Name: string
