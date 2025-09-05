@@ -28,7 +28,9 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
       if (error) {
         // Provide more user-friendly error messages
-        if (error.message.includes('Invalid login credentials')) {
+        if (error.message.includes('Supabase is not configured')) {
+          setError('Please set up your Supabase configuration in the .env file before using authentication.')
+        } else if (error.message.includes('Invalid login credentials')) {
           setError('Invalid email or password. Please check your credentials and try again.')
         } else if (error.message.includes('Database error saving new user')) {
           setError('Database error: Please ensure email confirmation is disabled in your Supabase dashboard (Authentication → Settings → Email Settings → Disable "Enable Email Confirmations"). Then try again.')
@@ -36,6 +38,8 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           setError('An account with this email already exists. Try signing in instead.')
         } else if (error.message.includes('Password should be at least')) {
           setError('Password must be at least 6 characters long.')
+        } else if (error.message.includes('Failed to fetch')) {
+          setError('Unable to connect to the authentication service. Please check your internet connection and Supabase configuration.')
         } else {
           setError(error.message)
         }

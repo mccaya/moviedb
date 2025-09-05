@@ -44,10 +44,21 @@ export function useAuth() {
       return { data, error }
     } catch (err) {
       console.error('Signup error:', err)
+      
+      // Check if it's a configuration error
+      if (err instanceof Error && err.message.includes('Missing Supabase configuration')) {
+        return { 
+          data: null, 
+          error: { 
+            message: 'Supabase is not configured. Please set up your environment variables in the .env file.' 
+          } 
+        }
+      }
+      
       return { 
         data: null, 
         error: { 
-          message: 'Signup failed. Please check your Supabase configuration.' 
+          message: err instanceof Error ? err.message : 'Signup failed. Please check your Supabase configuration.' 
         } 
       }
     }
