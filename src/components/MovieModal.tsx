@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
-import { X, Calendar, Star, Clock, Play, Plus, Check, Eye, EyeOff, ThumbsUp, ThumbsDown, Loader2 } from 'lucide-react'
+import { X, Calendar, Star, Clock, Play, Plus, Check, Eye, EyeOff, ThumbsUp, ThumbsDown, Loader2, Crown } from 'lucide-react'
 import { tmdbAPI, TMDBMovie } from '../lib/tmdb'
+import { embyAPI } from '../lib/emby'
 import { cn, formatDate, formatRating, getGenreColor } from '../lib/utils'
 
 interface Movie {
@@ -17,6 +18,10 @@ interface Movie {
   personal_rating: number | null
   added_at: string
   user_preference: string | null
+  // Emby integration fields
+  emby_item_id?: string | null
+  emby_available?: boolean
+  last_emby_check?: string | null
 }
 
 interface MovieDetails extends TMDBMovie {
@@ -55,6 +60,7 @@ interface MovieModalProps {
   onRemoveFromWatchlist?: (id: string) => Promise<void>
   onToggleWatched?: (id: string, watched: boolean) => Promise<void>
   onUpdatePreference?: (id: string, preference: 'thumbs_up' | 'thumbs_down' | null) => Promise<void>
+  onUpdateEmbyStatus?: (id: string, embyItemId: string | null, available: boolean) => Promise<void>
 }
 
 export function MovieModal({ 
@@ -65,22 +71,109 @@ export function MovieModal({
   onAddToWatchlist,
   onRemoveFromWatchlist,
   onToggleWatched,
-  onUpdatePreference
+  onUpdatePreference,
+  onUpdateEmbyStatus
 }: MovieModalProps) {
   const [movieDetails, setMovieDetails] = useState<MovieDetails | null>(null)
   const [streamingProviders, setStreamingProviders] = useState<any>(null)
   const [loading, setLoading] = useState(false)
   const [actionLoading, setActionLoading] = useState(false)
   const [activeTab, setActiveTab] = useState<'overview' | 'cast' | 'streaming' | 'details'>('overview')
+  const [embyLoading, setEmbyLoading] = useState(false)
+  const [embyAvailable, setEmbyAvailable] = useState(false)
+  const [embyItemId, setEmbyItemId] = useState<string | null>(null)
 
   const tmdbId = 'tmdb_id' in movie ? movie.tmdb_id : movie.id
   const isWatchlistMovie = 'user_id' in movie
 
+  // Check if movie has Emby data
+  const hasEmbyData = isWatchlistMovie && 'emby_available' in movie
+  const initialEmbyAvailable = hasEmbyData ? (movie as Movie).emby_available : false
+  const initialEmbyItemId = hasEmbyData ? (movie as Movie).emby_item_id : null
+
   useEffect(() => {
     if (isOpen && tmdbId) {
       loadMovieDetails()
+      
+      // Set initial Emby state or check Emby if not checked recently
+      if (hasEmbyData) {
+        setEmbyAvailable(!!initialEmbyAvailable)
+        setEmbyItemId(initialEmbyItemId || null)
+        
+        // Check if we need to refresh Emby status
+        const lastCheck = (movie as Movie).last_emby_check
+        if (!lastCheck || shouldRefreshEmbyCheck(lastCheck)) {
+          checkEmbyAvailability()
+        }
+      } else {
+        // For non-watchlist movies, don't check Emby
+        setEmbyAvailable(false)
+        setEmbyItemId(null)
+      }
     }
-  }, [isOpen, tmdbId])
+  }, [isOpen, tmdbId, hasEmbyData])
+
+  const shouldRefreshEmbyCheck = (lastCheckString: string): boolean => {
+    const lastCheck = new Date(lastCheckString)
+    const now = new Date()
+    const hoursSinceCheck = (now.getTime() - lastCheck.getTime()) / (1000 * 60 * 60)
+    return hoursSinceCheck > 24 // Refresh after 24 hours
+  }
+
+  const checkEmbyAvailability = async () => {
+    if (!isWatchlistMovie || embyLoading) return
+    
+    setEmbyLoading(true)
+    try {
+      // Check Emby connection first
+      const isConnected = await embyAPI.checkConnection()
+      if (!isConnected) {
+        console.warn('Emby server not accessible')
+        return
+      }
+
+      // Search for movie on Emby
+      const year = movie.release_date ? new Date(movie.release_date).getFullYear() : undefined
+      const embyItem = await embyAPI.searchMovie(movie.title, year)
+      
+      const available = !!embyItem
+      const itemId = embyItem?.Id || null
+      
+      setEmbyAvailable(available)
+      setEmbyItemId(itemId)
+      
+      // Update database if we have the callback
+      if (onUpdateEmbyStatus && isWatchlistMovie) {
+        await onUpdateEmbyStatus((movie as Movie).id, itemId, available)
+      }
+      
+    } catch (error) {
+      console.error('Error checking Emby availability:', error)
+    } finally {
+      setEmbyLoading(false)
+    }
+  }
+
+  const handlePremiumPlay = async () => {
+    if (!embyItemId) return
+    
+    try {
+      // Check connection
+      const isConnected = await embyAPI.checkConnection()
+      if (!isConnected) {
+        alert('Cannot connect to Emby server. Please check your connection.')
+        return
+      }
+
+      // Open Emby web player
+      const webPlayerUrl = embyAPI.getWebPlayerUrl(embyItemId)
+      window.open(webPlayerUrl, '_blank', 'noopener,noreferrer')
+      
+    } catch (error) {
+      console.error('Error opening Emby player:', error)
+      alert('Failed to open movie in Emby player.')
+    }
+  }
 
   const loadMovieDetails = async () => {
     setLoading(true)
@@ -104,12 +197,15 @@ export function MovieModal({
   }
 
   const handleClose = () => {
-    console.log('Modal close button clicked') // Debug log
+    console.log('Modal close button clicked')
     setMovieDetails(null)
     setStreamingProviders(null)
     setLoading(false)
     setActionLoading(false)
     setActiveTab('overview')
+    setEmbyLoading(false)
+    setEmbyAvailable(false)
+    setEmbyItemId(null)
     onClose()
   }
 
@@ -279,6 +375,16 @@ export function MovieModal({
                       <span className="text-gray-400">Directed by</span> {director.name}
                     </div>
                   )}
+
+                  {/* Emby Status Indicator */}
+                  {isWatchlistMovie && (
+                    <div className="flex items-center gap-1">
+                      <div className={`w-2 h-2 rounded-full ${embyAvailable ? 'bg-purple-400' : 'bg-gray-500'}`} />
+                      <span className="text-xs">
+                        {embyLoading ? 'Checking Emby...' : embyAvailable ? 'Available on Emby' : 'Not on Emby'}
+                      </span>
+                    </div>
+                  )}
                 </div>
                 
                 {genres.length > 0 && (
@@ -299,6 +405,22 @@ export function MovieModal({
                 
                 {/* Action buttons */}
                 <div className="flex flex-wrap gap-3">
+                  {/* Premium Button - Shows when available on Emby */}
+                  {isWatchlistMovie && embyAvailable && embyItemId && (
+                    <button
+                      onClick={handlePremiumPlay}
+                      disabled={embyLoading}
+                      className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 disabled:from-gray-600 disabled:to-gray-700 text-white rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-semibold"
+                    >
+                      {embyLoading ? (
+                        <Loader2 className="h-5 w-5 animate-spin" />
+                      ) : (
+                        <Crown className="h-5 w-5" />
+                      )}
+                      Premium
+                    </button>
+                  )}
+                  
                   {trailerUrl && (
                     <a
                       href={trailerUrl}
@@ -379,7 +501,7 @@ export function MovieModal({
           </div>
         </div>
 
-        {/* Content tabs */}
+        {/* Content tabs - Rest of the modal remains the same */}
         <div className="p-6">
           <div className="flex gap-1 mb-6 bg-gray-700 rounded-lg p-1">
             {[
@@ -485,6 +607,20 @@ export function MovieModal({
                             </div>
                           ))}
                         </div>
+                        
+                        {/* Add Emby Premium notice if available */}
+                        {isWatchlistMovie && embyAvailable && (
+                          <div className="mt-4 p-3 bg-purple-900/20 border border-purple-500/20 rounded-lg">
+                            <div className="flex items-center gap-2 mb-2">
+                              <Crown className="h-4 w-4 text-purple-400" />
+                              <span className="text-purple-300 font-medium">Premium Access</span>
+                            </div>
+                            <p className="text-purple-200 text-sm">
+                              This movie is available on your personal Emby server. Click the Premium button to watch instantly.
+                            </p>
+                          </div>
+                        )}
+                        
                         <div className="mt-4 p-3 bg-blue-900/20 border border-blue-500/20 rounded-lg">
                           <p className="text-blue-300 text-sm">
                             <strong>Note:</strong> Availability may vary by region and can change over time. 
@@ -498,10 +634,23 @@ export function MovieModal({
                           <span className="text-2xl">📺</span>
                         </div>
                         <h3 className="text-lg font-semibold text-white mb-2">Not available on major streaming services</h3>
-                        <p className="text-gray-400 text-sm">
+                        <p className="text-gray-400 text-sm mb-4">
                           This movie may be available for rent or purchase on digital platforms like 
                           Amazon Prime Video, Apple TV, Google Play, or Vudu.
                         </p>
+                        
+                        {/* Premium option notice */}
+                        {isWatchlistMovie && embyAvailable && (
+                          <div className="mt-4 p-3 bg-purple-900/20 border border-purple-500/20 rounded-lg">
+                            <div className="flex items-center justify-center gap-2 mb-2">
+                              <Crown className="h-5 w-5 text-purple-400" />
+                              <span className="text-purple-300 font-medium">Good news!</span>
+                            </div>
+                            <p className="text-purple-200 text-sm">
+                              This movie is available on your personal Emby server. Click the Premium button above to watch.
+                            </p>
+                          </div>
+                        )}
                       </div>
                     )
                   })()}
