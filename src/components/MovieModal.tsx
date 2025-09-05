@@ -210,9 +210,11 @@ export function MovieModal({
               e.stopPropagation()
               handleClose()
             }}
-            className="absolute top-4 right-4 p-2 bg-black/50 hover:bg-black/70 text-white rounded-full transition-colors backdrop-blur-sm"
+            className="absolute top-4 right-4 p-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors shadow-lg z-10 font-bold text-lg"
+            type="button"
+            aria-label="Close modal"
           >
-            <X className="h-5 w-5" />
+            Close ✕
           </button>
           
           {/* Movie info overlay */}
