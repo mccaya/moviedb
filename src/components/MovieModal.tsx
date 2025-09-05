@@ -96,6 +96,7 @@ export function MovieModal({
   }
 
   const handleClose = () => {
+    console.log('Modal close button clicked') // Debug log
     setMovieDetails(null)
     setLoading(false)
     setActionLoading(false)
@@ -204,12 +205,12 @@ export function MovieModal({
           )}
           
           <button
-            onClick={handleClose}
-            className="absolute top-4 right-4 p-2 bg-black/50 hover:bg-black/70 text-white rounded-full transition-colors backdrop-blur-sm"
             onClick={(e) => {
+              e.preventDefault()
               e.stopPropagation()
               handleClose()
             }}
+            className="absolute top-4 right-4 p-2 bg-black/50 hover:bg-black/70 text-white rounded-full transition-colors backdrop-blur-sm"
           >
             <X className="h-5 w-5" />
           </button>
