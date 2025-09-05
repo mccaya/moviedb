@@ -68,9 +68,10 @@ export function MovieModal({
   onUpdatePreference
 }: MovieModalProps) {
   const [movieDetails, setMovieDetails] = useState<MovieDetails | null>(null)
+  const [streamingProviders, setStreamingProviders] = useState<any>(null)
   const [loading, setLoading] = useState(false)
   const [actionLoading, setActionLoading] = useState(false)
-  const [activeTab, setActiveTab] = useState<'overview' | 'cast' | 'details'>('overview')
+  const [activeTab, setActiveTab] = useState<'overview' | 'cast' | 'streaming' | 'details'>('overview')
 
   const tmdbId = 'tmdb_id' in movie ? movie.tmdb_id : movie.id
   const isWatchlistMovie = 'user_id' in movie
@@ -84,9 +85,16 @@ export function MovieModal({
   const loadMovieDetails = async () => {
     setLoading(true)
     try {
-      const details = await tmdbAPI.getMovieDetails(tmdbId)
+      const [details, providers] = await Promise.all([
+        tmdbAPI.getMovieDetails(tmdbId),
+        tmdbAPI.getStreamingProviders(tmdbId)
+      ])
+      
       if (details) {
         setMovieDetails(details)
+      }
+      if (providers) {
+        setStreamingProviders(providers)
       }
     } catch (error) {
       console.error('Error loading movie details:', error)
@@ -98,6 +106,7 @@ export function MovieModal({
   const handleClose = () => {
     console.log('Modal close button clicked') // Debug log
     setMovieDetails(null)
+    setStreamingProviders(null)
     setLoading(false)
     setActionLoading(false)
     setActiveTab('overview')
@@ -366,6 +375,7 @@ export function MovieModal({
             {[
               { key: 'overview', label: 'Overview' },
               { key: 'cast', label: 'Cast & Crew' },
+              { key: 'streaming', label: 'Where to Watch' },
               { key: 'details', label: 'Details' }
             ].map(({ key, label }) => (
               <button
