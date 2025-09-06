@@ -79,7 +79,7 @@ export function MovieModal({
   onToggleWatched,
   onUpdatePreference,
   onUpdatePersonalRating,
-  onUpdateEmbyStatus
+ onUpdateEmbyStatus,
   watchlistMovies = [],
   onRemoveMovie = async () => {}
 }: MovieModalProps) {
