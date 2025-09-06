@@ -418,7 +418,7 @@ export function TraktImportModal({
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 backdrop-blur-xl border border-purple-500/20 rounded-xl max-w-6xl w-full max-h-[90vh] overflow-hidden shadow-2xl mx-4">
+      <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 backdrop-blur-xl border border-purple-500/20 rounded-xl max-w-6xl w-full h-[90vh] overflow-hidden shadow-2xl mx-4 flex flex-col">
         {/* Header */}
         <div className="p-4 sm:p-6 border-b border-purple-500/20 bg-gradient-to-r from-purple-900/20 to-blue-900/20">
           <div className="flex items-center justify-between">
@@ -468,14 +468,14 @@ export function TraktImportModal({
           </div>
         </div>
 
-        <div className="flex flex-1 overflow-hidden">
+        <div className="flex flex-1 overflow-hidden min-h-0">
           {/* Sidebar - List Selection */}
           <div className={`${showMovieGrid ? 'hidden sm:block' : 'block'} w-full sm:w-80 bg-gradient-to-b from-gray-800/50 to-gray-900/50 backdrop-blur-sm border-r border-purple-500/20 flex flex-col`}>
             <div className="p-3 sm:p-4">
               <h4 className="text-xs sm:text-sm font-semibold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent mb-4">Available Lists</h4>
             </div>
               
-            <div className="overflow-y-auto px-3 sm:px-4 pb-6" style={{ height: 'calc(100vh - 200px)' }}>
+            <div className="flex-1 overflow-y-auto px-3 sm:px-4 pb-6">
               <div className="space-y-2">
                 {predefinedLists.map((list) => {
                   const settings = listSettings[list.slug] || {}
@@ -637,8 +637,8 @@ export function TraktImportModal({
                 </div>
 
                 {/* Movie Grid */}
-                <div className="flex-1 overflow-y-auto">
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 p-4 sm:p-6 pb-6">
+                <div className="flex-1 overflow-y-auto min-h-0">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 p-4 sm:p-6">
                   {movies.map((movie) => {
                     const isSelected = selectedMovies.has(movie.id)
                     const isAdded = watchlistMovies.some(w => w.tmdb_id === movie.id)
