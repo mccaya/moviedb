@@ -11,6 +11,7 @@ import { FilterBar } from './components/FilterBar'
 import { AuthModal } from './components/AuthModal'
 import { ImportModal } from './components/ImportModal'
 import { EmbyInfoModal } from './components/EmbyInfoModal'
+import { VipInfoModal } from './components/VipInfoModal'
 
 function App() {
   const { user, loading: authLoading, signOut } = useAuth()
@@ -23,6 +24,7 @@ function App() {
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [showImportModal, setShowImportModal] = useState(false)
   const [showEmbyInfoModal, setShowEmbyInfoModal] = useState(false)
+  const [showVipInfoModal, setShowVipInfoModal] = useState(false)
   const [embyConnected, setEmbyConnected] = useState(false)
   const [selectedStreamingServices, setSelectedStreamingServices] = useState<number[]>([])
   const [movieStreamingData, setMovieStreamingData] = useState<Record<number, number[]>>({})
@@ -544,6 +546,11 @@ function App() {
       <EmbyInfoModal
         isOpen={showEmbyInfoModal}
         onClose={() => setShowEmbyInfoModal(false)}
+      />
+      
+      <VipInfoModal
+        isOpen={showVipInfoModal}
+        onClose={() => setShowVipInfoModal(false)}
       />
     </div>
   )
