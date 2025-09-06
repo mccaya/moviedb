@@ -44,6 +44,7 @@ export function ImportModal({
   const [progress, setProgress] = useState({ current: 0, total: 0 })
   const [results, setResults] = useState<{ success: TMDBMovie[], failed: string[] }>({ success: [], failed: [] })
   const [showTraktModal, setShowTraktModal] = useState(false)
+  const [showWebContainerWarning, setShowWebContainerWarning] = useState(false)
 
   const handleClose = () => {
     setImportMethod(null)
@@ -52,6 +53,7 @@ export function ImportModal({
     setLoading(false)
     setProgress({ current: 0, total: 0 })
     setResults({ success: [], failed: [] })
+    setShowWebContainerWarning(false)
     onClose()
   }
 
@@ -134,6 +136,11 @@ export function ImportModal({
   }
 
   const handleTraktImport = () => {
+    setShowWebContainerWarning(true)
+  }
+
+  const handleWebContainerWarningOk = () => {
+    setShowWebContainerWarning(false)
     setShowTraktModal(true)
   }
 
@@ -154,6 +161,33 @@ export function ImportModal({
         watchlistMovies={watchlistMovies}
         onRemoveMovie={onRemoveMovie}
       />
+    )
+  }
+
+  // Show WebContainer warning popup
+  if (showWebContainerWarning) {
+    return (
+      <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+        <div className="bg-gray-800 rounded-xl max-w-md w-full p-6">
+          <div className="text-center mb-6">
+            <div className="p-3 bg-blue-100 rounded-full mx-auto mb-4 w-fit">
+              <List className="h-8 w-8 text-blue-600" />
+            </div>
+            <h3 className="text-lg font-semibold text-white mb-4">Streaming Service Lists</h3>
+            <p className="text-gray-300 leading-relaxed">
+              This option is fully functional but Bolt.new does not allow accessing external web addresses. 
+              Function can be enabled by hosting on a site such as vercel.com
+            </p>
+          </div>
+          
+          <button
+            onClick={handleWebContainerWarningOk}
+            className="w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"
+          >
+            OK
+          </button>
+        </div>
+      </div>
     )
   }
 
