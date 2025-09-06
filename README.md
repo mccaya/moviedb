@@ -1,12 +1,12 @@
-# Movie Watchlist App
+# CineVault
 
-A beautiful, production-ready movie watchlist application built with React, TypeScript, and Tailwind CSS. Features AI-powered recommendations, media server integration, and a modern, responsive design.
+A beautiful, production-ready personal movie collection manager built with React, TypeScript, and Tailwind CSS. Features AI-powered recommendations, media server integration, and a modern, responsive design.
 
 ## ✨ Features
 
 ### Core Features
 - 🎬 **Movie Search**: Search movies using The Movie Database (TMDB) API
-- 📝 **Personal Watchlist**: Add, remove, and organize your movies
+- 📝 **Personal Collection**: Add, remove, and organize your movies
 - ✅ **Watch Status**: Mark movies as watched/unwatched
 - ⭐ **Personal Ratings**: Rate movies from 1-10
 - 🔍 **Advanced Filtering**: Filter by watch status, genre, rating
@@ -14,7 +14,7 @@ A beautiful, production-ready movie watchlist application built with React, Type
 
 ### AI-Powered Features
 - 🤖 **AI Recommendations**: Get personalized movie suggestions using OpenAI
-- 📊 **Watchlist Analysis**: AI insights about your movie preferences
+- 📊 **Collection Analysis**: AI insights about your movie preferences
 - 🎯 **Smart Search**: Natural language movie search
 
 ### Media Server Integration
@@ -105,14 +105,14 @@ A beautiful, production-ready movie watchlist application built with React, Type
 ### Basic Usage
 1. **Sign up/Sign in** to create your account
 2. **Search for movies** using the search bar
-3. **Add movies** to your watchlist by clicking the + button
+3. **Add movies** to your CineVault by clicking the + button
 4. **Mark as watched** and rate movies you've seen
-5. **Filter and sort** your watchlist as it grows
+5. **Filter and sort** your collection as it grows
 
 ### AI Features
 1. **Toggle AI mode** in the search bar (sparkles icon)
 2. **Ask natural questions** like "Movies like Inception but funnier"
-3. **Get personalized insights** about your watchlist preferences
+3. **Get personalized insights** about your movie preferences
 
 ### Media Server Integration
 1. **Click the server icon** in the bottom right
@@ -135,7 +135,7 @@ A beautiful, production-ready movie watchlist application built with React, Type
 
 ## 🎨 Design Philosophy
 
-This app follows Apple-level design aesthetics with:
+FilmFolio follows Apple-level design aesthetics with:
 - **Clean, minimal interface** with thoughtful spacing
 - **Smooth animations** and micro-interactions
 - **Consistent color system** with proper contrast ratios
@@ -164,7 +164,7 @@ For Radarr integration:
 - Trending movies display
 - Genre-based filtering
 
-### Watchlist Management
+### Collection Management
 - Add/remove movies instantly
 - Mark as watched with visual indicators
 - Personal rating system (1-10 stars)

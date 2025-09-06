@@ -24,11 +24,11 @@ export function FilterBar({
   availableStreamingMovies
 }: FilterBarProps) {
   return (
-    <div className="flex flex-col gap-4 mb-6 p-4 bg-gray-800 rounded-xl">
+    <div className="flex flex-col gap-4 mb-6 p-4 bg-black/40 backdrop-blur-sm border border-gray-600/30 rounded-xl shadow-xl">
       <div className="flex flex-col sm:flex-row gap-4">
       <div className="flex items-center gap-2">
         <Filter className="h-4 w-4 text-gray-400" />
-        <span className="text-sm text-gray-400">Filter:</span>
+        <span className="text-sm text-gray-300">Filter:</span>
         <div className="flex gap-1">
           {[
             { key: 'all', label: 'All' },
@@ -38,10 +38,10 @@ export function FilterBar({
             <button
               key={key}
               onClick={() => onFilterChange(key as any)}
-              className={`px-3 py-1 rounded-lg text-sm transition-colors ${
+              className={`px-3 py-1 rounded-lg text-sm transition-all duration-300 ${
                 filter === key
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  ? 'bg-gradient-to-r from-red-500 to-pink-500 text-white shadow-lg'
+                  : 'bg-black/30 text-gray-300 hover:bg-black/50 border border-gray-600/30'
               }`}
             >
               {label}
@@ -52,11 +52,11 @@ export function FilterBar({
 
       <div className="flex items-center gap-2">
         <SortAsc className="h-4 w-4 text-gray-400" />
-        <span className="text-sm text-gray-400">Sort by:</span>
+        <span className="text-sm text-gray-300">Sort by:</span>
         <select
           value={sortBy}
           onChange={(e) => onSortChange(e.target.value as any)}
-          className="px-3 py-1 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-1 bg-black/40 backdrop-blur-sm border border-gray-600/50 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300"
         >
           <option value="added">Date Added</option>
           <option value="title">Title</option>
@@ -75,7 +75,7 @@ export function FilterBar({
         </div>
 
       <div className="flex-1 flex items-center justify-end">
-        <span className="text-sm text-gray-400">
+        <span className="text-sm text-gray-300">
           {totalMovies} movie{totalMovies !== 1 ? 's' : ''}
         </span>
       </div>

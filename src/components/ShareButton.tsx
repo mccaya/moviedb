@@ -20,14 +20,14 @@ export function ShareButton({ movies, userName = 'Someone' }: ShareButtonProps) 
       .map(m => m.title)
       .join(', ')
 
-    let shareText = `🎬 Check out ${userName}'s movie watchlist!\n\n`
+    let shareText = `🎬 Check out ${userName}'s FilmFolio!\n\n`
     shareText += `📊 ${watchedCount} watched out of ${totalCount} movies\n`
     
     if (topMovies) {
       shareText += `🌟 Recently watched: ${topMovies}\n`
     }
     
-    shareText += `\n🔗 View the full watchlist: ${window.location.origin}`
+    shareText += `\n🔗 View the full FilmFolio: ${window.location.origin}`
     
     return shareText
   }
@@ -45,7 +45,7 @@ export function ShareButton({ movies, userName = 'Someone' }: ShareButtonProps) 
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `${userName}'s Movie Watchlist`,
+          title: `${userName}'s FilmFolio`,
           text: generateShareText(),
           url: generateShareUrl()
         })
@@ -70,7 +70,7 @@ export function ShareButton({ movies, userName = 'Someone' }: ShareButtonProps) 
   }
 
   const shareViaEmail = () => {
-    const subject = encodeURIComponent(`${userName}'s Movie Watchlist`)
+    const subject = encodeURIComponent(`${userName}'s FilmFolio`)
     const body = encodeURIComponent(generateShareText())
     window.open(`mailto:?subject=${subject}&body=${body}`)
     setShowShareMenu(false)
@@ -106,7 +106,7 @@ export function ShareButton({ movies, userName = 'Someone' }: ShareButtonProps) 
         title="Share your watchlist"
       >
         <Share2 className="h-4 w-4" />
-        <span className="hidden sm:inline">Share Watchlist</span>
+        <span className="hidden sm:inline">Share CineVault</span>
       </button>
 
       {showShareMenu && (
@@ -116,7 +116,7 @@ export function ShareButton({ movies, userName = 'Someone' }: ShareButtonProps) 
             onClick={() => setShowShareMenu(false)}
           />
           <div className="absolute right-0 top-full mt-2 w-64 bg-gray-800 border border-gray-700 rounded-xl shadow-xl z-50 p-4">
-            <h3 className="text-white font-semibold mb-3">Share Your Watchlist</h3>
+            <h3 className="text-white font-semibold mb-3">Share Your FilmFolio</h3>
             
             <div className="space-y-2">
               <button

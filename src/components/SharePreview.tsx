@@ -29,7 +29,7 @@ export function SharePreview({ onClose }: SharePreviewProps) {
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
       <div className="bg-gray-800 rounded-xl max-w-md w-full p-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-white">Shared Watchlist</h2>
+          <h2 className="text-xl font-bold text-white">Shared CineVault</h2>
           <button
             onClick={onClose}
             className="p-1 text-gray-400 hover:text-white transition-colors"
@@ -41,7 +41,7 @@ export function SharePreview({ onClose }: SharePreviewProps) {
         <div className="text-center mb-6">
           <Film className="h-16 w-16 text-blue-500 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-white mb-2">
-            Someone shared their movie taste with you!
+            Someone shared their CineVault with you!
           </h3>
           <p className="text-gray-400">
             Check out what they've been watching
@@ -86,7 +86,7 @@ export function SharePreview({ onClose }: SharePreviewProps) {
 
         <div className="text-center">
           <p className="text-sm text-gray-400 mb-4">
-            Want to create your own watchlist?
+            Want to create your own FilmFolio?
           </p>
           <button
             onClick={onClose}

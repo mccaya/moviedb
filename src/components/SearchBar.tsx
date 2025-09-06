@@ -126,14 +126,14 @@ export function SearchBar({ onAddMovie, watchlistMovies, onRemoveMovie }: Search
             onChange={(e) => setQuery(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder={aiMode ? "Ask AI: 'Movies like Inception but funnier'" : "Search for movies..."}
-            className="w-full pl-12 pr-4 py-3 bg-gray-800 border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 transition-all"
+            className="w-full pl-12 pr-4 py-3 bg-black/40 backdrop-blur-sm border border-gray-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500/50 text-white placeholder-gray-400 transition-all duration-300 shadow-lg hover:shadow-xl"
           />
         </div>
         
         <button
           onClick={handleSearch}
           disabled={loading || !query.trim()}
-          className="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-700 disabled:cursor-not-allowed text-white rounded-xl transition-all flex items-center gap-2"
+          className="px-6 py-3 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-500 hover:to-pink-500 disabled:from-gray-700 disabled:to-gray-800 disabled:cursor-not-allowed text-white rounded-xl transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl hover:scale-105"
         >
           {loading ? (
             <Loader2 className="h-5 w-5 animate-spin" />
@@ -145,10 +145,10 @@ export function SearchBar({ onAddMovie, watchlistMovies, onRemoveMovie }: Search
         
         <button
           onClick={toggleAiMode}
-          className={`px-4 py-3 rounded-xl transition-all flex items-center gap-2 ${
+          className={`px-4 py-3 rounded-xl transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl hover:scale-105 ${
             aiMode 
-              ? 'bg-purple-600 hover:bg-purple-700' 
-              : 'bg-gray-700 hover:bg-gray-600'
+              ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500' 
+              : 'bg-black/40 backdrop-blur-sm border border-gray-600/50 hover:bg-black/60'
           }`}
         >
           <Sparkles className={`h-5 w-5 ${aiMode ? 'text-yellow-400' : 'text-gray-400'}`} />
@@ -167,7 +167,7 @@ export function SearchBar({ onAddMovie, watchlistMovies, onRemoveMovie }: Search
       </div>
 
       {aiMode && aiResults.length > 0 && (
-        <div className="mb-4 p-4 bg-gradient-to-r from-purple-900/20 to-blue-900/20 rounded-xl border border-purple-500/20">
+        <div className="mb-4 p-4 bg-gradient-to-r from-purple-900/30 to-blue-900/30 backdrop-blur-sm rounded-xl border border-purple-500/30 shadow-xl">
           <h3 className="text-sm font-semibold text-purple-300 mb-2 flex items-center gap-2">
             <Sparkles className="h-4 w-4" />
             AI Recommendations
@@ -185,7 +185,7 @@ export function SearchBar({ onAddMovie, watchlistMovies, onRemoveMovie }: Search
       {showResults && (
         <div className="relative">
           {error && (
-            <div className="mb-4 p-4 bg-red-900/50 border border-red-500/50 rounded-xl">
+            <div className="mb-4 p-4 bg-red-900/30 backdrop-blur-sm border border-red-500/30 rounded-xl shadow-xl">
               <p className="text-red-300 text-sm">{error}</p>
               {error.includes('TMDB API key') && (
                 <p className="text-red-200 text-xs mt-2">

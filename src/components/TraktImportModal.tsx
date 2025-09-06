@@ -409,27 +409,27 @@ export function TraktImportModal({
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-800 rounded-xl max-w-6xl w-full max-h-[90vh] overflow-hidden">
+      <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 backdrop-blur-xl border border-purple-500/20 rounded-xl max-w-6xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
         {/* Header */}
-        <div className="p-6 border-b border-gray-700">
+        <div className="p-6 border-b border-purple-500/20 bg-gradient-to-r from-purple-900/20 to-blue-900/20">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-100 rounded-full">
-                <List className="h-6 w-6 text-purple-600" />
+              <div className="p-2 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full shadow-lg">
+                <List className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white">Import from Trakt Lists</h3>
+                <h3 className="text-lg font-semibold bg-gradient-to-r from-white via-purple-200 to-indigo-200 bg-clip-text text-transparent">Import from Trakt Lists</h3>
                 <p className="text-sm text-gray-400">Browse and import movies from curated Trakt.tv lists</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2">
-                <span className="text-lg font-bold text-gray-400 animate-pulse">Click here to set auto sync</span>
-                <span className="text-lg font-bold text-gray-400 animate-pulse">→</span>
+                <span className="text-lg font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">Click here to set auto sync</span>
+                <span className="text-lg font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">→</span>
               </div>
               <button
                 onClick={() => setShowSettings(!showSettings)}
-                className="p-2 text-gray-400 hover:text-white transition-colors"
+                className="p-2 text-gray-400 hover:text-white transition-all duration-300 hover:bg-purple-500/20 rounded-lg"
                 title="List Settings"
               >
                 <Settings className="h-5 w-5" />
@@ -438,7 +438,7 @@ export function TraktImportModal({
                 <button
                   onClick={handleSaveSettings}
                   disabled={saving}
-                  className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white rounded-lg transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 disabled:from-gray-600 disabled:to-gray-700 text-white rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 font-semibold"
                 >
                   {saving ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
@@ -450,7 +450,7 @@ export function TraktImportModal({
               )}
               <button
                 onClick={handleClose}
-                className="p-1 text-gray-400 hover:text-white transition-colors"
+                className="p-2 text-gray-400 hover:text-white transition-all duration-300 hover:bg-red-500/20 rounded-lg"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -460,9 +460,9 @@ export function TraktImportModal({
 
         <div className="flex flex-1 overflow-hidden">
           {/* Sidebar - List Selection */}
-          <div className="w-80 bg-gray-750 border-r border-gray-700 flex flex-col h-full">
+          <div className="w-80 bg-gradient-to-b from-gray-800/50 to-gray-900/50 backdrop-blur-sm border-r border-purple-500/20 flex flex-col h-full">
             <div className="p-4">
-              <h4 className="text-sm font-semibold text-gray-300 mb-4">Available Lists</h4>
+              <h4 className="text-sm font-semibold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent mb-4">Available Lists</h4>
             </div>
               
             <div className="overflow-y-auto px-4 pb-6" style={{ height: 'calc(100vh - 200px)' }}>
@@ -478,15 +478,15 @@ export function TraktImportModal({
                         disabled={loading && selectedList === list.slug}
                         className={`w-full text-left p-3 rounded-lg transition-all ${
                           isSelected
-                            ? 'bg-blue-600/20 border border-blue-500/30'
-                            : 'bg-gray-700 hover:bg-gray-600'
+                            ? 'bg-gradient-to-r from-purple-600/20 to-blue-600/20 border border-purple-500/30 shadow-lg'
+                            : 'bg-gradient-to-br from-gray-800/50 to-gray-900/50 hover:from-gray-700/50 hover:to-gray-800/50 border border-gray-700/30 hover:border-purple-500/30'
                         }`}
                       >
                         <div className="flex items-start justify-between mb-2">
-                          <h5 className="text-white font-medium text-sm">{list.name}</h5>
+                          <h5 className="text-white font-semibold text-sm">{list.name}</h5>
                           {settings.autoImport && (
-                            <div className="flex items-center gap-1 text-xs text-green-400">
-                              <div className="w-2 h-2 bg-green-400 rounded-full" />
+                            <div className="flex items-center gap-1 text-xs text-emerald-400">
+                              <div className="w-2 h-2 bg-emerald-400 rounded-full shadow-emerald-400/50 shadow-lg" />
                               Auto
                             </div>
                           )}
@@ -502,29 +502,29 @@ export function TraktImportModal({
                         </div>
                         
                         {settings.autoImport && (
-                          <div className="text-xs text-green-400 mt-1">
+                          <div className="text-xs text-emerald-400 mt-1">
                             {formatLastAutoSync(settings.lastAutoSync)}
                           </div>
                         )}
                         
                         {loading && selectedList === list.slug && (
-                          <div className="absolute inset-0 bg-gray-700/50 rounded-lg flex items-center justify-center">
-                            <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
+                          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm rounded-lg flex items-center justify-center">
+                            <Loader2 className="h-4 w-4 animate-spin text-purple-400" />
                           </div>
                         )}
                       </button>
                       
                       {/* Settings Panel */}
                       {showSettings && (
-                        <div className="mt-2 p-3 bg-gray-800 rounded-lg border border-gray-600">
+                        <div className="mt-2 p-3 bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-sm rounded-lg border border-purple-500/20">
                           <label className="flex items-center gap-2 text-sm">
                             <input
                               type="checkbox"
                               checked={settings.autoImport || false}
                               onChange={(e) => handleAutoImportToggle(list.slug, e.target.checked)}
-                              className="rounded border-gray-500 text-blue-600 focus:ring-blue-500"
+                              className="rounded border-gray-500 text-purple-600 focus:ring-purple-500"
                             />
-                            <span className="text-gray-300">Auto-import new movies</span>
+                            <span className="text-purple-200">Auto-import new movies</span>
                           </label>
                           <p className="text-xs text-gray-500 mt-1">
                             Automatically check for and import new movies every 24 hours
@@ -551,8 +551,8 @@ export function TraktImportModal({
             ) : loading ? (
               <div className="flex items-center justify-center h-full">
                 <div className="text-center">
-                  <Loader2 className="h-8 w-8 animate-spin text-blue-500 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-white mb-2">Loading Movies</h3>
+                  <Loader2 className="h-8 w-8 animate-spin text-purple-500 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent mb-2">Loading Movies</h3>
                   <p className="text-gray-400">Fetching latest movies from Trakt...</p>
                 </div>
               </div>
@@ -564,7 +564,7 @@ export function TraktImportModal({
                   <p className="text-gray-500">This list appears to be empty or unavailable</p>
                   <button
                     onClick={handleRefreshList}
-                    className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center gap-2 mx-auto"
+                    className="mt-4 px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-2 mx-auto font-semibold"
                   >
                     <RefreshCw className="h-4 w-4" />
                     Retry
@@ -576,13 +576,13 @@ export function TraktImportModal({
                 {/* Controls */}
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-4">
-                    <h4 className="text-lg font-semibold text-white">
+                    <h4 className="text-lg font-semibold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
                       {movies.length} Movies Found
                     </h4>
                     <button
                       onClick={handleRefreshList}
                       disabled={loading}
-                      className="flex items-center gap-2 px-3 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors text-sm"
+                      className="flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-gray-700/50 to-gray-800/50 hover:from-gray-600/50 hover:to-gray-700/50 backdrop-blur-sm border border-gray-600/30 hover:border-purple-500/30 text-white rounded-lg transition-all duration-300 text-sm"
                     >
                       <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
                       Refresh
@@ -592,7 +592,7 @@ export function TraktImportModal({
                   <div className="flex items-center gap-3">
                     <button
                       onClick={handleSelectAll}
-                      className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                      className="text-sm text-purple-400 hover:text-purple-300 transition-colors font-medium"
                     >
                       {selectedMovies.size === movies.length ? 'Deselect All' : 'Select All'}
                     </button>
@@ -601,7 +601,7 @@ export function TraktImportModal({
                       <button
                         onClick={handleImportSelected}
                         disabled={importingMovies.size > 0}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white rounded-lg transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 disabled:from-gray-600 disabled:to-gray-700 text-white rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 font-semibold"
                       >
                         {importingMovies.size > 0 ? (
                           <Loader2 className="h-4 w-4 animate-spin" />
@@ -629,12 +629,12 @@ export function TraktImportModal({
                             type="checkbox"
                             checked={isSelected}
                             onChange={(e) => handleMovieSelect(movie.id, e.target.checked)}
-                            className="w-4 h-4 rounded border-gray-400 text-blue-600 focus:ring-blue-500 bg-black/60 backdrop-blur-sm"
+                            className="w-4 h-4 rounded border-gray-400 text-purple-600 focus:ring-purple-500 bg-black/60 backdrop-blur-sm"
                           />
                         </div>
                         
                         {/* Movie Card */}
-                        <div className={`${isSelected ? 'ring-2 ring-blue-500' : ''} ${isImporting ? 'opacity-50' : ''} rounded-lg overflow-hidden`}>
+                        <div className={`${isSelected ? 'ring-2 ring-purple-500 shadow-purple-500/25 shadow-xl' : ''} ${isImporting ? 'opacity-50' : ''} rounded-lg overflow-hidden`}>
                           <MovieResult
                             movie={movie}
                             onAdd={handleIndividualMovieAdd}
