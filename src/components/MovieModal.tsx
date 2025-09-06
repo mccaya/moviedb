@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { X, Calendar, Star, Clock, Play, Plus, Check, Eye, EyeOff, ThumbsUp, ThumbsDown, Loader2, Crown } from 'lucide-react'
+import { X, Calendar, Star, Clock, Play, Plus, Check, Eye, EyeOff, ThumbsUp, ThumbsDown, Loader2, Crown, Trash2 } from 'lucide-react'
 import { tmdbAPI, TMDBMovie } from '../lib/tmdb'
 import { embyAPI } from '../lib/emby'
 import { openaiAPI } from '../lib/openai'
@@ -566,6 +566,19 @@ export function MovieModal({
                         )}
                       >
                         <ThumbsDown className="h-3 w-3 sm:h-4 sm:w-4" />
+                      </button>
+                      
+                      <button
+                        onClick={handleRemoveFromWatchlist}
+                        disabled={actionLoading}
+                        className="p-1.5 sm:p-3 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-500 hover:to-pink-500 disabled:from-gray-600 disabled:to-gray-700 text-white rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+                        title="Remove from watchlist"
+                      >
+                        {actionLoading ? (
+                          <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
+                        ) : (
+                          <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
+                        )}
                       </button>
                     </div>
                   )}
