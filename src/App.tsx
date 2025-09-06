@@ -597,68 +597,54 @@ function App() {
           </>
         ) : (
           <div className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
-            {/* Animated Background with Movie Posters */}
+            {/* Video Background */}
             <div className="absolute inset-0 overflow-hidden">
-              {/* Floating Movie Posters */}
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover opacity-30"
+                poster="https://images.unsplash.com/photo-1489599511986-c2b8e5b1b5b5?w=1920&h=1080&fit=crop"
+              >
+                {/* High-quality cinematic video sources */}
+                <source 
+                  src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" 
+                  type="video/mp4" 
+                />
+                <source 
+                  src="https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4" 
+                  type="video/mp4" 
+                />
+                {/* Fallback for browsers that don't support video */}
+                Your browser does not support the video tag.
+              </video>
+              
+              {/* Video Overlay for Better Text Readability */}
+              <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-purple-900/40 to-black/60"></div>
+              
+              {/* Cinematic Vignette Effect */}
+              <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/80"></div>
+              
+              {/* Subtle Floating Particles for Extra Cinematic Feel */}
               <div className="absolute inset-0">
-                {/* Row 1 - Top */}
-                <div className="absolute top-0 left-0 w-full h-32 flex items-center justify-around opacity-20 animate-pulse">
-                  <div className="w-20 h-28 bg-gradient-to-br from-red-600 to-pink-600 rounded-lg shadow-2xl transform rotate-12 hover:rotate-6 transition-transform duration-1000"></div>
-                  <div className="w-20 h-28 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-lg shadow-2xl transform -rotate-6 hover:rotate-3 transition-transform duration-1000"></div>
-                  <div className="w-20 h-28 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-lg shadow-2xl transform rotate-8 hover:-rotate-4 transition-transform duration-1000"></div>
-                  <div className="w-20 h-28 bg-gradient-to-br from-green-600 to-emerald-600 rounded-lg shadow-2xl transform -rotate-12 hover:rotate-8 transition-transform duration-1000"></div>
-                  <div className="w-20 h-28 bg-gradient-to-br from-yellow-600 to-orange-600 rounded-lg shadow-2xl transform rotate-4 hover:-rotate-2 transition-transform duration-1000"></div>
-                </div>
-                
-                {/* Row 2 - Left Side */}
-                <div className="absolute left-0 top-1/2 transform -translate-y-1/2 h-full w-32 flex flex-col items-center justify-around opacity-15">
-                  <div className="w-20 h-28 bg-gradient-to-br from-pink-600 to-rose-600 rounded-lg shadow-2xl transform -rotate-8 hover:rotate-4 transition-transform duration-1000"></div>
-                  <div className="w-20 h-28 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg shadow-2xl transform rotate-15 hover:-rotate-8 transition-transform duration-1000"></div>
-                  <div className="w-20 h-28 bg-gradient-to-br from-cyan-600 to-blue-600 rounded-lg shadow-2xl transform -rotate-10 hover:rotate-5 transition-transform duration-1000"></div>
-                </div>
-                
-                {/* Row 3 - Right Side */}
-                <div className="absolute right-0 top-1/2 transform -translate-y-1/2 h-full w-32 flex flex-col items-center justify-around opacity-15">
-                  <div className="w-20 h-28 bg-gradient-to-br from-orange-600 to-red-600 rounded-lg shadow-2xl transform rotate-12 hover:-rotate-6 transition-transform duration-1000"></div>
-                  <div className="w-20 h-28 bg-gradient-to-br from-emerald-600 to-teal-600 rounded-lg shadow-2xl transform -rotate-6 hover:rotate-8 transition-transform duration-1000"></div>
-                  <div className="w-20 h-28 bg-gradient-to-br from-violet-600 to-purple-600 rounded-lg shadow-2xl transform rotate-9 hover:-rotate-4 transition-transform duration-1000"></div>
-                </div>
-                
-                {/* Row 4 - Bottom */}
-                <div className="absolute bottom-0 left-0 w-full h-32 flex items-center justify-around opacity-20 animate-pulse">
-                  <div className="w-20 h-28 bg-gradient-to-br from-teal-600 to-cyan-600 rounded-lg shadow-2xl transform -rotate-8 hover:rotate-4 transition-transform duration-1000"></div>
-                  <div className="w-20 h-28 bg-gradient-to-br from-rose-600 to-pink-600 rounded-lg shadow-2xl transform rotate-10 hover:-rotate-5 transition-transform duration-1000"></div>
-                  <div className="w-20 h-28 bg-gradient-to-br from-amber-600 to-yellow-600 rounded-lg shadow-2xl transform -rotate-4 hover:rotate-8 transition-transform duration-1000"></div>
-                  <div className="w-20 h-28 bg-gradient-to-br from-purple-600 to-violet-600 rounded-lg shadow-2xl transform rotate-14 hover:-rotate-7 transition-transform duration-1000"></div>
-                  <div className="w-20 h-28 bg-gradient-to-br from-indigo-600 to-blue-600 rounded-lg shadow-2xl transform -rotate-6 hover:rotate-3 transition-transform duration-1000"></div>
-                </div>
-              </div>
-              
-              {/* Animated Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-transparent to-pink-900/30 animate-pulse"></div>
-              
-              {/* Radial Gradient Spotlight */}
-              <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/60"></div>
-              
-              {/* Floating Particles */}
-              <div className="absolute inset-0">
-                <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-purple-400 rounded-full opacity-60 animate-ping"></div>
-                <div className="absolute top-3/4 right-1/4 w-1 h-1 bg-pink-400 rounded-full opacity-40 animate-pulse"></div>
-                <div className="absolute top-1/2 left-3/4 w-3 h-3 bg-red-400 rounded-full opacity-30 animate-bounce"></div>
-                <div className="absolute top-1/3 right-1/3 w-1 h-1 bg-blue-400 rounded-full opacity-50 animate-ping"></div>
+                <div className="absolute top-1/4 left-1/4 w-1 h-1 bg-white rounded-full opacity-40 animate-ping"></div>
+                <div className="absolute top-3/4 right-1/4 w-1 h-1 bg-purple-400 rounded-full opacity-30 animate-pulse"></div>
+                <div className="absolute top-1/2 left-3/4 w-1 h-1 bg-pink-400 rounded-full opacity-20 animate-bounce"></div>
+                <div className="absolute top-1/3 right-1/3 w-1 h-1 bg-white rounded-full opacity-30 animate-ping"></div>
               </div>
             </div>
             
             {/* Main Content */}
             <div className="relative z-10 text-center py-16 px-4">
               <div className="relative mb-8">
-                <Film className="h-20 w-20 text-transparent bg-gradient-to-r from-red-500 via-purple-500 to-pink-500 bg-clip-text mx-auto drop-shadow-2xl" />
-                <div className="absolute inset-0 h-20 w-20 bg-gradient-to-r from-red-500 via-purple-500 to-pink-500 opacity-30 blur-2xl rounded-full mx-auto animate-pulse"></div>
+                <Film className="h-24 w-24 text-transparent bg-gradient-to-r from-red-500 via-purple-500 to-pink-500 bg-clip-text mx-auto drop-shadow-2xl" />
+                <div className="absolute inset-0 h-24 w-24 bg-gradient-to-r from-red-500 via-purple-500 to-pink-500 opacity-40 blur-3xl rounded-full mx-auto animate-pulse"></div>
               </div>
-              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent mb-6 drop-shadow-2xl">
+              <h2 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent mb-6 drop-shadow-2xl text-shadow-lg">
                 Welcome to FilmFolio
               </h2>
-              <p className="text-gray-300 mb-10 max-w-2xl mx-auto text-lg md:text-xl leading-relaxed drop-shadow-lg">
+              <p className="text-gray-200 mb-12 max-w-2xl mx-auto text-xl md:text-2xl leading-relaxed drop-shadow-xl text-shadow">
                 Your personal movie collection manager with AI recommendations and media server integration!
               </p>
               <button
@@ -666,7 +652,7 @@ function App() {
                   setAuthModalMode('signin')
                   setShowAuthModal(true)
                 }}
-                className="px-10 py-4 bg-gradient-to-r from-red-600 via-purple-600 to-pink-600 hover:from-red-500 hover:via-purple-500 hover:to-pink-500 text-white rounded-2xl transition-all duration-300 shadow-2xl hover:shadow-purple-500/25 hover:scale-110 font-bold text-xl transform hover:-translate-y-1"
+                className="px-12 py-5 bg-gradient-to-r from-red-600 via-purple-600 to-pink-600 hover:from-red-500 hover:via-purple-500 hover:to-pink-500 text-white rounded-2xl transition-all duration-300 shadow-2xl hover:shadow-purple-500/50 hover:scale-110 font-bold text-xl transform hover:-translate-y-2 backdrop-blur-sm border border-white/10"
               >
                 Get Started
               </button>
