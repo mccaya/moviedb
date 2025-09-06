@@ -366,6 +366,43 @@ export function TraktImportModal({
   const handleAddMovieFromCollection = async (movie: TMDBMovie) => {
     await onImport([movie])
   }
+
+  const handleIndividualMovieAdd = async (movie: TMDBMovie) => {
+    setImportingMovies(prev => new Set([...prev, movie.id]))
+    
+    try {
+      await onImport([movie])
+      
+      // Check if movie is part of a collection
+      try {
+        const collection = await tmdbAPI.getMovieCollection(movie.id)
+        if (collection) {
+          setCollectionMovie({ title: movie.title, id: movie.id })
+          setShowCollectionModal(true)
+        }
+      } catch (error) {
+        // Collection check failed, but movie was added successfully
+        console.log('No collection found for movie:', movie.title)
+      }
+    } catch (error) {
+      console.error('Failed to add movie:', error)
+    } finally {
+      setImportingMovies(prev => {
+        const newSet = new Set(prev)
+        newSet.delete(movie.id)
+        return newSet
+      })
+    }
+  }
+
+  const handleShowCollection = (movie: { title: string; id: number }) => {
+    setCollectionMovie(movie)
+    setShowCollectionModal(true)
+  }
+
+  const handleCloseCollectionModal = () => {
+    setShowCollectionModal(false)
+    setCollectionMovie(null)
   }
   if (!isOpen) return null
 
