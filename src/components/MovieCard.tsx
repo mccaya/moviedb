@@ -305,6 +305,8 @@ export function MovieCard({
           onToggleWatched={onToggleWatched}
           onUpdatePreference={onUpdatePreference}
           onUpdateEmbyStatus={handleUpdateEmbyStatus}
+          watchlistMovies={[]}
+          onRemoveMovie={async () => {}}
         />
         
         <DeleteConfirmDialog

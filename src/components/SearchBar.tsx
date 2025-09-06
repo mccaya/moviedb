@@ -252,10 +252,7 @@ export function SearchBar({ onAddMovie, watchlistMovies, onRemoveMovie }: Search
       {collectionMovie && (
         <CollectionModal
           isOpen={showCollectionModal}
-          onClose={() => {
-            setShowCollectionModal(false)
-            setCollectionMovie(null)
-          }}
+          onClose={handleCloseCollectionModal}
           movieTitle={collectionMovie.title}
           movieId={collectionMovie.id}
           onAddMovie={onAddMovie}

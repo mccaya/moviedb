@@ -177,6 +177,8 @@ export function MovieResult({
         isInWatchlist={isAdded}
         onAddToWatchlist={handleAddFromModal}
         onRemoveFromWatchlist={onRemoveMovie}
+        watchlistMovies={watchlistMovies}
+        onRemoveMovie={onRemoveMovie}
       />
     </>
   )

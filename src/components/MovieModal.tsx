@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react'
 import { X, Calendar, Star, Clock, Play, Plus, Check, Eye, EyeOff, ThumbsUp, ThumbsDown, Loader2, Crown } from 'lucide-react'
 import { tmdbAPI, TMDBMovie } from '../lib/tmdb'
 import { embyAPI } from '../lib/emby'
+import { openaiAPI } from '../lib/openai'
 import { cn, formatDate, formatRating, getGenreColor } from '../lib/utils'
 import { PersonalRatingStars } from './PersonalRatingStars'
+import { CollectionModal } from './CollectionModal'
 
 interface Movie {
   id: string
@@ -63,6 +65,8 @@ interface MovieModalProps {
   onUpdatePreference?: (id: string, preference: 'thumbs_up' | 'thumbs_down' | null) => Promise<void>
   onUpdatePersonalRating?: (id: string, rating: number | null) => Promise<void>
   onUpdateEmbyStatus?: (id: string, embyItemId: string | null, available: boolean) => Promise<void>
+  watchlistMovies?: Movie[]
+  onRemoveMovie?: (id: string) => Promise<void>
 }
 
 export function MovieModal({ 
@@ -76,6 +80,8 @@ export function MovieModal({
   onUpdatePreference,
   onUpdatePersonalRating,
   onUpdateEmbyStatus
+  watchlistMovies = [],
+  onRemoveMovie = async () => {}
 }: MovieModalProps) {
   const [movieDetails, setMovieDetails] = useState<MovieDetails | null>(null)
   const [streamingProviders, setStreamingProviders] = useState<any>(null)
@@ -85,6 +91,8 @@ export function MovieModal({
   const [embyLoading, setEmbyLoading] = useState(false)
   const [embyAvailable, setEmbyAvailable] = useState(false)
   const [embyItemId, setEmbyItemId] = useState<string | null>(null)
+  const [showCollectionModal, setShowCollectionModal] = useState(false)
+  const [collectionMovie, setCollectionMovie] = useState<{ title: string; id: number } | null>(null)
 
   const tmdbId = 'tmdb_id' in movie ? movie.tmdb_id : movie.id
   const isWatchlistMovie = 'user_id' in movie
@@ -218,10 +226,41 @@ export function MovieModal({
     setActionLoading(true)
     try {
       await onAddToWatchlist(movie as TMDBMovie)
+      
+      // Check if movie is part of a collection and show modal
+      try {
+        const collection = await tmdbAPI.getMovieCollection(tmdbId)
+        if (collection) {
+          setCollectionMovie({ title: movie.title, id: tmdbId })
+          setShowCollectionModal(true)
+        }
+      } catch (error) {
+        console.log('No collection found for movie:', movie.title)
+      }
     } catch (error) {
       console.error('Failed to add to watchlist:', error)
     } finally {
       setActionLoading(false)
+    }
+  }
+
+  const handleShowCollection = (movieTitle: string, movieId: number) => {
+    setCollectionMovie({ title: movieTitle, id: movieId })
+    setShowCollectionModal(true)
+  }
+
+  const handleCloseCollectionModal = () => {
+    setShowCollectionModal(false)
+    setCollectionMovie(null)
+  }
+
+  const handleAddMovieFromCollection = async (movieToAdd: TMDBMovie) => {
+    if (!onAddToWatchlist) return
+    
+    try {
+      await onAddToWatchlist(movieToAdd)
+    } catch (error) {
+      console.error('Failed to add movie from collection:', error)
     }
   }
 
@@ -742,6 +781,19 @@ export function MovieModal({
           )}
         </div>
       </div>
+      
+      {/* Collection Modal */}
+      {collectionMovie && (
+        <CollectionModal
+          isOpen={showCollectionModal}
+          onClose={handleCloseCollectionModal}
+          movieTitle={collectionMovie.title}
+          movieId={collectionMovie.id}
+          onAddMovie={handleAddMovieFromCollection}
+          watchlistMovies={watchlistMovies}
+          onRemoveMovie={onRemoveMovie}
+        />
+      )}
       </div>
   )
 }
