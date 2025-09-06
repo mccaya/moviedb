@@ -338,7 +338,7 @@ function App() {
       {/* Header */}
       <header className="bg-gradient-to-r from-gray-900 via-purple-900 to-gray-900 border-b border-purple-500/20 backdrop-blur-sm sticky top-0 z-40 px-safe">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 sm:h-18">
+          <div className="flex items-center justify-between h-16 sm:h-18 gap-2">
             <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
               <div className="relative">
                 <Film className="h-7 w-7 sm:h-8 sm:w-8 text-transparent bg-gradient-to-r from-red-500 via-purple-500 to-pink-500 bg-clip-text" />
@@ -359,7 +359,7 @@ function App() {
               )}
             </div>
             
-            <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
+            <div className="flex items-center gap-1 sm:gap-2 lg:gap-3 flex-shrink-0">
               {user && (
                 <>
                   {/* VIP Button */}
@@ -369,7 +369,7 @@ function App() {
                     title="VIP Features - Radarr Integration"
                   >
                     <span className="text-lg">👑</span>
-                    <span className="hidden sm:inline text-white font-semibold">VIP</span>
+                    <span className="hidden md:inline text-white font-semibold">VIP</span>
                   </button>
                   
                   {/* Emby Sync Button */}
@@ -391,7 +391,7 @@ function App() {
                   
                   <button
                     onClick={() => setShowImportModal(true)}
-                    className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+                    className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
                   >
                     <Upload className="h-4 w-4" />
                     <span className="hidden sm:inline">Import</span>
@@ -399,7 +399,7 @@ function App() {
                   
                   <button
                     onClick={() => setShowExportModal(true)}
-                    className="hidden md:flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+                    className="hidden lg:flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
                   >
                     <Download className="h-4 w-4" />
                     <span className="hidden lg:inline">Export</span>
@@ -434,7 +434,7 @@ function App() {
                 <div className="flex items-center gap-2 sm:gap-3">
                   <div className="hidden lg:flex items-center gap-2 text-sm text-gray-300">
                     <User className="h-4 w-4" />
-                    <span>{user.email}</span>
+                    <span className="truncate max-w-32">{user.email}</span>
                   </div>
                   <button
                     onClick={handleSignOut}
@@ -451,14 +451,14 @@ function App() {
                       setAuthModalMode('signup') 
                       setShowAuthModal(true)
                     }}
-                    className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 font-semibold"
+                    className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 font-semibold text-sm sm:text-base"
                   >
                     <User className="h-4 w-4" />
                     <span>Sign Up</span>
                   </button>
                   <button
                     onClick={() => setShowAuthModal(true)}
-                    className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 font-semibold"
+                    className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 font-semibold text-sm sm:text-base"
                   >
                     <User className="h-4 w-4" />
                     <span>Sign In</span>
