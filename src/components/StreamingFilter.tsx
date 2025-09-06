@@ -160,10 +160,10 @@ export function StreamingFilter({
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors min-w-[200px]"
+        className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors w-full sm:min-w-[200px]"
       >
         <Tv className="h-4 w-4 flex-shrink-0" />
-        <span className="flex-1 text-left truncate">
+        <span className="flex-1 text-left truncate text-xs sm:text-sm">
           {selectedServices.length === 0 
             ? 'My Streaming Services' 
             : `${selectedServices.length} Service${selectedServices.length !== 1 ? 's' : ''} Selected`
@@ -173,7 +173,7 @@ export function StreamingFilter({
       </button>
 
       {selectedServices.length > 0 && (
-        <div className="absolute top-full left-0 mt-1 text-xs text-green-400 whitespace-nowrap">
+        <div className="absolute top-full left-0 mt-1 text-xs text-green-400 whitespace-nowrap hidden sm:block">
           {availableMoviesCount} of {totalMoviesCount} movies available
         </div>
       )}
@@ -184,11 +184,11 @@ export function StreamingFilter({
             className="fixed inset-0 z-40" 
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute top-full left-0 mt-2 w-96 bg-gray-800 border border-gray-700 rounded-xl shadow-xl z-50 max-h-[80vh] overflow-hidden">
+          <div className="absolute top-full left-0 right-0 sm:right-auto mt-2 w-full sm:w-96 bg-gray-800 border border-gray-700 rounded-xl shadow-xl z-50 max-h-[80vh] overflow-hidden">
             {/* Header */}
-            <div className="p-4 border-b border-gray-700">
+            <div className="p-3 sm:p-4 border-b border-gray-700">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-white font-semibold">My Streaming Services</h3>
+                <h3 className="text-white font-semibold text-sm sm:text-base">My Streaming Services</h3>
                 <div className="flex gap-2">
                   <button
                     onClick={clearAll}
@@ -207,7 +207,7 @@ export function StreamingFilter({
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search streaming services..."
-                  className="w-full pl-10 pr-10 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  className="w-full pl-10 pr-10 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs sm:text-sm"
                 />
                 {searchQuery && (
                   <button
@@ -221,17 +221,17 @@ export function StreamingFilter({
             </div>
             
             {/* Services List */}
-            <div className="overflow-y-auto max-h-96">
+            <div className="overflow-y-auto max-h-64 sm:max-h-96">
               {Object.keys(groupedServices).length === 0 ? (
-                <div className="p-4 text-center text-gray-400">
+                <div className="p-3 sm:p-4 text-center text-gray-400">
                   <Tv className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                  <p>No streaming services found</p>
+                  <p className="text-sm">No streaming services found</p>
                 </div>
               ) : (
                 Object.entries(groupedServices).map(([category, services]) => (
-                  <div key={category} className="p-4 border-b border-gray-700 last:border-b-0">
+                  <div key={category} className="p-3 sm:p-4 border-b border-gray-700 last:border-b-0">
                     <div className="flex items-center justify-between mb-3">
-                      <h4 className="text-sm font-medium text-gray-300">
+                      <h4 className="text-xs sm:text-sm font-medium text-gray-300">
                         {CATEGORY_LABELS[category as keyof typeof CATEGORY_LABELS]}
                       </h4>
                       <button
@@ -242,7 +242,7 @@ export function StreamingFilter({
                       </button>
                     </div>
                     
-                    <div className="space-y-2">
+                    <div className="space-y-1 sm:space-y-2">
                       {services.map((service) => {
                         const isSelected = selectedServices.includes(service.id)
                         
@@ -250,25 +250,25 @@ export function StreamingFilter({
                           <button
                             key={service.id}
                             onClick={() => toggleService(service.id)}
-                            className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all ${
+                            className={`w-full flex items-center gap-2 sm:gap-3 p-2 sm:p-3 rounded-lg transition-all ${
                               isSelected 
                                 ? 'bg-blue-600/20 border border-blue-500/30 shadow-sm' 
                                 : 'bg-gray-700 hover:bg-gray-600'
                             }`}
                           >
-                            <div className={`w-10 h-10 ${service.color} rounded-lg flex-shrink-0 flex items-center justify-center text-white font-bold text-sm shadow-sm`}>
+                            <div className={`w-8 h-8 sm:w-10 sm:h-10 ${service.color} rounded-lg flex-shrink-0 flex items-center justify-center text-white font-bold text-xs sm:text-sm shadow-sm`}>
                               {service.logo}
                             </div>
                             
                             <div className="flex-1 text-left min-w-0">
-                              <p className="text-white text-sm font-medium truncate">{service.name}</p>
+                              <p className="text-white text-xs sm:text-sm font-medium truncate">{service.name}</p>
                               <p className="text-xs text-gray-400 capitalize">{service.category}</p>
                             </div>
                             
                             {isSelected && (
                               <div className="flex-shrink-0">
-                                <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
-                                  <Check className="h-3 w-3 text-white" />
+                                <div className="w-4 h-4 sm:w-5 sm:h-5 bg-blue-500 rounded-full flex items-center justify-center">
+                                  <Check className="h-2 w-2 sm:h-3 sm:w-3 text-white" />
                                 </div>
                               </div>
                             )}
@@ -282,7 +282,7 @@ export function StreamingFilter({
             </div>
 
             {/* Footer */}
-            <div className="p-4 border-t border-gray-700 bg-gray-750">
+            <div className="p-3 sm:p-4 border-t border-gray-700 bg-gray-750">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-400">
                   {selectedServices.length} selected
@@ -293,7 +293,7 @@ export function StreamingFilter({
                   </span>
                 )}
               </div>
-              <p className="text-xs text-gray-500 mt-2">
+              <p className="text-xs text-gray-500 mt-2 hidden sm:block">
                 Select the streaming services you have subscriptions to filter your watchlist.
               </p>
             </div>

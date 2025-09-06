@@ -125,10 +125,10 @@ export function MovieCard({
     return (
       <>
         <div 
-          className="bg-gray-800 rounded-xl p-4 flex gap-4 hover:bg-gray-750 transition-colors cursor-pointer"
+          className="bg-gray-800 rounded-xl p-3 sm:p-4 flex gap-3 sm:gap-4 hover:bg-gray-750 transition-colors cursor-pointer"
           onClick={handleMovieClick}
         >
-        <div className="w-16 h-24 flex-shrink-0">
+        <div className="w-12 h-18 sm:w-16 sm:h-24 flex-shrink-0">
           <img
             src={tmdbAPI.getImageUrl(movie.poster_path)}
             alt={movie.title}
@@ -142,7 +142,7 @@ export function MovieCard({
         
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between mb-2">
-            <h3 className="font-semibold text-white text-lg truncate pr-2">
+            <h3 className="font-semibold text-white text-sm sm:text-base lg:text-lg truncate pr-2">
               {movie.title}
             </h3>
             <div className="flex items-center gap-2 flex-shrink-0">
@@ -158,19 +158,19 @@ export function MovieCard({
               {movie.watched && (
                 <div className="flex items-center gap-1 text-green-500">
                   <Eye className="h-4 w-4" />
-                  <span className="text-sm">Watched</span>
+                  <span className="text-xs sm:text-sm">Watched</span>
                 </div>
               )}
               <button
                 onClick={() => setShowActions(!showActions)}
-                className="p-1 text-gray-400 hover:text-white transition-colors"
+                className="p-1 text-gray-400 hover:text-white transition-colors sm:hidden"
               >
                 <MoreVertical className="h-4 w-4" />
               </button>
             </div>
           </div>
           
-          <div className="flex items-center gap-4 text-sm text-gray-400 mb-2">
+          <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-400 mb-2">
             <div className="flex items-center gap-1">
               <Calendar className="h-3 w-3" />
               <span>{releaseYear}</span>
@@ -184,13 +184,14 @@ export function MovieCard({
             {movie.personal_rating && (
               <div className="flex items-center gap-1">
                 <Star className="h-3 w-3 text-blue-400 fill-current" />
-                <span>My Rating: {movie.personal_rating}/10</span>
+                <span className="hidden sm:inline">My Rating: {movie.personal_rating}/10</span>
+                <span className="sm:hidden">{movie.personal_rating}/10</span>
               </div>
             )}
           </div>
 
           {/* Personal Rating */}
-          <div className="mb-2">
+          <div className="mb-2 hidden sm:block">
             <PersonalRatingStars
               rating={movie.personal_rating}
               onRatingChange={handlePersonalRatingChange}
@@ -200,86 +201,94 @@ export function MovieCard({
           </div>
 
           {/* Emby Status Indicator */}
-          <EmbyStatusIndicator 
+          <div className="hidden sm:block">
+            <EmbyStatusIndicator 
             available={!!movie.emby_available}
             lastChecked={movie.last_emby_check}
             className="mb-2"
-          />
+            />
+          </div>
           
           {movie.genres && movie.genres.length > 0 && (
-            <div className="flex flex-wrap gap-1 mb-2">
-              {movie.genres.slice(0, 3).map((genre) => (
+            <div className="flex flex-wrap gap-1 mb-2 sm:mb-2">
+              {movie.genres.slice(0, 2).map((genre) => (
                 <span
                   key={genre}
                   className={cn(
-                    "px-2 py-1 rounded-full text-xs text-white font-medium",
+                    "px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs text-white font-medium",
                     getGenreColor(genre)
                   )}
                 >
                   {genre}
                 </span>
               ))}
+              {movie.genres.length > 2 && (
+                <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs text-gray-400 bg-gray-700">
+                  +{movie.genres.length - 2}
+                </span>
+              )}
             </div>
           )}
           
           {movie.overview && (
-            <p className="text-sm text-gray-400 line-clamp-2">
+            <p className="text-xs sm:text-sm text-gray-400 line-clamp-2 hidden sm:block">
               {movie.overview}
             </p>
           )}
         </div>
         
-        {showActions && (
-          <div className="flex flex-col gap-2 flex-shrink-0">
+        {(showActions || window.innerWidth >= 640) && (
+          <div className="flex flex-col gap-1 sm:gap-2 flex-shrink-0">
             <button
               onClick={handleToggleWatched}
               disabled={loading}
               className={cn(
-                "p-2 rounded-lg transition-colors flex items-center gap-2 text-sm",
+                "p-1.5 sm:p-2 rounded-lg transition-colors flex items-center gap-1 sm:gap-2 text-xs sm:text-sm",
                 movie.watched
                   ? "bg-orange-600 hover:bg-orange-700 text-white"
                   : "bg-green-600 hover:bg-green-700 text-white"
               )}
             >
               {movie.watched ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-              {movie.watched ? 'Mark Unwatched' : 'Mark Watched'}
+              <span className="hidden lg:inline">{movie.watched ? 'Mark Unwatched' : 'Mark Watched'}</span>
+              <span className="lg:hidden">{movie.watched ? 'Unwatch' : 'Watch'}</span>
             </button>
             
             <button
               onClick={handleThumbsUp}
               disabled={loading}
               className={cn(
-                "p-2 rounded-lg transition-colors flex items-center gap-2 text-sm",
+                "p-1.5 sm:p-2 rounded-lg transition-colors flex items-center gap-1 sm:gap-2 text-xs sm:text-sm",
                 movie.user_preference === 'thumbs_up'
                   ? "bg-green-600 hover:bg-green-700 text-white"
                   : "bg-gray-600 hover:bg-gray-500 text-white"
               )}
             >
               <ThumbsUp className="h-4 w-4" />
-              Like
+              <span className="hidden sm:inline">Like</span>
             </button>
             
             <button
               onClick={handleThumbsDown}
               disabled={loading}
               className={cn(
-                "p-2 rounded-lg transition-colors flex items-center gap-2 text-sm",
+                "p-1.5 sm:p-2 rounded-lg transition-colors flex items-center gap-1 sm:gap-2 text-xs sm:text-sm",
                 movie.user_preference === 'thumbs_down'
                   ? "bg-red-600 hover:bg-red-700 text-white"
                   : "bg-gray-600 hover:bg-gray-500 text-white"
               )}
             >
               <ThumbsDown className="h-4 w-4" />
-              Dislike
+              <span className="hidden sm:inline">Dislike</span>
             </button>
             
             <button
               onClick={() => setShowDeleteDialog(true)}
               disabled={loading}
-              className="p-2 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-500 hover:to-pink-500 text-white rounded-lg transition-all duration-300 flex items-center gap-2 text-sm shadow-lg hover:shadow-xl"
+              className="p-1.5 sm:p-2 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-500 hover:to-pink-500 text-white rounded-lg transition-all duration-300 flex items-center gap-1 sm:gap-2 text-xs sm:text-sm shadow-lg hover:shadow-xl"
             >
               <Trash2 className="h-4 w-4" />
-              Remove
+              <span className="hidden sm:inline">Remove</span>
             </button>
           </div>
         )}
@@ -417,7 +426,7 @@ export function MovieCard({
 
         <div className="p-4">
           <div className="flex items-start justify-between mb-2">
-            <h3 className="font-semibold text-white text-sm line-clamp-2 leading-tight">
+            <h3 className="font-semibold text-white text-xs sm:text-sm line-clamp-2 leading-tight">
               {movie.title}
             </h3>
             
@@ -432,22 +441,23 @@ export function MovieCard({
             )}
           </div>
           
-          <div className="flex items-center gap-2 text-xs text-gray-400 mb-3">
+          <div className="flex items-center gap-1 sm:gap-2 text-xs text-gray-400 mb-2 sm:mb-3">
             <Calendar className="h-3 w-3" />
             <span>{releaseYear}</span>
             {movie.user_preference && (
               <>
-                <span>•</span>
+                <span className="hidden sm:inline">•</span>
                 <div className="flex items-center gap-1">
                   <Star className="h-3 w-3 text-yellow-400 fill-current" />
-                  <span>My Rating: {movie.personal_rating}/10</span>
+                  <span className="hidden sm:inline">My Rating: {movie.personal_rating}/10</span>
+                  <span className="sm:hidden">{movie.personal_rating}/10</span>
                 </div>
               </>
             )}
           </div>
 
           {/* Personal Rating */}
-          <div className="mb-3">
+          <div className="mb-2 sm:mb-3 hidden sm:block">
             <PersonalRatingStars
               rating={movie.personal_rating}
               onRatingChange={handlePersonalRatingChange}
@@ -457,28 +467,29 @@ export function MovieCard({
           </div>
 
           {/* Emby Status in footer */}
-          <EmbyStatusIndicator 
+          <div className="mb-2 sm:mb-3 hidden sm:block">
+            <EmbyStatusIndicator 
             available={!!movie.emby_available}
             lastChecked={movie.last_emby_check}
-            className="mb-3"
-          />
+            />
+          </div>
 
           {movie.genres && movie.genres.length > 0 && (
             <div className="flex flex-wrap gap-1">
-              {movie.genres.slice(0, 2).map((genre) => (
+              {movie.genres.slice(0, 1).map((genre) => (
                 <span
                   key={genre}
                   className={cn(
-                    "px-2 py-1 rounded-full text-xs text-white font-medium",
+                    "px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs text-white font-medium",
                     getGenreColor(genre)
                   )}
                 >
                   {genre}
                 </span>
               ))}
-              {movie.genres.length > 2 && (
-                <span className="px-2 py-1 rounded-full text-xs text-gray-400 bg-gray-700">
-                  +{movie.genres.length - 2}
+              {movie.genres.length > 1 && (
+                <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs text-gray-400 bg-gray-700">
+                  +{movie.genres.length - 1}
                 </span>
               )}
             </div>

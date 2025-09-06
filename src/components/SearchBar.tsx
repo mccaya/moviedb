@@ -116,8 +116,8 @@ export function SearchBar({ onAddMovie, watchlistMovies, onRemoveMovie }: Search
   }
 
   return (
-    <div className="mb-8">
-      <div className="flex gap-3 mb-4">
+    <div className="mb-6 sm:mb-8">
+      <div className="flex flex-col sm:flex-row gap-3 mb-4">
         <div className="relative flex-1">
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
           <input
@@ -126,34 +126,36 @@ export function SearchBar({ onAddMovie, watchlistMovies, onRemoveMovie }: Search
             onChange={(e) => setQuery(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder={aiMode ? "Ask AI: 'Movies like Inception but funnier'" : "Search for movies..."}
-            className="w-full pl-12 pr-4 py-3 bg-black/40 backdrop-blur-sm border border-gray-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500/50 text-white placeholder-gray-400 transition-all duration-300 shadow-lg hover:shadow-xl"
+            className="w-full pl-12 pr-4 py-3 sm:py-3 bg-black/40 backdrop-blur-sm border border-gray-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500/50 text-white placeholder-gray-400 transition-all duration-300 shadow-lg hover:shadow-xl text-sm sm:text-base"
           />
         </div>
         
-        <button
-          onClick={handleSearch}
-          disabled={loading || !query.trim()}
-          className="px-6 py-3 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-500 hover:to-pink-500 disabled:from-gray-700 disabled:to-gray-800 disabled:cursor-not-allowed text-white rounded-xl transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl hover:scale-105"
-        >
-          {loading ? (
-            <Loader2 className="h-5 w-5 animate-spin" />
-          ) : (
-            <Search className="h-5 w-5" />
-          )}
-          <span className="hidden sm:inline">Search</span>
-        </button>
-        
-        <button
-          onClick={toggleAiMode}
-          className={`px-4 py-3 rounded-xl transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl hover:scale-105 ${
-            aiMode 
-              ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500' 
-              : 'bg-black/40 backdrop-blur-sm border border-gray-600/50 hover:bg-black/60'
-          }`}
-        >
-          <Sparkles className={`h-5 w-5 ${aiMode ? 'text-yellow-400' : 'text-gray-400'}`} />
-          <span className="hidden sm:inline text-white">AI</span>
-        </button>
+        <div className="flex gap-2 sm:gap-3">
+          <button
+            onClick={handleSearch}
+            disabled={loading || !query.trim()}
+            className="flex-1 sm:flex-none px-4 sm:px-6 py-3 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-500 hover:to-pink-500 disabled:from-gray-700 disabled:to-gray-800 disabled:cursor-not-allowed text-white rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:scale-105"
+          >
+            {loading ? (
+              <Loader2 className="h-5 w-5 animate-spin" />
+            ) : (
+              <Search className="h-5 w-5" />
+            )}
+            <span className="hidden sm:inline">Search</span>
+          </button>
+          
+          <button
+            onClick={toggleAiMode}
+            className={`px-3 sm:px-4 py-3 rounded-xl transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl hover:scale-105 ${
+              aiMode 
+                ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500' 
+                : 'bg-black/40 backdrop-blur-sm border border-gray-600/50 hover:bg-black/60'
+            }`}
+          >
+            <Sparkles className={`h-5 w-5 ${aiMode ? 'text-yellow-400' : 'text-gray-400'}`} />
+            <span className="hidden sm:inline text-white">AI</span>
+          </button>
+        </div>
         
         {(aiMode && (!import.meta.env.VITE_OPENAI_API_KEY || 
           import.meta.env.VITE_OPENAI_API_KEY === 'demo-key' || 
@@ -218,12 +220,12 @@ export function SearchBar({ onAddMovie, watchlistMovies, onRemoveMovie }: Search
                 </h3>
                 <button
                   onClick={clearResults}
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-gray-400 hover:text-white transition-colors text-sm sm:text-base"
                 >
                   Clear
                 </button>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
                 {results.map((movie) => (
                   <MovieResult 
                     key={movie.id} 
@@ -240,7 +242,7 @@ export function SearchBar({ onAddMovie, watchlistMovies, onRemoveMovie }: Search
           ) : query && (
             <div className="text-center py-12 text-gray-400">
               <Search className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p>No movies found for "{query}"</p>
+              <p className="text-sm sm:text-base">No movies found for "{query}"</p>
               <p className="text-sm mt-2">Try a different search term</p>
             </div>
           )}
