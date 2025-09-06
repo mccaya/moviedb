@@ -110,28 +110,52 @@ export function useAuth() {
       // If signup was successful, trigger webhook
       if (data.user && !error) {
         try {
-          // Call the signup webhook edge function
-          const webhookResponse = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/signup-webhook`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-            },
-            body: JSON.stringify({
+          console.log('Sending signup webhook for user:', data.user.email)
+          
+          const webhookUrl = import.meta.env.VITE_SIGNUP_WEBHOOK_URL
+          
+          if (!webhookUrl) {
+            console.warn('VITE_SIGNUP_WEBHOOK_URL not configured - skipping webhook')
+          } else {
+            console.log('Webhook URL configured:', webhookUrl)
+            
+            const webhookPayload = {
+              event: 'user.signup',
               email: data.user.email,
               user_id: data.user.id,
-              created_at: data.user.created_at
+              created_at: data.user.created_at,
+              timestamp: new Date().toISOString(),
+              source: 'filmfolio'
+            }
+            
+            console.log('Sending webhook payload:', webhookPayload)
+            
+            const webhookResponse = await fetch(webhookUrl, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'User-Agent': 'FilmFolio-Signup-Webhook/1.0',
+              },
+              body: JSON.stringify(webhookPayload)
             })
-          });
-          
-          if (!webhookResponse.ok) {
-            console.warn('Signup webhook failed:', await webhookResponse.text());
-          } else {
-            console.log('Signup webhook sent successfully');
+            
+            console.log('Webhook response status:', webhookResponse.status)
+            
+            if (webhookResponse.ok) {
+              const responseText = await webhookResponse.text()
+              console.log('Webhook sent successfully:', responseText)
+            } else {
+              const errorText = await webhookResponse.text()
+              console.error('Webhook failed:', {
+                status: webhookResponse.status,
+                statusText: webhookResponse.statusText,
+                response: errorText
+              })
+            }
           }
         } catch (webhookError) {
           // Don't fail the signup if webhook fails
-          console.warn('Failed to send signup webhook:', webhookError);
+          console.error('Failed to send signup webhook:', webhookError)
         }
       }
       
