@@ -742,7 +742,6 @@ export function MovieModal({
             </div>
           )}
         </div>
-        </div>
       </div>
       </div>
     </div>
