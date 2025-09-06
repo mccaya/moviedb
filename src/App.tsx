@@ -596,26 +596,81 @@ function App() {
             />
           </>
         ) : (
-          <div className="text-center py-16">
-            <div className="relative mb-6">
-              <Film className="h-16 w-16 text-transparent bg-gradient-to-r from-red-500 via-purple-500 to-pink-500 bg-clip-text mx-auto" />
-              <div className="absolute inset-0 h-16 w-16 bg-gradient-to-r from-red-500 via-purple-500 to-pink-500 opacity-20 blur-xl rounded-full mx-auto"></div>
+          <div className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
+            {/* Animated Background with Movie Posters */}
+            <div className="absolute inset-0 overflow-hidden">
+              {/* Floating Movie Posters */}
+              <div className="absolute inset-0">
+                {/* Row 1 - Top */}
+                <div className="absolute top-0 left-0 w-full h-32 flex items-center justify-around opacity-20 animate-pulse">
+                  <div className="w-20 h-28 bg-gradient-to-br from-red-600 to-pink-600 rounded-lg shadow-2xl transform rotate-12 hover:rotate-6 transition-transform duration-1000"></div>
+                  <div className="w-20 h-28 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-lg shadow-2xl transform -rotate-6 hover:rotate-3 transition-transform duration-1000"></div>
+                  <div className="w-20 h-28 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-lg shadow-2xl transform rotate-8 hover:-rotate-4 transition-transform duration-1000"></div>
+                  <div className="w-20 h-28 bg-gradient-to-br from-green-600 to-emerald-600 rounded-lg shadow-2xl transform -rotate-12 hover:rotate-8 transition-transform duration-1000"></div>
+                  <div className="w-20 h-28 bg-gradient-to-br from-yellow-600 to-orange-600 rounded-lg shadow-2xl transform rotate-4 hover:-rotate-2 transition-transform duration-1000"></div>
+                </div>
+                
+                {/* Row 2 - Left Side */}
+                <div className="absolute left-0 top-1/2 transform -translate-y-1/2 h-full w-32 flex flex-col items-center justify-around opacity-15">
+                  <div className="w-20 h-28 bg-gradient-to-br from-pink-600 to-rose-600 rounded-lg shadow-2xl transform -rotate-8 hover:rotate-4 transition-transform duration-1000"></div>
+                  <div className="w-20 h-28 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg shadow-2xl transform rotate-15 hover:-rotate-8 transition-transform duration-1000"></div>
+                  <div className="w-20 h-28 bg-gradient-to-br from-cyan-600 to-blue-600 rounded-lg shadow-2xl transform -rotate-10 hover:rotate-5 transition-transform duration-1000"></div>
+                </div>
+                
+                {/* Row 3 - Right Side */}
+                <div className="absolute right-0 top-1/2 transform -translate-y-1/2 h-full w-32 flex flex-col items-center justify-around opacity-15">
+                  <div className="w-20 h-28 bg-gradient-to-br from-orange-600 to-red-600 rounded-lg shadow-2xl transform rotate-12 hover:-rotate-6 transition-transform duration-1000"></div>
+                  <div className="w-20 h-28 bg-gradient-to-br from-emerald-600 to-teal-600 rounded-lg shadow-2xl transform -rotate-6 hover:rotate-8 transition-transform duration-1000"></div>
+                  <div className="w-20 h-28 bg-gradient-to-br from-violet-600 to-purple-600 rounded-lg shadow-2xl transform rotate-9 hover:-rotate-4 transition-transform duration-1000"></div>
+                </div>
+                
+                {/* Row 4 - Bottom */}
+                <div className="absolute bottom-0 left-0 w-full h-32 flex items-center justify-around opacity-20 animate-pulse">
+                  <div className="w-20 h-28 bg-gradient-to-br from-teal-600 to-cyan-600 rounded-lg shadow-2xl transform -rotate-8 hover:rotate-4 transition-transform duration-1000"></div>
+                  <div className="w-20 h-28 bg-gradient-to-br from-rose-600 to-pink-600 rounded-lg shadow-2xl transform rotate-10 hover:-rotate-5 transition-transform duration-1000"></div>
+                  <div className="w-20 h-28 bg-gradient-to-br from-amber-600 to-yellow-600 rounded-lg shadow-2xl transform -rotate-4 hover:rotate-8 transition-transform duration-1000"></div>
+                  <div className="w-20 h-28 bg-gradient-to-br from-purple-600 to-violet-600 rounded-lg shadow-2xl transform rotate-14 hover:-rotate-7 transition-transform duration-1000"></div>
+                  <div className="w-20 h-28 bg-gradient-to-br from-indigo-600 to-blue-600 rounded-lg shadow-2xl transform -rotate-6 hover:rotate-3 transition-transform duration-1000"></div>
+                </div>
+              </div>
+              
+              {/* Animated Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-transparent to-pink-900/30 animate-pulse"></div>
+              
+              {/* Radial Gradient Spotlight */}
+              <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/60"></div>
+              
+              {/* Floating Particles */}
+              <div className="absolute inset-0">
+                <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-purple-400 rounded-full opacity-60 animate-ping"></div>
+                <div className="absolute top-3/4 right-1/4 w-1 h-1 bg-pink-400 rounded-full opacity-40 animate-pulse"></div>
+                <div className="absolute top-1/2 left-3/4 w-3 h-3 bg-red-400 rounded-full opacity-30 animate-bounce"></div>
+                <div className="absolute top-1/3 right-1/3 w-1 h-1 bg-blue-400 rounded-full opacity-50 animate-ping"></div>
+              </div>
             </div>
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent mb-4">
-              Welcome to FilmFolio
-            </h2>
-            <p className="text-gray-400 mb-8 max-w-md mx-auto text-lg">
-              Your personal movie collection manager with AI recommendations and media server integration!
-            </p>
-            <button
-              onClick={() => {
-                setAuthModalMode('signin')
-                setShowAuthModal(true)
-              }}
-              className="px-8 py-4 bg-gradient-to-r from-red-600 via-purple-600 to-pink-600 hover:from-red-500 hover:via-purple-500 hover:to-pink-500 text-white rounded-xl transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 font-semibold text-lg"
-            >
-              Get Started
-            </button>
+            
+            {/* Main Content */}
+            <div className="relative z-10 text-center py-16 px-4">
+              <div className="relative mb-8">
+                <Film className="h-20 w-20 text-transparent bg-gradient-to-r from-red-500 via-purple-500 to-pink-500 bg-clip-text mx-auto drop-shadow-2xl" />
+                <div className="absolute inset-0 h-20 w-20 bg-gradient-to-r from-red-500 via-purple-500 to-pink-500 opacity-30 blur-2xl rounded-full mx-auto animate-pulse"></div>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent mb-6 drop-shadow-2xl">
+                Welcome to FilmFolio
+              </h2>
+              <p className="text-gray-300 mb-10 max-w-2xl mx-auto text-lg md:text-xl leading-relaxed drop-shadow-lg">
+                Your personal movie collection manager with AI recommendations and media server integration!
+              </p>
+              <button
+                onClick={() => {
+                  setAuthModalMode('signin')
+                  setShowAuthModal(true)
+                }}
+                className="px-10 py-4 bg-gradient-to-r from-red-600 via-purple-600 to-pink-600 hover:from-red-500 hover:via-purple-500 hover:to-pink-500 text-white rounded-2xl transition-all duration-300 shadow-2xl hover:shadow-purple-500/25 hover:scale-110 font-bold text-xl transform hover:-translate-y-1"
+              >
+                Get Started
+              </button>
+            </div>
           </div>
         )}
       </main>
