@@ -340,6 +340,16 @@ function App() {
             <div className="flex items-center gap-4">
               {user && (
                 <>
+                  {/* VIP Button */}
+                  <button
+                    onClick={() => setShowVipInfoModal(true)}
+                    className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-yellow-600 to-yellow-700 hover:from-yellow-700 hover:to-yellow-800 rounded-lg transition-colors"
+                    title="VIP Features - Radarr Integration"
+                  >
+                    <span className="text-lg">👑</span>
+                    <span className="hidden sm:inline text-white font-semibold">VIP</span>
+                  </button>
+                  
                   {/* Emby Sync Button */}
                   <button
                     onClick={handleManualEmbySync}
