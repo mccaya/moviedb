@@ -160,7 +160,7 @@ export function StreamingFilter({
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors w-full sm:min-w-[200px]"
+        className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-gray-800/80 to-gray-900/80 hover:from-gray-700/80 hover:to-gray-800/80 backdrop-blur-sm border border-gray-600/50 hover:border-purple-500/50 text-white rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 w-full sm:min-w-[200px]"
       >
         <Tv className="h-4 w-4 flex-shrink-0" />
         <span className="flex-1 text-left truncate text-xs sm:text-sm">
