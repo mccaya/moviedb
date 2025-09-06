@@ -12,6 +12,7 @@ import { AuthModal } from './components/AuthModal'
 import { ImportModal } from './components/ImportModal'
 import { EmbyInfoModal } from './components/EmbyInfoModal'
 import { ExportModal } from './components/ExportModal'
+import { VipInfoModal } from './components/VipInfoModal'
 
 function App() {
   const { user, loading: authLoading, signOut } = useAuth()
@@ -25,6 +26,7 @@ function App() {
   const [showImportModal, setShowImportModal] = useState(false)
   const [showEmbyInfoModal, setShowEmbyInfoModal] = useState(false)
   const [showExportModal, setShowExportModal] = useState(false)
+  const [showVipInfoModal, setShowVipInfoModal] = useState(false)
   const [embyConnected, setEmbyConnected] = useState(false)
   const [selectedStreamingServices, setSelectedStreamingServices] = useState<number[]>([])
   const [movieStreamingData, setMovieStreamingData] = useState<Record<number, number[]>>({})
@@ -371,6 +373,14 @@ function App() {
                     <span className="hidden sm:inline">Export</span>
                   </button>
                   
+                  <button
+                    onClick={() => setShowVipInfoModal(true)}
+                    className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-yellow-600 to-yellow-700 hover:from-yellow-700 hover:to-yellow-800 rounded-lg transition-colors"
+                  >
+                    <span className="text-lg">👑</span>
+                    <span className="hidden sm:inline">VIP</span>
+                  </button>
+                  
                   <div className="flex items-center gap-1 bg-gray-700 rounded-lg p-1">
                     <button
                       onClick={() => setViewMode('grid')}
@@ -593,6 +603,11 @@ function App() {
         isOpen={showExportModal}
         onClose={() => setShowExportModal(false)}
         movies={movies}
+      />
+      
+      <VipInfoModal
+        isOpen={showVipInfoModal}
+        onClose={() => setShowVipInfoModal(false)}
       />
     </div>
   )
