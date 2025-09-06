@@ -231,6 +231,21 @@ function App() {
     }
   }
 
+  const updatePersonalRating = async (id: string, rating: number | null) => {
+    try {
+      const { data, error } = await movieService.updatePersonalRating(id, rating)
+      if (error) throw error
+      if (data) {
+        setMovies(prev => prev.map(movie => 
+          movie.id === id ? { ...movie, personal_rating: rating } : movie
+        ))
+      }
+    } catch (error) {
+      console.error('Error updating personal rating:', error)
+      throw error
+    }
+  }
+
   const handleImport = async (importedMovies: TMDBMovie[]) => {
     let successCount = 0
     let failedCount = 0
@@ -591,6 +606,7 @@ function App() {
               onRemove={removeFromWatchlist}
               onToggleWatched={toggleWatchedStatus}
               onUpdatePreference={updateUserPreference}
+              onUpdatePersonalRating={updatePersonalRating}
               movieStreamingData={movieStreamingData}
             />
           </>

@@ -84,6 +84,15 @@ export const movieService = {
       .single()
   },
 
+  async updatePersonalRating(id: string, rating: number | null) {
+    return supabase
+      .from('watchlist_items')
+      .update({ personal_rating: rating })
+      .eq('id', id)
+      .select()
+      .single()
+  },
+
   // New Emby integration methods
   async updateEmbyStatus(id: string, embyItemId: string | null, available: boolean) {
     return supabase

@@ -3,6 +3,7 @@ import { X, Calendar, Star, Clock, Play, Plus, Check, Eye, EyeOff, ThumbsUp, Thu
 import { tmdbAPI, TMDBMovie } from '../lib/tmdb'
 import { embyAPI } from '../lib/emby'
 import { cn, formatDate, formatRating, getGenreColor } from '../lib/utils'
+import { PersonalRatingStars } from './PersonalRatingStars'
 
 interface Movie {
   id: string
@@ -60,6 +61,7 @@ interface MovieModalProps {
   onRemoveFromWatchlist?: (id: string) => Promise<void>
   onToggleWatched?: (id: string, watched: boolean) => Promise<void>
   onUpdatePreference?: (id: string, preference: 'thumbs_up' | 'thumbs_down' | null) => Promise<void>
+  onUpdatePersonalRating?: (id: string, rating: number | null) => Promise<void>
   onUpdateEmbyStatus?: (id: string, embyItemId: string | null, available: boolean) => Promise<void>
 }
 
@@ -72,6 +74,7 @@ export function MovieModal({
   onRemoveFromWatchlist,
   onToggleWatched,
   onUpdatePreference,
+  onUpdatePersonalRating,
   onUpdateEmbyStatus
 }: MovieModalProps) {
   const [movieDetails, setMovieDetails] = useState<MovieDetails | null>(null)
@@ -264,6 +267,19 @@ export function MovieModal({
     }
   }
 
+  const handleUpdatePersonalRating = async (rating: number | null) => {
+    if (!onUpdatePersonalRating || !isWatchlistMovie) return
+    
+    setActionLoading(true)
+    try {
+      await onUpdatePersonalRating((movie as Movie).id, rating)
+    } catch (error) {
+      console.error('Failed to update personal rating:', error)
+    } finally {
+      setActionLoading(false)
+    }
+  }
+
   const getTrailerUrl = () => {
     const trailer = movieDetails?.videos?.results?.find(
       video => video.type === 'Trailer' && video.site === 'YouTube'
@@ -400,6 +416,18 @@ export function MovieModal({
                         {genre}
                       </span>
                     ))}
+                  </div>
+                )}
+                
+                {/* Personal Rating */}
+                {isWatchlistMovie && (
+                  <div className="mt-4">
+                    <PersonalRatingStars
+                      rating={(movie as Movie).personal_rating}
+                      onRatingChange={handleUpdatePersonalRating}
+                      disabled={actionLoading}
+                      size="md"
+                    />
                   </div>
                 )}
                 
