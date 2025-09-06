@@ -250,6 +250,7 @@ export function TraktImportModal({
               </div>
             </div>
             <div className="flex items-center gap-3">
+              <span className="text-sm text-gray-400">Click here to set auto sync</span>
               <button
                 onClick={() => setShowSettings(!showSettings)}
                 className="p-2 text-gray-400 hover:text-white transition-colors"
