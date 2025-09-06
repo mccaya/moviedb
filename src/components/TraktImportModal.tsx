@@ -409,23 +409,23 @@ export function TraktImportModal({
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 backdrop-blur-xl border border-purple-500/20 rounded-xl max-w-6xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
+      <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 backdrop-blur-xl border border-purple-500/20 rounded-xl max-w-6xl w-full max-h-[90vh] overflow-hidden shadow-2xl mx-4">
         {/* Header */}
-        <div className="p-6 border-b border-purple-500/20 bg-gradient-to-r from-purple-900/20 to-blue-900/20">
+        <div className="p-4 sm:p-6 border-b border-purple-500/20 bg-gradient-to-r from-purple-900/20 to-blue-900/20">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full shadow-lg">
                 <List className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold bg-gradient-to-r from-white via-purple-200 to-indigo-200 bg-clip-text text-transparent">Import from Trakt Lists</h3>
-                <p className="text-sm text-gray-400">Browse and import movies from curated Trakt.tv lists</p>
+                <h3 className="text-base sm:text-lg font-semibold bg-gradient-to-r from-white via-purple-200 to-indigo-200 bg-clip-text text-transparent">Import from Trakt Lists</h3>
+                <p className="text-xs sm:text-sm text-gray-400 hidden sm:block">Browse and import movies from curated Trakt.tv lists</p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2">
-                <span className="text-lg font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">Click here to set auto sync</span>
-                <span className="text-lg font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">→</span>
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="hidden lg:flex items-center gap-2">
+                <span className="text-sm font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">Click here to set auto sync</span>
+                <span className="text-sm font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">→</span>
               </div>
               <button
                 onClick={() => setShowSettings(!showSettings)}
@@ -438,14 +438,15 @@ export function TraktImportModal({
                 <button
                   onClick={handleSaveSettings}
                   disabled={saving}
-                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 disabled:from-gray-600 disabled:to-gray-700 text-white rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 font-semibold"
+                  className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 disabled:from-gray-600 disabled:to-gray-700 text-white rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 font-semibold text-sm"
                 >
                   {saving ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
                     <Check className="h-4 w-4" />
                   )}
-                  {saving ? 'Saving...' : 'Save'}
+                  <span className="hidden sm:inline">{saving ? 'Saving...' : 'Save'}</span>
+                  <span className="sm:hidden">{saving ? '...' : '✓'}</span>
                 </button>
               )}
               <button
@@ -460,12 +461,12 @@ export function TraktImportModal({
 
         <div className="flex flex-1 overflow-hidden">
           {/* Sidebar - List Selection */}
-          <div className="w-80 bg-gradient-to-b from-gray-800/50 to-gray-900/50 backdrop-blur-sm border-r border-purple-500/20 flex flex-col h-full">
-            <div className="p-4">
-              <h4 className="text-sm font-semibold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent mb-4">Available Lists</h4>
+          <div className="w-full sm:w-80 bg-gradient-to-b from-gray-800/50 to-gray-900/50 backdrop-blur-sm border-r border-purple-500/20 flex flex-col h-full">
+            <div className="p-3 sm:p-4">
+              <h4 className="text-xs sm:text-sm font-semibold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent mb-4">Available Lists</h4>
             </div>
               
-            <div className="overflow-y-auto px-4 pb-6" style={{ height: 'calc(100vh - 200px)' }}>
+            <div className="overflow-y-auto px-3 sm:px-4 pb-6" style={{ height: 'calc(100vh - 200px)' }}>
               <div className="space-y-2">
                 {predefinedLists.map((list) => {
                   const settings = listSettings[list.slug] || {}
@@ -476,33 +477,33 @@ export function TraktImportModal({
                       <button
                         onClick={() => handleListSelect(list.slug)}
                         disabled={loading && selectedList === list.slug}
-                        className={`w-full text-left p-3 rounded-lg transition-all ${
+                        className={`w-full text-left p-2 sm:p-3 rounded-lg transition-all ${
                           isSelected
                             ? 'bg-gradient-to-r from-purple-600/20 to-blue-600/20 border border-purple-500/30 shadow-lg'
                             : 'bg-gradient-to-br from-gray-800/50 to-gray-900/50 hover:from-gray-700/50 hover:to-gray-800/50 border border-gray-700/30 hover:border-purple-500/30'
                         }`}
                       >
                         <div className="flex items-start justify-between mb-2">
-                          <h5 className="text-white font-semibold text-sm">{list.name}</h5>
+                          <h5 className="text-white font-semibold text-xs sm:text-sm pr-2">{list.name}</h5>
                           {settings.autoImport && (
-                            <div className="flex items-center gap-1 text-xs text-emerald-400">
+                            <div className="flex items-center gap-1 text-xs text-emerald-400 flex-shrink-0">
                               <div className="w-2 h-2 bg-emerald-400 rounded-full shadow-emerald-400/50 shadow-lg" />
-                              Auto
+                              <span className="hidden sm:inline">Auto</span>
                             </div>
                           )}
                         </div>
                         
-                        <p className="text-gray-400 text-xs mb-2 line-clamp-2">
+                        <p className="text-gray-400 text-xs mb-2 line-clamp-2 hidden sm:block">
                           {list.description}
                         </p>
                         
                         <div className="flex items-center justify-between text-xs text-gray-500">
-                          <span>@{list.username}</span>
-                          <span>Updated: {formatLastUpdated(settings.lastUpdated)}</span>
+                          <span className="hidden sm:inline">@{list.username}</span>
+                          <span className="text-xs">Updated: {formatLastUpdated(settings.lastUpdated)}</span>
                         </div>
                         
                         {settings.autoImport && (
-                          <div className="text-xs text-emerald-400 mt-1">
+                          <div className="text-xs text-emerald-400 mt-1 hidden sm:block">
                             {formatLastAutoSync(settings.lastAutoSync)}
                           </div>
                         )}
@@ -516,8 +517,8 @@ export function TraktImportModal({
                       
                       {/* Settings Panel */}
                       {showSettings && (
-                        <div className="mt-2 p-3 bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-sm rounded-lg border border-purple-500/20">
-                          <label className="flex items-center gap-2 text-sm">
+                        <div className="mt-2 p-2 sm:p-3 bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-sm rounded-lg border border-purple-500/20">
+                          <label className="flex items-center gap-2 text-xs sm:text-sm">
                             <input
                               type="checkbox"
                               checked={settings.autoImport || false}
@@ -526,7 +527,7 @@ export function TraktImportModal({
                             />
                             <span className="text-purple-200">Auto-import new movies</span>
                           </label>
-                          <p className="text-xs text-gray-500 mt-1">
+                          <p className="text-xs text-gray-500 mt-1 hidden sm:block">
                             Automatically check for and import new movies every 24 hours
                           </p>
                         </div>
@@ -539,7 +540,7 @@ export function TraktImportModal({
           </div>
 
           {/* Main Content - Movie Grid */}
-          <div className="flex-1 overflow-y-auto">
+          <div className="hidden sm:flex flex-1 overflow-y-auto">
             {!selectedList ? (
               <div className="flex items-center justify-center h-full">
                 <div className="text-center">
@@ -560,7 +561,7 @@ export function TraktImportModal({
               <div className="flex items-center justify-center h-full">
                 <div className="text-center">
                   <List className="h-16 w-16 text-gray-600 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-gray-300 mb-2">No Movies Found</h3>
+                  <h3 className="text-lg sm:text-xl font-semibold text-gray-300 mb-2">No Movies Found</h3>
                   <p className="text-gray-500">This list appears to be empty or unavailable</p>
                   <button
                     onClick={handleRefreshList}
@@ -572,50 +573,52 @@ export function TraktImportModal({
                 </div>
               </div>
             ) : (
-              <div className="p-6">
+              <div className="p-4 sm:p-6">
                 {/* Controls */}
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-4">
-                    <h4 className="text-lg font-semibold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
+                    <h4 className="text-base sm:text-lg font-semibold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
                       {movies.length} Movies Found
                     </h4>
                     <button
                       onClick={handleRefreshList}
                       disabled={loading}
-                      className="flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-gray-700/50 to-gray-800/50 hover:from-gray-600/50 hover:to-gray-700/50 backdrop-blur-sm border border-gray-600/30 hover:border-purple-500/30 text-white rounded-lg transition-all duration-300 text-sm"
+                      className="flex items-center gap-2 px-2 sm:px-3 py-1 bg-gradient-to-r from-gray-700/50 to-gray-800/50 hover:from-gray-600/50 hover:to-gray-700/50 backdrop-blur-sm border border-gray-600/30 hover:border-purple-500/30 text-white rounded-lg transition-all duration-300 text-xs sm:text-sm"
                     >
                       <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-                      Refresh
+                      <span className="hidden sm:inline">Refresh</span>
                     </button>
                   </div>
                   
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 sm:gap-3">
                     <button
                       onClick={handleSelectAll}
-                      className="text-sm text-purple-400 hover:text-purple-300 transition-colors font-medium"
+                      className="text-xs sm:text-sm text-purple-400 hover:text-purple-300 transition-colors font-medium"
                     >
-                      {selectedMovies.size === movies.length ? 'Deselect All' : 'Select All'}
+                      <span className="hidden sm:inline">{selectedMovies.size === movies.length ? 'Deselect All' : 'Select All'}</span>
+                      <span className="sm:hidden">{selectedMovies.size === movies.length ? 'None' : 'All'}</span>
                     </button>
                     
                     {selectedMovies.size > 0 && (
                       <button
                         onClick={handleImportSelected}
                         disabled={importingMovies.size > 0}
-                        className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 disabled:from-gray-600 disabled:to-gray-700 text-white rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 font-semibold"
+                        className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 disabled:from-gray-600 disabled:to-gray-700 text-white rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 font-semibold text-xs sm:text-sm"
                       >
                         {importingMovies.size > 0 ? (
                           <Loader2 className="h-4 w-4 animate-spin" />
                         ) : (
                           <Check className="h-4 w-4" />
                         )}
-                        Import Selected ({selectedMovies.size})
+                        <span className="hidden sm:inline">Import Selected ({selectedMovies.size})</span>
+                        <span className="sm:hidden">Import ({selectedMovies.size})</span>
                       </button>
                     )}
                   </div>
                 </div>
 
                 {/* Movie Grid */}
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
                   {movies.map((movie) => {
                     const isSelected = selectedMovies.has(movie.id)
                     const isAdded = watchlistMovies.some(w => w.tmdb_id === movie.id)

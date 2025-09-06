@@ -193,17 +193,17 @@ export function ImportModal({
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 backdrop-blur-xl border border-purple-500/20 rounded-xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
+      <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 backdrop-blur-xl border border-purple-500/20 rounded-xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl mx-4">
         {/* Header */}
-        <div className="p-6 border-b border-purple-500/20 bg-gradient-to-r from-purple-900/20 to-blue-900/20">
+        <div className="p-4 sm:p-6 border-b border-purple-500/20 bg-gradient-to-r from-purple-900/20 to-blue-900/20">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full shadow-lg">
                 <Upload className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent">Import Movies</h3>
-                <p className="text-sm text-gray-400">Add movies to your watchlist from various sources</p>
+                <h3 className="text-base sm:text-lg font-semibold bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent">Import Movies</h3>
+                <p className="text-xs sm:text-sm text-gray-400 hidden sm:block">Add movies to your watchlist from various sources</p>
               </div>
             </div>
             <button
@@ -215,58 +215,58 @@ export function ImportModal({
           </div>
         </div>
 
-        <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+        <div className="p-4 sm:p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
           {!importMethod ? (
             /* Method Selection */
             <div className="space-y-4">
-              <h4 className="text-lg font-semibold text-white mb-4">Choose Import Method</h4>
+              <h4 className="text-base sm:text-lg font-semibold text-white mb-4">Choose Import Method</h4>
               
               {/* Trakt Lists Option */}
               <button
                 onClick={handleTraktImport}
-                className="w-full p-6 bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-purple-500/20 hover:border-purple-500/40 rounded-xl transition-all duration-300 text-left group hover:scale-105 hover:shadow-xl"
+                className="w-full p-4 sm:p-6 bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-purple-500/20 hover:border-purple-500/40 rounded-xl transition-all duration-300 text-left group hover:scale-105 hover:shadow-xl"
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
                     <div className="p-3 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full shadow-lg">
                       <List className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h5 className="text-lg font-semibold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent mb-1">Streaming Service Lists</h5>
-                      <p className="text-gray-400 text-sm">
+                      <h5 className="text-sm sm:text-lg font-semibold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent mb-1">Streaming Service Lists</h5>
+                      <p className="text-gray-400 text-xs sm:text-sm">
                         Import from curated lists: Netflix, Disney+, Amazon Prime, Hulu, and Top Movies
                       </p>
-                      <div className="flex flex-wrap gap-2 mt-2">
-                        <span className="px-2 py-1 bg-red-600 text-white text-xs rounded">Netflix</span>
-                        <span className="px-2 py-1 bg-blue-600 text-white text-xs rounded">Disney+</span>
-                        <span className="px-2 py-1 bg-blue-500 text-white text-xs rounded">Prime</span>
-                        <span className="px-2 py-1 bg-green-500 text-white text-xs rounded">Hulu</span>
-                        <span className="px-2 py-1 bg-purple-600 text-white text-xs rounded">Top Movies</span>
+                      <div className="flex flex-wrap gap-1 sm:gap-2 mt-2">
+                        <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-red-600 text-white text-xs rounded">Netflix</span>
+                        <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-blue-600 text-white text-xs rounded">Disney+</span>
+                        <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-blue-500 text-white text-xs rounded">Prime</span>
+                        <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-green-500 text-white text-xs rounded">Hulu</span>
+                        <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-purple-600 text-white text-xs rounded">Top Movies</span>
                       </div>
                     </div>
                   </div>
-                  <ChevronRight className="h-5 w-5 text-gray-400 group-hover:text-white transition-colors" />
+                  <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 group-hover:text-white transition-colors flex-shrink-0" />
                 </div>
               </button>
 
               {/* CSV Upload Option */}
               <button
                 onClick={() => setImportMethod('csv')}
-                className="w-full p-6 bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-blue-500/20 hover:border-blue-500/40 rounded-xl transition-all duration-300 text-left group hover:scale-105 hover:shadow-xl"
+                className="w-full p-4 sm:p-6 bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-blue-500/20 hover:border-blue-500/40 rounded-xl transition-all duration-300 text-left group hover:scale-105 hover:shadow-xl"
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
                     <div className="p-3 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full shadow-lg">
                       <FileText className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h5 className="text-lg font-semibold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent mb-1">CSV File Upload</h5>
-                      <p className="text-gray-400 text-sm">
+                      <h5 className="text-sm sm:text-lg font-semibold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent mb-1">CSV File Upload</h5>
+                      <p className="text-gray-400 text-xs sm:text-sm">
                         Upload a CSV file with movie titles from IMDB lists or other sources
                       </p>
                     </div>
                   </div>
-                  <ChevronRight className="h-5 w-5 text-gray-400 group-hover:text-white transition-colors" />
+                  <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 group-hover:text-white transition-colors flex-shrink-0" />
                 </div>
               </button>
             </div>
@@ -280,14 +280,14 @@ export function ImportModal({
                 >
                   ←
                 </button>
-                <h4 className="text-lg font-semibold text-white">CSV File Import</h4>
+                <h4 className="text-base sm:text-lg font-semibold text-white">CSV File Import</h4>
               </div>
 
               {!csvFile ? (
-                <div className="border-2 border-dashed border-gray-600 rounded-xl p-8 text-center">
+                <div className="border-2 border-dashed border-gray-600 rounded-xl p-4 sm:p-8 text-center">
                   <FileText className="h-12 w-12 text-gray-500 mx-auto mb-4" />
-                  <h5 className="text-lg font-semibold text-white mb-2">Upload CSV File</h5>
-                  <p className="text-gray-400 mb-4">
+                  <h5 className="text-base sm:text-lg font-semibold text-white mb-2">Upload CSV File</h5>
+                  <p className="text-gray-400 mb-4 text-sm">
                     Select a CSV file containing movie titles
                   </p>
                   <input
@@ -299,7 +299,7 @@ export function ImportModal({
                   />
                   <label
                     htmlFor="csv-upload"
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg cursor-pointer transition-colors"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg cursor-pointer transition-colors text-sm"
                   >
                     <Upload className="h-4 w-4" />
                     Choose File
@@ -309,15 +309,15 @@ export function ImportModal({
                 <div className="space-y-4">
                   <div className="flex items-center justify-between p-4 bg-gray-700 rounded-lg">
                     <div>
-                      <p className="text-white font-medium">{csvFile.name}</p>
-                      <p className="text-gray-400 text-sm">{csvMovies.length} movies detected</p>
+                      <p className="text-white font-medium text-sm sm:text-base truncate">{csvFile.name}</p>
+                      <p className="text-gray-400 text-xs sm:text-sm">{csvMovies.length} movies detected</p>
                     </div>
                     <button
                       onClick={() => {
                         setCsvFile(null)
                         setCsvMovies([])
                       }}
-                      className="text-red-400 hover:text-red-300 transition-colors"
+                      className="text-red-400 hover:text-red-300 transition-colors flex-shrink-0"
                     >
                       <X className="h-4 w-4" />
                     </button>
@@ -325,16 +325,16 @@ export function ImportModal({
 
                   {csvMovies.length > 0 && (
                     <div className="space-y-4">
-                      <div className="max-h-40 overflow-y-auto bg-gray-700 rounded-lg p-4">
-                        <h6 className="text-white font-medium mb-2">Detected Movies:</h6>
+                      <div className="max-h-40 overflow-y-auto bg-gray-700 rounded-lg p-3 sm:p-4">
+                        <h6 className="text-white font-medium mb-2 text-sm sm:text-base">Detected Movies:</h6>
                         <div className="space-y-1">
                           {csvMovies.slice(0, 10).map((title, index) => (
-                            <div key={index} className="text-gray-300 text-sm">
+                            <div key={index} className="text-gray-300 text-xs sm:text-sm">
                               • {title}
                             </div>
                           ))}
                           {csvMovies.length > 10 && (
-                            <div className="text-gray-400 text-sm">
+                            <div className="text-gray-400 text-xs sm:text-sm">
                               ... and {csvMovies.length - 10} more
                             </div>
                           )}
@@ -344,7 +344,7 @@ export function ImportModal({
                       {loading ? (
                         <div className="text-center py-4">
                           <Loader2 className="h-8 w-8 animate-spin text-blue-500 mx-auto mb-2" />
-                          <p className="text-white">
+                          <p className="text-white text-sm">
                             Processing {progress.current} of {progress.total} movies...
                           </p>
                         </div>
@@ -354,7 +354,7 @@ export function ImportModal({
                             <div className="p-4 bg-green-900/20 border border-green-500/20 rounded-lg">
                               <div className="flex items-center gap-2 mb-2">
                                 <CheckCircle className="h-5 w-5 text-green-400" />
-                                <span className="text-green-300 font-medium">
+                                <span className="text-green-300 font-medium text-sm">
                                   Successfully imported {results.success.length} movies
                                 </span>
                               </div>
@@ -365,7 +365,7 @@ export function ImportModal({
                             <div className="p-4 bg-red-900/20 border border-red-500/20 rounded-lg">
                               <div className="flex items-center gap-2 mb-2">
                                 <AlertCircle className="h-5 w-5 text-red-400" />
-                                <span className="text-red-300 font-medium">
+                                <span className="text-red-300 font-medium text-sm">
                                   Failed to find {results.failed.length} movies
                                 </span>
                               </div>
@@ -383,7 +383,7 @@ export function ImportModal({
                       ) : (
                         <button
                           onClick={handleCsvImport}
-                          className="w-full px-4 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors flex items-center justify-center gap-2"
+                          className="w-full px-4 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors flex items-center justify-center gap-2 text-sm sm:text-base"
                         >
                           <Upload className="h-4 w-4" />
                           Import {csvMovies.length} Movies
