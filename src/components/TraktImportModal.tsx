@@ -33,6 +33,7 @@ interface ListSettings {
   [key: string]: {
     autoImport: boolean
     lastUpdated?: string
+    lastAutoSync?: string
   }
 }
 
@@ -51,6 +52,8 @@ export function TraktImportModal({
   const [showSettings, setShowSettings] = useState(false)
   const [listSettings, setListSettings] = useState<ListSettings>({})
   const [importingMovies, setImportingMovies] = useState<Set<number>>(new Set())
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
+  const [saving, setSaving] = useState(false)
 
   const predefinedLists = traktAPI.getPredefinedLists()
 
@@ -66,11 +69,109 @@ export function TraktImportModal({
     }
   }, [])
 
-  // Save list settings to localStorage
+  // Set up auto-sync interval when component mounts
   useEffect(() => {
-    localStorage.setItem('traktListSettings', JSON.stringify(listSettings))
-  }, [listSettings])
+    if (!isOpen) return
 
+    const checkAutoSync = async () => {
+      const now = new Date()
+      
+      for (const [listSlug, settings] of Object.entries(listSettings)) {
+        if (!settings.autoImport) continue
+        
+        const lastSync = settings.lastAutoSync ? new Date(settings.lastAutoSync) : null
+        const hoursSinceSync = lastSync ? (now.getTime() - lastSync.getTime()) / (1000 * 60 * 60) : 25
+        
+        // Auto-sync every 24 hours
+        if (hoursSinceSync >= 24) {
+          console.log(`Auto-syncing ${listSlug} (${hoursSinceSync.toFixed(1)} hours since last sync)`)
+          await performAutoSync(listSlug)
+        }
+      }
+    }
+
+    // Check immediately and then every hour
+    checkAutoSync()
+    const interval = setInterval(checkAutoSync, 60 * 60 * 1000) // Check every hour
+
+    return () => clearInterval(interval)
+  }, [isOpen, listSettings])
+
+  const performAutoSync = async (listSlug: string) => {
+    try {
+      const listConfig = predefinedLists.find(list => list.slug === listSlug)
+      if (!listConfig) return
+
+      // Fetch latest movies from the list
+      const traktMovieItems = await traktAPI.getListMovies(listConfig.username, listSlug)
+      
+      // Convert to TMDB format
+      const tmdbMovies: TMDBMovie[] = []
+      
+      for (const item of traktMovieItems) {
+        try {
+          const traktMovie = traktAPI.formatMovieForTMDB(item.movie)
+          
+          let movie: TMDBMovie | null = null
+          
+          if (traktMovie.tmdbId) {
+            try {
+              movie = await tmdbAPI.getMovieDetails(traktMovie.tmdbId)
+            } catch (error) {
+              console.warn(`Failed to fetch movie by TMDB ID ${traktMovie.tmdbId}`)
+            }
+          }
+          
+          if (!movie) {
+            const searchQuery = traktMovie.year 
+              ? `${traktMovie.title} ${traktMovie.year}`
+              : traktMovie.title
+            
+            const searchResults = await tmdbAPI.searchMovies(searchQuery)
+            movie = searchResults.find(result => {
+              const resultYear = result.release_date ? new Date(result.release_date).getFullYear() : null
+              return resultYear === traktMovie.year || 
+                     Math.abs((resultYear || 0) - traktMovie.year) <= 1
+            }) || searchResults[0]
+          }
+          
+          if (movie) {
+            // Check if movie is already in watchlist
+            const isAlreadyAdded = watchlistMovies.some(w => w.tmdb_id === movie!.id)
+            if (!isAlreadyAdded) {
+              tmdbMovies.push(movie)
+            }
+          }
+          
+          await new Promise(resolve => setTimeout(resolve, 100))
+          
+        } catch (error) {
+          console.error(`Error processing movie ${item.movie.title}:`, error)
+        }
+      }
+
+      // Auto-import new movies
+      if (tmdbMovies.length > 0) {
+        console.log(`Auto-importing ${tmdbMovies.length} new movies from ${listSlug}`)
+        await onImport(tmdbMovies)
+      }
+
+      // Update last sync time
+      const updatedSettings = {
+        ...listSettings,
+        [listSlug]: {
+          ...listSettings[listSlug],
+          lastAutoSync: new Date().toISOString()
+        }
+      }
+      
+      setListSettings(updatedSettings)
+      localStorage.setItem('traktListSettings', JSON.stringify(updatedSettings))
+      
+    } catch (error) {
+      console.error(`Auto-sync failed for ${listSlug}:`, error)
+    }
+  }
   const handleListSelect = async (listSlug: string) => {
     setSelectedList(listSlug)
     setLoading(true)
@@ -203,8 +304,23 @@ export function TraktImportModal({
         autoImport: enabled
       }
     }))
+    setHasUnsavedChanges(true)
   }
 
+  const handleSaveSettings = async () => {
+    setSaving(true)
+    try {
+      // Save to localStorage
+      localStorage.setItem('traktListSettings', JSON.stringify(listSettings))
+      setHasUnsavedChanges(false)
+      
+      // Show success feedback
+      setTimeout(() => setSaving(false), 500)
+    } catch (error) {
+      console.error('Failed to save settings:', error)
+      setSaving(false)
+    }
+  }
   const handleRefreshList = () => {
     if (selectedList) {
       handleListSelect(selectedList)
@@ -218,6 +334,8 @@ export function TraktImportModal({
     setSelectedMovies(new Set())
     setShowSettings(false)
     setLoading(false)
+    setHasUnsavedChanges(false)
+    setSaving(false)
     onClose()
   }
 
@@ -232,6 +350,16 @@ export function TraktImportModal({
     return `${Math.floor(diffHours / 24)}d ago`
   }
 
+  const formatLastAutoSync = (timestamp?: string) => {
+    if (!timestamp) return 'Never synced'
+    const date = new Date(timestamp)
+    const now = new Date()
+    const diffHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60))
+    
+    if (diffHours < 1) return 'Synced recently'
+    if (diffHours < 24) return `Synced ${diffHours}h ago`
+    return `Synced ${Math.floor(diffHours / 24)}d ago`
+  }
   if (!isOpen) return null
 
   return (
@@ -261,6 +389,20 @@ export function TraktImportModal({
               >
                 <Settings className="h-5 w-5" />
               </button>
+              {hasUnsavedChanges && (
+                <button
+                  onClick={handleSaveSettings}
+                  disabled={saving}
+                  className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white rounded-lg transition-colors"
+                >
+                  {saving ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Check className="h-4 w-4" />
+                  )}
+                  {saving ? 'Saving...' : 'Save'}
+                </button>
+              )}
               <button
                 onClick={handleClose}
                 className="p-1 text-gray-400 hover:text-white transition-colors"
@@ -312,6 +454,12 @@ export function TraktImportModal({
                           <span>Updated: {formatLastUpdated(settings.lastUpdated)}</span>
                         </div>
                         
+                        {settings.autoImport && (
+                          <div className="text-xs text-green-400 mt-1">
+                            {formatLastAutoSync(settings.lastAutoSync)}
+                          </div>
+                        )}
+                        
                         {loading && selectedList === list.slug && (
                           <div className="absolute inset-0 bg-gray-700/50 rounded-lg flex items-center justify-center">
                             <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
@@ -332,7 +480,7 @@ export function TraktImportModal({
                             <span className="text-gray-300">Auto-import new movies</span>
                           </label>
                           <p className="text-xs text-gray-500 mt-1">
-                            Automatically add new movies when the list updates
+                            Automatically check for and import new movies every 24 hours
                           </p>
                         </div>
                       )}
