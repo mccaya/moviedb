@@ -27,10 +27,14 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
     setLoading(true)
     setError('')
 
+    console.log(`🔄 ${isSignUp ? 'SIGNUP' : 'SIGNIN'} attempt for:`, email)
+
     try {
       const { error } = isSignUp 
         ? await signUp(email, password)
         : await signIn(email, password)
+
+      console.log(`📋 ${isSignUp ? 'SIGNUP' : 'SIGNIN'} result:`, { hasError: !!error, errorMessage: error?.message })
 
       if (error) {
         // Provide more user-friendly error messages
@@ -50,11 +54,13 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
           setError(error.message)
         }
       } else {
+        console.log(`✅ ${isSignUp ? 'SIGNUP' : 'SIGNIN'} successful!`)
         onClose()
         setEmail('')
         setPassword('')
       }
     } catch (err) {
+      console.error(`❌ ${isSignUp ? 'SIGNUP' : 'SIGNIN'} exception:`, err)
       setError('An unexpected error occurred')
     } finally {
       setLoading(false)
