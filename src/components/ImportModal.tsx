@@ -37,4 +37,4 @@ export function ImportModal({
   watchlistMovies = [], 
   onRemoveMovie = async () => {} 
 }: ImportModalProps) {
-  const [importMethod, setImportMethod] = useState<ImportMetho
+  const [importMethod, setImportMethod] = useState<ImportMethod | null>(null)
