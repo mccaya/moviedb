@@ -460,7 +460,7 @@ export function TraktImportModal({
 
         <div className="flex flex-1 overflow-hidden">
           {/* Sidebar - List Selection */}
-          <div className="w-80 bg-gray-750 border-r border-gray-700 overflow-y-auto">
+          <div className="w-80 bg-gray-750 border-r border-gray-700 overflow-y-auto max-h-full">
             <div className="p-4">
               <h4 className="text-sm font-semibold text-gray-300 mb-4">Available Lists</h4>
               
