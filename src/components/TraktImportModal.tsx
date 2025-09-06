@@ -362,6 +362,7 @@ export function TraktImportModal({
     if (diffHours < 1) return 'Synced recently'
     if (diffHours < 24) return `Synced ${diffHours}h ago`
     return `Synced ${Math.floor(diffHours / 24)}d ago`
+  }
 
   const handleAddMovieFromCollection = async (movie: TMDBMovie) => {
     await onImport([movie])
