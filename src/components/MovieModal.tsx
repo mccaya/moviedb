@@ -325,7 +325,7 @@ export function MovieModal({
         {/* Header with backdrop */}
         <div className="relative flex-shrink-0">
           {movieDetails?.backdrop_path && (
-            <div className="h-24 sm:h-48 md:h-64 bg-gradient-to-r from-gray-900 to-gray-800 relative overflow-hidden">
+            <div className="h-40 sm:h-48 md:h-64 bg-gradient-to-r from-gray-900 to-gray-800 relative overflow-hidden">
               <img
                 src={tmdbAPI.getImageUrl(movieDetails.backdrop_path)}
                 alt={movie.title}
@@ -351,7 +351,7 @@ export function MovieModal({
           {/* Movie info overlay */}
           <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-6">
             <div className="flex gap-2 sm:gap-6">
-              <div className="w-16 h-24 sm:w-32 sm:h-48 flex-shrink-0">
+              <div className="w-20 h-30 sm:w-32 sm:h-48 flex-shrink-0">
                 <img
                   src={tmdbAPI.getImageUrl(movie.poster_path)}
                   alt={movie.title}
