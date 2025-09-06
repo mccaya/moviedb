@@ -1,0 +1,106 @@
+Title,Year,Genre,Director,Rating
+The Shawshank Redemption,1994,Drama,Frank Darabont,9.3
+The Godfather,1972,Crime,Francis Ford Coppola,9.2
+The Dark Knight,2008,Action,Christopher Nolan,9.0
+The Godfather Part II,1974,Crime,Francis Ford Coppola,9.0
+12 Angry Men,1957,Drama,Sidney Lumet,9.0
+Schindler's List,1993,Drama,Steven Spielberg,8.9
+The Lord of the Rings: The Return of the King,2003,Fantasy,Peter Jackson,8.9
+Pulp Fiction,1994,Crime,Quentin Tarantino,8.9
+The Lord of the Rings: The Fellowship of the Ring,2001,Fantasy,Peter Jackson,8.8
+The Good the Bad and the Ugly,1966,Western,Sergio Leone,8.8
+Forrest Gump,1994,Drama,Robert Zemeckis,8.8
+Fight Club,1999,Drama,David Fincher,8.8
+The Lord of the Rings: The Two Towers,2002,Fantasy,Peter Jackson,8.7
+Inception,2010,Sci-Fi,Christopher Nolan,8.7
+The Empire Strikes Back,1980,Sci-Fi,Irvin Kershner,8.7
+The Matrix,1999,Sci-Fi,The Wachowskis,8.7
+Goodfellas,1990,Crime,Martin Scorsese,8.7
+One Flew Over the Cuckoo's Nest,1975,Drama,Milos Forman,8.7
+Se7en,1995,Crime,David Fincher,8.6
+Seven Samurai,1954,Action,Akira Kurosawa,8.6
+It's a Wonderful Life,1946,Drama,Frank Capra,8.6
+The Silence of the Lambs,1991,Thriller,Jonathan Demme,8.6
+Saving Private Ryan,1998,War,Steven Spielberg,8.6
+City of God,2002,Crime,Fernando Meirelles,8.6
+Interstellar,2014,Sci-Fi,Christopher Nolan,8.6
+Life Is Beautiful,1997,Drama,Roberto Benigni,8.6
+The Green Mile,1999,Drama,Frank Darabont,8.6
+Star Wars,1977,Sci-Fi,George Lucas,8.6
+Terminator 2: Judgment Day,1991,Sci-Fi,James Cameron,8.5
+Back to the Future,1985,Sci-Fi,Robert Zemeckis,8.5
+Spirited Away,2001,Animation,Hayao Miyazaki,8.5
+The Pianist,2002,Drama,Roman Polanski,8.5
+Psycho,1960,Thriller,Alfred Hitchcock,8.5
+Parasite,2019,Thriller,Bong Joon-ho,8.5
+Léon: The Professional,1994,Action,Luc Besson,8.5
+The Lion King,1994,Animation,Roger Allers,8.5
+Gladiator,2000,Action,Ridley Scott,8.5
+American History X,1998,Drama,Tony Kaye,8.5
+The Departed,2006,Crime,Martin Scorsese,8.5
+The Usual Suspects,1995,Crime,Bryan Singer,8.5
+Whiplash,2014,Drama,Damien Chazelle,8.5
+The Prestige,2006,Mystery,Christopher Nolan,8.5
+Casablanca,1942,Romance,Michael Curtiz,8.5
+Harakiri,1962,Drama,Masaki Kobayashi,8.4
+Grave of the Fireflies,1988,Animation,Isao Takahata,8.4
+Modern Times,1936,Comedy,Charlie Chaplin,8.4
+Rear Window,1954,Thriller,Alfred Hitchcock,8.4
+Alien,1979,Sci-Fi,Ridley Scott,8.4
+City Lights,1931,Comedy,Charlie Chaplin,8.4
+Apocalypse Now,1979,War,Francis Ford Coppola,8.4
+Django Unchained,2012,Western,Quentin Tarantino,8.4
+WALL-E,2008,Animation,Andrew Stanton,8.4
+The Lives of Others,2006,Drama,Florian Henckel von Donnersmarck,8.4
+Sunset Boulevard,1950,Drama,Billy Wilder,8.4
+Paths of Glory,1957,War,Stanley Kubrick,8.4
+The Shining,1980,Horror,Stanley Kubrick,8.4
+The Great Dictator,1940,Comedy,Charlie Chaplin,8.4
+Witness for the Prosecution,1957,Crime,Billy Wilder,8.4
+Aliens,1986,Sci-Fi,James Cameron,8.3
+Spider-Man: Into the Spider-Verse,2018,Animation,Bob Persichetti,8.3
+American Beauty,1999,Drama,Sam Mendes,8.3
+Dr. Strangelove,1964,Comedy,Stanley Kubrick,8.3
+The Dark Knight Rises,2012,Action,Christopher Nolan,8.3
+Oldboy,2003,Thriller,Park Chan-wook,8.3
+Amadeus,1984,Drama,Milos Forman,8.3
+Princess Mononoke,1997,Animation,Hayao Miyazaki,8.3
+Avengers: Infinity War,2018,Action,Anthony Russo,8.3
+Once Upon a Time in the West,1968,Western,Sergio Leone,8.3
+Coco,2017,Animation,Lee Unkrich,8.3
+Das Boot,1981,War,Wolfgang Petersen,8.3
+Braveheart,1995,Action,Mel Gibson,8.3
+Avengers: Endgame,2019,Action,Anthony Russo,8.3
+Your Name,2016,Animation,Makoto Shinkai,8.2
+Toy Story,1995,Animation,John Lasseter,8.2
+3 Idiots,2009,Comedy,Rajkumar Hirani,8.2
+Joker,2019,Drama,Todd Phillips,8.2
+Star Wars: The Last Jedi,2017,Sci-Fi,Rian Johnson,8.2
+High Noon,1952,Western,Fred Zinnemann,8.2
+Singin' in the Rain,1952,Musical,Gene Kelly,8.2
+Toy Story 3,2010,Animation,Lee Unkrich,8.2
+Inglourious Basterds,2009,War,Quentin Tarantino,8.2
+Good Will Hunting,1997,Drama,Gus Van Sant,8.2
+2001: A Space Odyssey,1968,Sci-Fi,Stanley Kubrick,8.2
+Requiem for a Dream,2000,Drama,Darren Aronofsky,8.2
+Vertigo,1958,Thriller,Alfred Hitchcock,8.2
+M,1931,Crime,Fritz Lang,8.2
+Eternal Sunshine of the Spotless Mind,2004,Romance,Michel Gondry,8.2
+Citizen Kane,1941,Drama,Orson Welles,8.2
+Full Metal Jacket,1987,War,Stanley Kubrick,8.1
+North by Northwest,1959,Thriller,Alfred Hitchcock,8.1
+Bicycle Thieves,1948,Drama,Vittorio De Sica,8.1
+Snatch,2000,Crime,Guy Ritchie,8.1
+The Kid,1921,Comedy,Charlie Chaplin,8.1
+Ikiru,1952,Drama,Akira Kurosawa,8.1
+The Hunt,2012,Drama,Thomas Vinterberg,8.1
+Monty Python and the Holy Grail,1975,Comedy,Terry Gilliam,8.1
+A Clockwork Orange,1971,Crime,Stanley Kubrick,8.1
+Scarface,1983,Crime,Brian De Palma,8.1
+The Apartment,1960,Comedy,Billy Wilder,8.1
+Taxi Driver,1976,Crime,Martin Scorsese,8.1
+Lawrence of Arabia,1962,Adventure,David Lean,8.1
+Double Indemnity,1944,Crime,Billy Wilder,8.1
+To Kill a Mockingbird,1962,Drama,Robert Mulligan,8.1
+Reservoir Dogs,1992,Crime,Quentin Tarantino,8.1
+The Treasure of the Sierra Madre,1948,Adventure,John Huston,8.1
