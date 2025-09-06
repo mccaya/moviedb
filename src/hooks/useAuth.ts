@@ -106,6 +106,35 @@ export function useAuth() {
           emailRedirectTo: undefined // Explicitly disable email confirmation
         }
       })
+      
+      // If signup was successful, trigger webhook
+      if (data.user && !error) {
+        try {
+          // Call the signup webhook edge function
+          const webhookResponse = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/signup-webhook`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+            },
+            body: JSON.stringify({
+              email: data.user.email,
+              user_id: data.user.id,
+              created_at: data.user.created_at
+            })
+          });
+          
+          if (!webhookResponse.ok) {
+            console.warn('Signup webhook failed:', await webhookResponse.text());
+          } else {
+            console.log('Signup webhook sent successfully');
+          }
+        } catch (webhookError) {
+          // Don't fail the signup if webhook fails
+          console.warn('Failed to send signup webhook:', webhookError);
+        }
+      }
+      
       return { data, error }
     } catch (err) {
       console.error('Signup error:', err)
