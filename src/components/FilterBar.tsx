@@ -24,7 +24,7 @@ export function FilterBar({
   availableStreamingMovies
 }: FilterBarProps) {
   return (
-    <div className="flex flex-col gap-3 sm:gap-4 mb-4 sm:mb-6 p-3 sm:p-4 bg-black/40 backdrop-blur-sm border border-gray-600/30 rounded-xl shadow-xl relative">
+    <div className="flex flex-col gap-3 sm:gap-4 mb-4 sm:mb-6 p-3 sm:p-4 bg-black/40 backdrop-blur-sm border border-gray-600/30 rounded-xl shadow-xl relative z-50">
       <div className="flex flex-col lg:flex-row gap-3 sm:gap-4">
       <div className="flex items-center gap-2 flex-wrap">
         <Filter className="h-4 w-4 text-gray-400" />
@@ -65,7 +65,7 @@ export function FilterBar({
         </select>
       </div>
 
-        <div className="flex items-center gap-2 w-full sm:w-auto relative z-10">
+        <div className="flex items-center gap-2 w-full sm:w-auto relative z-[100]">
           <StreamingFilter
             selectedServices={selectedStreamingServices}
             onServicesChange={onStreamingServicesChange}
