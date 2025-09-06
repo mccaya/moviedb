@@ -321,17 +321,17 @@ export function MovieModal({
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-gray-800 w-full max-w-md sm:max-w-4xl max-h-[85vh] rounded-xl overflow-hidden flex flex-col shadow-2xl">
+      <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 backdrop-blur-xl border border-purple-500/20 w-full max-w-md sm:max-w-4xl max-h-[85vh] rounded-xl overflow-hidden flex flex-col shadow-2xl">
         {/* Header with backdrop */}
         <div className="relative flex-shrink-0">
           {movieDetails?.backdrop_path && (
-            <div className="h-40 sm:h-48 md:h-64 bg-gradient-to-r from-gray-900 to-gray-800 relative overflow-hidden">
+            <div className="h-40 sm:h-48 md:h-64 bg-gradient-to-r from-gray-900 via-purple-900/30 to-gray-800 relative overflow-hidden">
               <img
                 src={tmdbAPI.getImageUrl(movieDetails.backdrop_path)}
                 alt={movie.title}
                 className="w-full h-full object-cover opacity-40"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-gray-800 via-gray-800/50 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-gray-800 via-purple-900/20 to-transparent" />
             </div>
           )}
           
@@ -341,7 +341,7 @@ export function MovieModal({
               e.stopPropagation()
               handleClose()
             }}
-            className="absolute top-4 right-4 p-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors shadow-lg z-10 font-bold"
+            className="absolute top-4 right-4 p-3 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-500 hover:to-pink-500 text-white rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 z-10 font-bold"
             type="button"
             aria-label="Close modal"
           >
@@ -459,7 +459,7 @@ export function MovieModal({
                       href={trailerUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1 sm:py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors text-xs sm:text-sm"
+                      className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1 sm:py-2 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-500 hover:to-pink-500 text-white rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 text-xs sm:text-sm"
                     >
                       <Play className="h-3 w-3 sm:h-4 sm:w-4" />
                       <span className="hidden sm:inline">Trailer</span>
@@ -470,7 +470,7 @@ export function MovieModal({
                     <button
                       onClick={handleAddToWatchlist}
                       disabled={actionLoading}
-                      className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1 sm:py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white rounded-lg transition-colors text-xs sm:text-sm"
+                      className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1 sm:py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 disabled:from-gray-600 disabled:to-gray-700 text-white rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 text-xs sm:text-sm"
                     >
                       {actionLoading ? (
                         <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
@@ -485,10 +485,10 @@ export function MovieModal({
                         onClick={handleToggleWatched}
                         disabled={actionLoading}
                         className={cn(
-                          "flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1 sm:py-2 rounded-lg transition-colors text-xs sm:text-sm",
+                          "flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1 sm:py-2 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 text-xs sm:text-sm",
                           isWatchlistMovie && (movie as Movie).watched
-                            ? "bg-orange-600 hover:bg-orange-700 text-white"
-                            : "bg-green-600 hover:bg-green-700 text-white"
+                            ? "bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white"
+                            : "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white"
                         )}
                       >
                         {actionLoading ? (
@@ -507,10 +507,10 @@ export function MovieModal({
                         onClick={() => handleUpdatePreference('thumbs_up')}
                         disabled={actionLoading}
                         className={cn(
-                          "p-1.5 sm:p-3 rounded-lg transition-colors",
+                          "p-1.5 sm:p-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105",
                           isWatchlistMovie && (movie as Movie).user_preference === 'thumbs_up'
-                            ? "bg-green-600 hover:bg-green-700 text-white"
-                            : "bg-gray-600 hover:bg-gray-500 text-white"
+                            ? "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white"
+                            : "bg-black/40 backdrop-blur-sm border border-gray-600/30 hover:bg-black/60 text-white"
                         )}
                       >
                         <ThumbsUp className="h-3 w-3 sm:h-4 sm:w-4" />
@@ -520,10 +520,10 @@ export function MovieModal({
                         onClick={() => handleUpdatePreference('thumbs_down')}
                         disabled={actionLoading}
                         className={cn(
-                          "p-1.5 sm:p-3 rounded-lg transition-colors",
+                          "p-1.5 sm:p-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105",
                           isWatchlistMovie && (movie as Movie).user_preference === 'thumbs_down'
-                            ? "bg-red-600 hover:bg-red-700 text-white"
-                            : "bg-gray-600 hover:bg-gray-500 text-white"
+                            ? "bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-500 hover:to-pink-500 text-white"
+                            : "bg-black/40 backdrop-blur-sm border border-gray-600/30 hover:bg-black/60 text-white"
                         )}
                       >
                         <ThumbsDown className="h-3 w-3 sm:h-4 sm:w-4" />
@@ -538,7 +538,7 @@ export function MovieModal({
 
         {/* Content tabs - Rest of the modal remains the same */}
         <div className="flex-1 overflow-y-auto p-2 sm:p-6">
-          <div className="flex gap-1 mb-2 sm:mb-6 bg-gray-700 rounded-lg p-1">
+          <div className="flex gap-1 mb-2 sm:mb-6 bg-black/40 backdrop-blur-sm border border-gray-600/30 rounded-lg p-1">
             {[
               { key: 'overview', label: 'Overview' },
               { key: 'cast', label: 'Cast' },
@@ -549,10 +549,10 @@ export function MovieModal({
                 key={key}
                 onClick={() => setActiveTab(key as any)}
                 className={cn(
-                  "flex-1 px-1 sm:px-3 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-colors",
+                  "flex-1 px-1 sm:px-3 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-all duration-300",
                   activeTab === key
-                    ? "bg-blue-600 text-white"
-                    : "text-gray-300 hover:text-white hover:bg-gray-600"
+                    ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
+                    : "text-gray-300 hover:text-white hover:bg-black/40 backdrop-blur-sm"
                 )}
               >
                 {label}
@@ -622,7 +622,7 @@ export function MovieModal({
                           {services.map((service: any) => (
                             <div 
                               key={service.provider_id} 
-                              className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
+                              className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-black/40 backdrop-blur-sm border border-gray-600/30 rounded-lg hover:bg-black/60 transition-all duration-300 hover:scale-105"
                             >
                               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-lg overflow-hidden flex-shrink-0">
                                 <img
@@ -645,7 +645,7 @@ export function MovieModal({
                         
                         {/* Add Emby Premium notice if available */}
                         {isWatchlistMovie && embyAvailable && (
-                          <div className="mt-3 sm:mt-4 p-2 sm:p-3 bg-purple-900/20 border border-purple-500/20 rounded-lg">
+                          <div className="mt-3 sm:mt-4 p-2 sm:p-3 bg-gradient-to-r from-purple-900/30 to-indigo-900/30 backdrop-blur-sm border border-purple-500/30 rounded-lg shadow-lg">
                             <div className="flex items-center gap-2 mb-2">
                               <Crown className="h-4 w-4 text-purple-400" />
                               <span className="text-purple-300 font-medium text-sm">Premium Access</span>
@@ -656,7 +656,7 @@ export function MovieModal({
                           </div>
                         )}
                         
-                        <div className="mt-3 sm:mt-4 p-2 sm:p-3 bg-blue-900/20 border border-blue-500/20 rounded-lg">
+                        <div className="mt-3 sm:mt-4 p-2 sm:p-3 bg-gradient-to-r from-blue-900/30 to-cyan-900/30 backdrop-blur-sm border border-blue-500/30 rounded-lg shadow-lg">
                           <p className="text-blue-300 text-xs sm:text-sm">
                             <strong>Note:</strong> Availability may vary by region and can change over time. 
                             Check the streaming service directly to confirm current availability.
@@ -665,7 +665,7 @@ export function MovieModal({
                       </div>
                     ) : (
                       <div className="text-center py-8">
-                        <div className="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <div className="w-16 h-16 bg-gradient-to-r from-gray-700 to-gray-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
                           <span className="text-2xl">📺</span>
                         </div>
                         <h3 className="text-base sm:text-lg font-semibold text-white mb-2">Not available on streaming</h3>
@@ -676,7 +676,7 @@ export function MovieModal({
                         
                         {/* Premium option notice */}
                         {isWatchlistMovie && embyAvailable && (
-                          <div className="mt-3 sm:mt-4 p-2 sm:p-3 bg-purple-900/20 border border-purple-500/20 rounded-lg">
+                          <div className="mt-3 sm:mt-4 p-2 sm:p-3 bg-gradient-to-r from-purple-900/30 to-indigo-900/30 backdrop-blur-sm border border-purple-500/30 rounded-lg shadow-lg">
                             <div className="flex items-center justify-center gap-2 mb-2">
                               <Crown className="h-5 w-5 text-purple-400" />
                               <span className="text-purple-300 font-medium text-sm">Good news!</span>
