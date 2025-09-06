@@ -102,7 +102,9 @@ class TraktAPI {
       const endpoint = `/users/${username}/lists/${listSlug}/items/movies`
       return await this.makeRequest<TraktListItem[]>(endpoint)
     } catch (error) {
-      console.error(`Failed to fetch list ${listSlug} for user ${username}:`, error)
+      console.warn(`Failed to fetch list ${listSlug} for user ${username}:`, error)
+      console.warn('This is likely due to network restrictions or CORS policies in the development environment (WebContainer)')
+      console.warn('The application will fall back to using demo data to demonstrate functionality')
       // Return demo data if API fails
       return this.getDemoListData(listSlug)
     }
