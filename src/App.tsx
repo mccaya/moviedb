@@ -30,6 +30,7 @@ function App() {
   const [embyConnected, setEmbyConnected] = useState(false)
   const [selectedStreamingServices, setSelectedStreamingServices] = useState<number[]>([])
   const [movieStreamingData, setMovieStreamingData] = useState<Record<number, number[]>>({})
+  const [authModalMode, setAuthModalMode] = useState<'signin' | 'signup'>('signin')
 
   useEffect(() => {
     if (user) {
@@ -144,6 +145,7 @@ function App() {
 
   const addToWatchlist = async (tmdbMovie: TMDBMovie) => {
     if (!user) {
+      setAuthModalMode('signin')
       setShowAuthModal(true)
       return
     }
@@ -415,13 +417,26 @@ function App() {
                   </button>
                 </div>
               ) : (
-                <button
-                  onClick={() => setShowAuthModal(true)}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
-                >
-                  <User className="h-4 w-4" />
-                  Sign In
-                </button>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => {
+                      setAuthModalMode('signin')
+                      setAuthModalMode('signup')
+                      setShowAuthModal(true)
+                    }}
+                    className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg transition-colors"
+                  >
+                    <User className="h-4 w-4" />
+                    Sign Up
+                  </button>
+                  <button
+                    onClick={() => setShowAuthModal(true)}
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+                  >
+                    <User className="h-4 w-4" />
+                    Sign In
+                  </button>
+                </div>
               )}
             </div>
           </div>
@@ -574,7 +589,10 @@ function App() {
               Keep track of movies you want to watch and play them directly from your Emby server!
             </p>
             <button
-              onClick={() => setShowAuthModal(true)}
+              onClick={() => {
+                setAuthModalMode('signin')
+                setShowAuthModal(true)
+              }}
               className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
             >
               Get Started
@@ -585,7 +603,8 @@ function App() {
 
       <AuthModal 
         isOpen={showAuthModal} 
-        onClose={() => setShowAuthModal(false)} 
+        onClose={() => setShowAuthModal(false)}
+        initialMode={authModalMode}
       />
       
       <ImportModal

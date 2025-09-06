@@ -1,20 +1,26 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { X, Mail, Lock, User, Loader2 } from 'lucide-react'
 import { useAuth } from '../hooks/useAuth'
 
 interface AuthModalProps {
   isOpen: boolean
   onClose: () => void
+  initialMode?: 'signin' | 'signup'
 }
 
-export function AuthModal({ isOpen, onClose }: AuthModalProps) {
-  const [isSignUp, setIsSignUp] = useState(false)
+export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) {
+  const [isSignUp, setIsSignUp] = useState(initialMode === 'signup')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   const { signIn, signUp } = useAuth()
+
+  // Update isSignUp when initialMode changes
+  useEffect(() => {
+    setIsSignUp(initialMode === 'signup')
+  }, [initialMode])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
