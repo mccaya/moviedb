@@ -642,9 +642,10 @@ function App() {
                 <div className="absolute inset-0 h-24 w-24 bg-gradient-to-r from-red-500 via-purple-500 to-pink-500 opacity-40 blur-3xl rounded-full mx-auto animate-pulse"></div>
               </div>
               <h2 className="text-6xl md:text-8xl lg:text-9xl font-black bg-gradient-to-r from-white via-red-300 via-purple-300 via-pink-300 to-white bg-clip-text text-transparent mb-8 drop-shadow-2xl text-shadow-ultra animate-glow-pulse tracking-wider leading-tight">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-black bg-gradient-to-r from-white via-red-300 via-purple-300 via-pink-300 to-white bg-clip-text text-transparent mb-8 drop-shadow-2xl text-shadow-ultra animate-glow-pulse tracking-wider leading-tight">
                 Welcome to FilmFolio
               </h2>
-              <p className="text-white mb-12 max-w-3xl mx-auto text-2xl md:text-3xl lg:text-4xl leading-relaxed drop-shadow-2xl text-shadow-ultra font-light bg-gradient-to-r from-gray-100 via-white to-gray-100 bg-clip-text text-transparent animate-fade-in-up tracking-wide">
+              <p className="text-white mb-12 max-w-3xl mx-auto text-xl md:text-2xl leading-relaxed drop-shadow-2xl text-shadow-ultra font-light bg-gradient-to-r from-gray-100 via-white to-gray-100 bg-clip-text text-transparent animate-fade-in-up tracking-wide">
                 Your personal movie collection manager with AI recommendations and media server integration!
               </p>
               <button
