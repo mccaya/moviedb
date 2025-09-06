@@ -470,7 +470,7 @@ export function TraktImportModal({
 
         <div className="flex flex-1 overflow-hidden min-h-0">
           {/* Sidebar - List Selection */}
-          <div className={`${showMovieGrid ? 'hidden sm:block' : 'block'} w-full sm:w-80 bg-gradient-to-b from-gray-800/50 to-gray-900/50 backdrop-blur-sm border-r border-purple-500/20 flex flex-col`}>
+          <div className={`${showMovieGrid ? 'hidden sm:block' : 'block'} w-full sm:w-80 bg-gradient-to-b from-gray-800/50 to-gray-900/50 backdrop-blur-sm border-r border-purple-500/20 flex flex-col overflow-hidden`}>
             <div className="p-3 sm:p-4">
               <h4 className="text-xs sm:text-sm font-semibold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent mb-4">Available Lists</h4>
             </div>
@@ -585,7 +585,7 @@ export function TraktImportModal({
               <div className="flex-1 flex flex-col overflow-hidden">
                 {/* Controls */}
                 {/* Mobile Back Button */}
-                <div className="flex sm:hidden items-center mb-4 px-4 sm:px-6">
+                <div className="flex sm:hidden items-center mb-4 px-4 sm:px-6 flex-shrink-0">
                   <button
                     onClick={handleBackToLists}
                     className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-gray-700/50 to-gray-800/50 hover:from-gray-600/50 hover:to-gray-700/50 backdrop-blur-sm border border-gray-600/30 hover:border-purple-500/30 text-white rounded-lg transition-all duration-300 text-sm"
