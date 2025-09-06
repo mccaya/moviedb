@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Film, User, LogOut, Upload, Grid, List, Server, WifiSync as Sync, Loader2, Crown, Download, FileDown } from 'lucide-react'
+import { Film, User, LogOut, Upload, Download, Grid, List, Server, WifiSync as Sync, Loader2 } from 'lucide-react'
 import { useAuth } from './hooks/useAuth'
 import { useEmbySync } from './hooks/useEmbySync'
 import { movieService, Movie } from './lib/supabase'
@@ -11,7 +11,7 @@ import { FilterBar } from './components/FilterBar'
 import { AuthModal } from './components/AuthModal'
 import { ImportModal } from './components/ImportModal'
 import { EmbyInfoModal } from './components/EmbyInfoModal'
-import { VipInfoModal } from './components/VipInfoModal'
+import { ExportModal } from './components/ExportModal'
 
 function App() {
   const { user, loading: authLoading, signOut } = useAuth()
@@ -24,7 +24,7 @@ function App() {
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [showImportModal, setShowImportModal] = useState(false)
   const [showEmbyInfoModal, setShowEmbyInfoModal] = useState(false)
-  const [showVipInfoModal, setShowVipInfoModal] = useState(false)
+  const [showExportModal, setShowExportModal] = useState(false)
   const [embyConnected, setEmbyConnected] = useState(false)
   const [selectedStreamingServices, setSelectedStreamingServices] = useState<number[]>([])
   const [movieStreamingData, setMovieStreamingData] = useState<Record<number, number[]>>({})
@@ -33,10 +33,33 @@ function App() {
     if (user) {
       loadWatchlist()
       checkEmbyConnection()
+      // Check for auto-import settings and run if needed
+      checkAutoImports()
     } else {
       setLoading(false)
     }
   }, [user])
+
+  // Auto-import check for Trakt lists
+  const checkAutoImports = async () => {
+    try {
+      const settings = localStorage.getItem('traktListSettings')
+      if (settings) {
+        const listSettings = JSON.parse(settings)
+        const autoImportLists = Object.entries(listSettings).filter(
+          ([_, config]: [string, any]) => config.autoImport
+        )
+        
+        if (autoImportLists.length > 0) {
+          console.log(`Found ${autoImportLists.length} lists with auto-import enabled`)
+          // You could implement background auto-import here
+          // For now, we'll just log it
+        }
+      }
+    } catch (error) {
+      console.error('Error checking auto-imports:', error)
+    }
+  }
 
   // Fetch streaming data for movies
   useEffect(() => {
@@ -62,6 +85,7 @@ function App() {
     
     fetchStreamingData()
   }, [movies])
+
   // Auto-sync with Emby when movies are loaded
   useEffect(() => {
     if (movies.length > 0 && embyConnected && !isChecking) {
@@ -204,14 +228,30 @@ function App() {
   }
 
   const handleImport = async (importedMovies: TMDBMovie[]) => {
+    let successCount = 0
+    let failedCount = 0
+    
     for (const movie of importedMovies) {
       try {
         await addToWatchlist(movie)
+        successCount++
       } catch (error) {
         // Continue with other movies even if one fails
         console.error('Failed to import movie:', movie.title, error)
+        failedCount++
       }
     }
+    
+    if (successCount > 0) {
+      console.log(`Successfully imported ${successCount} movies`)
+    }
+    
+    if (failedCount > 0) {
+      console.warn(`Failed to import ${failedCount} movies`)
+    }
+    
+    // Reload watchlist to reflect changes
+    await loadWatchlist()
   }
 
   const handleSignOut = async () => {
@@ -226,41 +266,6 @@ function App() {
   const handleManualEmbySync = async () => {
     // Show info modal instead of attempting connection in WebContainer
     setShowEmbyInfoModal(true)
-  }
-
-  const handleExportWatchlist = () => {
-    if (movies.length === 0) {
-      alert('No movies to export')
-      return
-    }
-
-    // Create CSV content
-    const headers = ['Title', 'Release Date', 'Rating', 'Genres', 'Watched', 'Personal Rating', 'User Preference', 'Added Date', 'Overview']
-    const csvContent = [
-      headers.join(','),
-      ...movies.map(movie => [
-        `"${movie.title.replace(/"/g, '""')}"`,
-        movie.release_date || '',
-        movie.rating || '',
-        `"${movie.genres.join('; ')}"`,
-        movie.watched ? 'Yes' : 'No',
-        movie.personal_rating || '',
-        movie.user_preference || '',
-        new Date(movie.added_at).toLocaleDateString(),
-        `"${(movie.overview || '').replace(/"/g, '""')}"`
-      ].join(','))
-    ].join('\n')
-
-    // Create and download file
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
-    const link = document.createElement('a')
-    const url = URL.createObjectURL(blob)
-    link.setAttribute('href', url)
-    link.setAttribute('download', `movie-watchlist-${new Date().toISOString().split('T')[0]}.csv`)
-    link.style.visibility = 'hidden'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
   }
 
   // Filter and sort movies
@@ -297,6 +302,7 @@ function App() {
         const movieProviders = movieStreamingData[movie.tmdb_id] || []
         return selectedStreamingServices.some(serviceId => movieProviders.includes(serviceId))
       }).length
+
   if (authLoading) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
@@ -332,16 +338,6 @@ function App() {
             <div className="flex items-center gap-4">
               {user && (
                 <>
-                  {/* VIP Button */}
-                  <button
-                    onClick={() => setShowVipInfoModal(true)}
-                    className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-yellow-600 to-yellow-700 hover:from-yellow-700 hover:to-yellow-800 rounded-lg transition-colors"
-                    title="VIP Features (In Development)"
-                  >
-                    <Crown className="h-4 w-4" />
-                    <span className="hidden sm:inline">VIP</span>
-                  </button>
-                  
                   {/* Emby Sync Button */}
                   <button
                     onClick={handleManualEmbySync}
@@ -368,11 +364,10 @@ function App() {
                   </button>
                   
                   <button
-                    onClick={handleExportWatchlist}
+                    onClick={() => setShowExportModal(true)}
                     className="flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
-                    title="Export watchlist as CSV"
                   >
-                    <FileDown className="h-4 w-4" />
+                    <Download className="h-4 w-4" />
                     <span className="hidden sm:inline">Export</span>
                   </button>
                   
@@ -585,6 +580,8 @@ function App() {
         isOpen={showImportModal}
         onClose={() => setShowImportModal(false)}
         onImport={handleImport}
+        watchlistMovies={movies}
+        onRemoveMovie={removeFromWatchlist}
       />
       
       <EmbyInfoModal
@@ -592,9 +589,10 @@ function App() {
         onClose={() => setShowEmbyInfoModal(false)}
       />
       
-      <VipInfoModal
-        isOpen={showVipInfoModal}
-        onClose={() => setShowVipInfoModal(false)}
+      <ExportModal
+        isOpen={showExportModal}
+        onClose={() => setShowExportModal(false)}
+        movies={movies}
       />
     </div>
   )
