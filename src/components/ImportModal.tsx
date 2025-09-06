@@ -38,3 +38,4 @@ export function ImportModal({
   onRemoveMovie = async () => {} 
 }: ImportModalProps) {
   const [importMethod, setImportMethod] = useState<ImportMethod | null>(null)
+}
