@@ -373,14 +373,6 @@ function App() {
                     <span className="hidden sm:inline">Export</span>
                   </button>
                   
-                  <button
-                    onClick={() => setShowVipInfoModal(true)}
-                    className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-yellow-600 to-yellow-700 hover:from-yellow-700 hover:to-yellow-800 rounded-lg transition-colors"
-                  >
-                    <span className="text-lg">👑</span>
-                    <span className="hidden sm:inline">VIP</span>
-                  </button>
-                  
                   <div className="flex items-center gap-1 bg-gray-700 rounded-lg p-1">
                     <button
                       onClick={() => setViewMode('grid')}
