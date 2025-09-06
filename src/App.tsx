@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Film, User, LogOut, Upload, Grid, List, Server, WifiSync as Sync, Loader2 } from 'lucide-react'
+import { Film, User, LogOut, Upload, Grid, List, Server, WifiSync as Sync, Loader2, Crown, Download } from 'lucide-react'
 import { useAuth } from './hooks/useAuth'
 import { useEmbySync } from './hooks/useEmbySync'
 import { movieService, Movie } from './lib/supabase'
@@ -295,6 +295,16 @@ function App() {
             <div className="flex items-center gap-4">
               {user && (
                 <>
+                  {/* VIP Button */}
+                  <button
+                    onClick={() => setShowVipInfoModal(true)}
+                    className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-yellow-600 to-yellow-700 hover:from-yellow-700 hover:to-yellow-800 rounded-lg transition-colors"
+                    title="VIP Features (In Development)"
+                  >
+                    <Crown className="h-4 w-4" />
+                    <span className="hidden sm:inline">VIP</span>
+                  </button>
+                  
                   {/* Emby Sync Button */}
                   <button
                     onClick={handleManualEmbySync}
