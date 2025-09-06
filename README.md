@@ -135,7 +135,7 @@ A beautiful, production-ready personal movie collection manager built with React
 
 ## 🎨 Design Philosophy
 
-CineVault follows Apple-level design aesthetics with:
+FilmFolio follows Apple-level design aesthetics with:
 - **Clean, minimal interface** with thoughtful spacing
 - **Smooth animations** and micro-interactions
 - **Consistent color system** with proper contrast ratios

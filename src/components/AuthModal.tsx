@@ -162,7 +162,7 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
         {isSignUp && (
           <div className="mt-4 p-3 bg-blue-900/20 border border-blue-500/20 rounded-lg">
             <p className="text-xs text-blue-300">
-              By creating an account, you'll be able to sync your CineVault across devices and access advanced features.
+              By creating an account, you'll be able to sync your FilmFolio across devices and access advanced features.
             </p>
           </div>
         )}

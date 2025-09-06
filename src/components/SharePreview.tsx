@@ -86,7 +86,7 @@ export function SharePreview({ onClose }: SharePreviewProps) {
 
         <div className="text-center">
           <p className="text-sm text-gray-400 mb-4">
-            Want to create your own CineVault?
+            Want to create your own FilmFolio?
           </p>
           <button
             onClick={onClose}
