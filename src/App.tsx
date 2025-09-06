@@ -326,7 +326,7 @@ function App() {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
               <Film className="h-8 w-8 text-blue-500" />
-              <h1 className="text-xl font-bold">Movie Watchlist</h1>
+              <h1 className="text-xl font-bold">CineVault</h1>
               
               {/* Emby Status Indicator */}
               {user && (
@@ -583,10 +583,10 @@ function App() {
           <div className="text-center py-16">
             <Film className="h-16 w-16 text-gray-600 mx-auto mb-6" />
             <h2 className="text-2xl font-bold text-gray-300 mb-4">
-              Welcome to Movie Watchlist
+              Welcome to CineVault
             </h2>
             <p className="text-gray-500 mb-8 max-w-md mx-auto">
-              Keep track of movies you want to watch and play them directly from your Emby server!
+              Your personal movie collection manager with AI recommendations and media server integration!
             </p>
             <button
               onClick={() => {
