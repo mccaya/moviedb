@@ -251,8 +251,8 @@ export function TraktImportModal({
             </div>
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-400">Click here to set auto sync</span>
-                <span className="text-gray-400">→</span>
+                <span className="text-sm text-gray-400 animate-pulse">Click here to set auto sync</span>
+                <span className="text-gray-400 animate-pulse">→</span>
               </div>
               <button
                 onClick={() => setShowSettings(!showSettings)}
