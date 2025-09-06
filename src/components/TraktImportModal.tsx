@@ -57,6 +57,7 @@ export function TraktImportModal({
   const [saving, setSaving] = useState(false)
   const [showCollectionModal, setShowCollectionModal] = useState(false)
   const [collectionMovie, setCollectionMovie] = useState<{ title: string; id: number } | null>(null)
+  const [showMovieGrid, setShowMovieGrid] = useState(false)
 
   const predefinedLists = traktAPI.getPredefinedLists()
 
@@ -178,6 +179,7 @@ export function TraktImportModal({
   const handleListSelect = async (listSlug: string) => {
     setSelectedList(listSlug)
     setLoading(true)
+    setShowMovieGrid(true) // Show movie grid on mobile
     setMovies([])
     setTraktMovies([])
     setSelectedMovies(new Set())
@@ -324,6 +326,12 @@ export function TraktImportModal({
       setSaving(false)
     }
   }
+
+  const handleBackToLists = () => {
+    setShowMovieGrid(false)
+    setSelectedList('')
+  }
+
   const handleRefreshList = () => {
     if (selectedList) {
       handleListSelect(selectedList)
@@ -338,6 +346,7 @@ export function TraktImportModal({
     setShowSettings(false)
     setLoading(false)
     setHasUnsavedChanges(false)
+    setShowMovieGrid(false)
     setSaving(false)
     onClose()
   }
@@ -461,7 +470,7 @@ export function TraktImportModal({
 
         <div className="flex flex-1 overflow-hidden">
           {/* Sidebar - List Selection */}
-          <div className="w-full sm:w-80 bg-gradient-to-b from-gray-800/50 to-gray-900/50 backdrop-blur-sm border-r border-purple-500/20 flex flex-col h-full">
+          <div className={`${showMovieGrid ? 'hidden sm:block' : 'block'} w-full sm:w-80 bg-gradient-to-b from-gray-800/50 to-gray-900/50 backdrop-blur-sm border-r border-purple-500/20 flex flex-col h-full`}>
             <div className="p-3 sm:p-4">
               <h4 className="text-xs sm:text-sm font-semibold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent mb-4">Available Lists</h4>
             </div>
@@ -540,7 +549,7 @@ export function TraktImportModal({
           </div>
 
           {/* Main Content - Movie Grid */}
-          <div className="hidden sm:flex flex-1 overflow-y-auto">
+          <div className={`${showMovieGrid ? 'flex' : 'hidden sm:flex'} flex-1 overflow-y-auto flex-col`}>
             {!selectedList ? (
               <div className="flex items-center justify-center h-full">
                 <div className="text-center">
@@ -575,6 +584,16 @@ export function TraktImportModal({
             ) : (
               <div className="p-4 sm:p-6">
                 {/* Controls */}
+                {/* Mobile Back Button */}
+                <div className="flex sm:hidden items-center mb-4">
+                  <button
+                    onClick={handleBackToLists}
+                    className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-gray-700/50 to-gray-800/50 hover:from-gray-600/50 hover:to-gray-700/50 backdrop-blur-sm border border-gray-600/30 hover:border-purple-500/30 text-white rounded-lg transition-all duration-300 text-sm"
+                  >
+                    ← Back to Lists
+                  </button>
+                </div>
+                
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-4">
                     <h4 className="text-base sm:text-lg font-semibold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
