@@ -585,7 +585,7 @@ export function TraktImportModal({
               <div className="flex-1 flex flex-col overflow-hidden">
                 {/* Controls */}
                 {/* Mobile Back Button */}
-                <div className="flex sm:hidden items-center mb-4">
+                <div className="flex sm:hidden items-center mb-4 px-4 sm:px-6">
                   <button
                     onClick={handleBackToLists}
                     className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-gray-700/50 to-gray-800/50 hover:from-gray-600/50 hover:to-gray-700/50 backdrop-blur-sm border border-gray-600/30 hover:border-purple-500/30 text-white rounded-lg transition-all duration-300 text-sm"
@@ -637,8 +637,8 @@ export function TraktImportModal({
                 </div>
 
                 {/* Movie Grid */}
-                <div className="flex-1 overflow-y-auto px-4 sm:px-6 pb-6">
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
+                <div className="flex-1 overflow-y-auto">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 p-4 sm:p-6 pb-6">
                   {movies.map((movie) => {
                     const isSelected = selectedMovies.has(movie.id)
                     const isAdded = watchlistMovies.some(w => w.tmdb_id === movie.id)
