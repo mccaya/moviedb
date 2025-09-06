@@ -615,6 +615,19 @@ export function TraktImportModal({
           </div>
         </div>
       </div>
+      
+      {/* Collection Modal */}
+      {collectionMovie && (
+        <CollectionModal
+          isOpen={showCollectionModal}
+          onClose={handleCloseCollectionModal}
+          movieTitle={collectionMovie.title}
+          movieId={collectionMovie.id}
+          onAddMovie={onImport}
+          watchlistMovies={watchlistMovies}
+          onRemoveMovie={onRemoveMovie}
+        />
+      )}
     </div>
   )
 }
