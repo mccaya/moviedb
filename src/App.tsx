@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Film, User, LogOut, Upload, Grid, List, Server, WifiSync as Sync, Loader2, Crown, Download } from 'lucide-react'
+import { Film, User, LogOut, Upload, Grid, List, Server, WifiSync as Sync, Loader2, Crown, Download, FileDown } from 'lucide-react'
 import { useAuth } from './hooks/useAuth'
 import { useEmbySync } from './hooks/useEmbySync'
 import { movieService, Movie } from './lib/supabase'
@@ -228,6 +228,41 @@ function App() {
     setShowEmbyInfoModal(true)
   }
 
+  const handleExportWatchlist = () => {
+    if (movies.length === 0) {
+      alert('No movies to export')
+      return
+    }
+
+    // Create CSV content
+    const headers = ['Title', 'Release Date', 'Rating', 'Genres', 'Watched', 'Personal Rating', 'User Preference', 'Added Date', 'Overview']
+    const csvContent = [
+      headers.join(','),
+      ...movies.map(movie => [
+        `"${movie.title.replace(/"/g, '""')}"`,
+        movie.release_date || '',
+        movie.rating || '',
+        `"${movie.genres.join('; ')}"`,
+        movie.watched ? 'Yes' : 'No',
+        movie.personal_rating || '',
+        movie.user_preference || '',
+        new Date(movie.added_at).toLocaleDateString(),
+        `"${(movie.overview || '').replace(/"/g, '""')}"`
+      ].join(','))
+    ].join('\n')
+
+    // Create and download file
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const link = document.createElement('a')
+    const url = URL.createObjectURL(blob)
+    link.setAttribute('href', url)
+    link.setAttribute('download', `movie-watchlist-${new Date().toISOString().split('T')[0]}.csv`)
+    link.style.visibility = 'hidden'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   // Filter and sort movies
   const filteredMovies = movies
     .filter(movie => {
@@ -330,6 +365,15 @@ function App() {
                   >
                     <Upload className="h-4 w-4" />
                     <span className="hidden sm:inline">Import</span>
+                  </button>
+                  
+                  <button
+                    onClick={handleExportWatchlist}
+                    className="flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+                    title="Export watchlist as CSV"
+                  >
+                    <FileDown className="h-4 w-4" />
+                    <span className="hidden sm:inline">Export</span>
                   </button>
                   
                   <div className="flex items-center gap-1 bg-gray-700 rounded-lg p-1">
