@@ -320,12 +320,12 @@ export function MovieModal({
   const trailerUrl = getTrailerUrl()
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4 overflow-y-auto">
-      <div className="bg-gray-800 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+    <div className="fixed inset-0 bg-black/70 flex items-start sm:items-center justify-center z-50 p-2 sm:p-4 overflow-y-auto">
+      <div className="bg-gray-800 rounded-xl w-full max-w-4xl max-h-[98vh] sm:max-h-[90vh] overflow-hidden mt-2 sm:mt-0">
         {/* Header with backdrop */}
         <div className="relative">
           {movieDetails?.backdrop_path && (
-            <div className="h-64 bg-gradient-to-r from-gray-900 to-gray-800 relative overflow-hidden">
+            <div className="h-32 sm:h-48 md:h-64 bg-gradient-to-r from-gray-900 to-gray-800 relative overflow-hidden">
               <img
                 src={tmdbAPI.getImageUrl(movieDetails.backdrop_path)}
                 alt={movie.title}
@@ -341,17 +341,18 @@ export function MovieModal({
               e.stopPropagation()
               handleClose()
             }}
-            className="absolute top-4 right-4 p-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors shadow-lg z-10 font-bold text-lg"
+            className="absolute top-2 right-2 sm:top-4 sm:right-4 p-2 sm:p-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors shadow-lg z-10 font-bold text-sm sm:text-lg"
             type="button"
             aria-label="Close modal"
           >
-            Close ✕
+            <span className="hidden sm:inline">Close ✕</span>
+            <span className="sm:hidden">✕</span>
           </button>
           
           {/* Movie info overlay */}
-          <div className="absolute bottom-0 left-0 right-0 p-6">
-            <div className="flex gap-6">
-              <div className="w-32 h-48 flex-shrink-0">
+          <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-6">
+            <div className="flex gap-3 sm:gap-6">
+              <div className="w-20 h-30 sm:w-32 sm:h-48 flex-shrink-0">
                 <img
                   src={tmdbAPI.getImageUrl(movie.poster_path)}
                   alt={movie.title}
@@ -364,16 +365,16 @@ export function MovieModal({
               </div>
               
               <div className="flex-1 min-w-0">
-                <h1 className="text-3xl font-bold text-white mb-2">{movie.title}</h1>
+                <h1 className="text-lg sm:text-2xl md:text-3xl font-bold text-white mb-2 line-clamp-2">{movie.title}</h1>
                 
-                <div className="flex flex-wrap items-center gap-4 text-sm text-gray-300 mb-4">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-300 mb-2 sm:mb-4">
                   <div className="flex items-center gap-1">
                     <Calendar className="h-4 w-4" />
                     <span>{releaseYear}</span>
                   </div>
                   
                   {movieDetails?.runtime && (
-                    <div className="flex items-center gap-1">
+                    <div className="hidden sm:flex items-center gap-1">
                       <Clock className="h-4 w-4" />
                       <span>{formatRuntime(movieDetails.runtime)}</span>
                     </div>
@@ -387,14 +388,14 @@ export function MovieModal({
                   )}
                   
                   {director && (
-                    <div>
+                    <div className="hidden md:block">
                       <span className="text-gray-400">Directed by</span> {director.name}
                     </div>
                   )}
 
                   {/* Emby Status Indicator */}
                   {isWatchlistMovie && (
-                    <div className="flex items-center gap-1">
+                    <div className="hidden sm:flex items-center gap-1">
                       <div className={`w-2 h-2 rounded-full ${embyAvailable ? 'bg-purple-400' : 'bg-gray-500'}`} />
                       <span className="text-xs">
                         {embyLoading ? 'Checking Emby...' : embyAvailable ? 'Available on Emby' : 'Not on Emby'}
@@ -404,24 +405,29 @@ export function MovieModal({
                 </div>
                 
                 {genres.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {genres.map((genre) => (
+                  <div className="flex flex-wrap gap-1 sm:gap-2 mb-2 sm:mb-4">
+                    {genres.slice(0, 3).map((genre) => (
                       <span
                         key={genre}
                         className={cn(
-                          "px-3 py-1 rounded-full text-sm text-white font-medium",
+                          "px-2 py-1 rounded-full text-xs sm:text-sm text-white font-medium",
                           getGenreColor(genre)
                         )}
                       >
                         {genre}
                       </span>
                     ))}
+                    {genres.length > 3 && (
+                      <span className="px-2 py-1 rounded-full text-xs sm:text-sm text-gray-400 bg-gray-700">
+                        +{genres.length - 3}
+                      </span>
+                    )}
                   </div>
                 )}
                 
                 {/* Personal Rating */}
                 {isWatchlistMovie && (
-                  <div className="mt-4">
+                  <div className="mt-2 sm:mt-4 hidden sm:block">
                     <PersonalRatingStars
                       rating={(movie as Movie).personal_rating}
                       onRatingChange={handleUpdatePersonalRating}
@@ -432,20 +438,20 @@ export function MovieModal({
                 )}
                 
                 {/* Action buttons */}
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-2 sm:gap-3 mt-2 sm:mt-4">
                   {/* Premium Button - Shows when available on Emby */}
                   {isWatchlistMovie && embyAvailable && embyItemId && (
                     <button
                       onClick={handlePremiumPlay}
                       disabled={embyLoading}
-                      className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 disabled:from-gray-600 disabled:to-gray-700 text-white rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-semibold"
+                      className="flex items-center gap-1 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 disabled:from-gray-600 disabled:to-gray-700 text-white rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-semibold text-sm sm:text-base"
                     >
                       {embyLoading ? (
                         <Loader2 className="h-5 w-5 animate-spin" />
                       ) : (
                         <Crown className="h-5 w-5" />
                       )}
-                      Premium
+                      <span className="hidden sm:inline">Premium</span>
                     </button>
                   )}
                   
@@ -454,10 +460,11 @@ export function MovieModal({
                       href={trailerUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+                      className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors text-sm sm:text-base"
                     >
                       <Play className="h-4 w-4" />
-                      Watch Trailer
+                      <span className="hidden sm:inline">Watch Trailer</span>
+                      <span className="sm:hidden">Trailer</span>
                     </a>
                   )}
                   
@@ -465,22 +472,23 @@ export function MovieModal({
                     <button
                       onClick={handleAddToWatchlist}
                       disabled={actionLoading}
-                      className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white rounded-lg transition-colors"
+                      className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white rounded-lg transition-colors text-sm sm:text-base"
                     >
                       {actionLoading ? (
                         <Loader2 className="h-4 w-4 animate-spin" />
                       ) : (
                         <Plus className="h-4 w-4" />
                       )}
-                      Add to Watchlist
+                      <span className="hidden sm:inline">Add to Watchlist</span>
+                      <span className="sm:hidden">Add</span>
                     </button>
                   ) : (
-                    <div className="flex gap-2">
+                    <div className="flex gap-1 sm:gap-2">
                       <button
                         onClick={handleToggleWatched}
                         disabled={actionLoading}
                         className={cn(
-                          "flex items-center gap-2 px-4 py-2 rounded-lg transition-colors",
+                          "flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 rounded-lg transition-colors text-sm sm:text-base",
                           isWatchlistMovie && (movie as Movie).watched
                             ? "bg-orange-600 hover:bg-orange-700 text-white"
                             : "bg-green-600 hover:bg-green-700 text-white"
@@ -493,7 +501,12 @@ export function MovieModal({
                         ) : (
                           <Eye className="h-4 w-4" />
                         )}
-                        {isWatchlistMovie && (movie as Movie).watched ? 'Mark Unwatched' : 'Mark Watched'}
+                        <span className="hidden sm:inline">
+                          {isWatchlistMovie && (movie as Movie).watched ? 'Mark Unwatched' : 'Mark Watched'}
+                        </span>
+                        <span className="sm:hidden">
+                          {isWatchlistMovie && (movie as Movie).watched ? 'Unwatch' : 'Watch'}
+                        </span>
                       </button>
                       
                       <button
@@ -530,8 +543,8 @@ export function MovieModal({
         </div>
 
         {/* Content tabs - Rest of the modal remains the same */}
-        <div className="p-6">
-          <div className="flex gap-1 mb-6 bg-gray-700 rounded-lg p-1">
+        <div className="p-3 sm:p-6">
+          <div className="flex gap-1 mb-4 sm:mb-6 bg-gray-700 rounded-lg p-1">
             {[
               { key: 'overview', label: 'Overview' },
               { key: 'cast', label: 'Cast & Crew' },
@@ -542,13 +555,18 @@ export function MovieModal({
                 key={key}
                 onClick={() => setActiveTab(key as any)}
                 className={cn(
-                  "flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors",
+                  "flex-1 px-2 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors",
                   activeTab === key
                     ? "bg-blue-600 text-white"
                     : "text-gray-300 hover:text-white hover:bg-gray-600"
                 )}
               >
-                {label}
+                <span className="hidden sm:inline">{label}</span>
+                <span className="sm:hidden">
+                  {key === 'overview' ? 'Info' : 
+                   key === 'cast' ? 'Cast' : 
+                   key === 'streaming' ? 'Watch' : 'Details'}
+                </span>
               </button>
             ))}
           </div>
@@ -559,11 +577,11 @@ export function MovieModal({
               <span className="ml-3 text-gray-400">Loading details...</span>
             </div>
           ) : (
-            <div className="max-h-64 overflow-y-auto">
+            <div className="max-h-48 sm:max-h-64 overflow-y-auto">
               {activeTab === 'overview' && (
                 <div>
-                  <h3 className="text-lg font-semibold text-white mb-3">Synopsis</h3>
-                  <p className="text-gray-300 leading-relaxed">
+                  <h3 className="text-base sm:text-lg font-semibold text-white mb-3">Synopsis</h3>
+                  <p className="text-sm sm:text-base text-gray-300 leading-relaxed">
                     {movie.overview || movieDetails?.overview || 'No synopsis available.'}
                   </p>
                 </div>
@@ -573,8 +591,8 @@ export function MovieModal({
                 <div>
                   {movieDetails?.credits?.cast && movieDetails.credits.cast.length > 0 ? (
                     <div>
-                      <h3 className="text-lg font-semibold text-white mb-3">Cast</h3>
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                      <h3 className="text-base sm:text-lg font-semibold text-white mb-3">Cast</h3>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
                         {movieDetails.credits.cast.slice(0, 12).map((actor, index) => (
                           <div key={index} className="flex items-center gap-3">
                             <div className="w-12 h-12 bg-gray-700 rounded-full flex-shrink-0 overflow-hidden">
@@ -591,7 +609,7 @@ export function MovieModal({
                               )}
                             </div>
                             <div className="min-w-0">
-                              <p className="text-white text-sm font-medium truncate">{actor.name}</p>
+                              <p className="text-white text-xs sm:text-sm font-medium truncate">{actor.name}</p>
                               <p className="text-gray-400 text-xs truncate">{actor.character}</p>
                             </div>
                           </div>
@@ -599,7 +617,7 @@ export function MovieModal({
                       </div>
                     </div>
                   ) : (
-                    <p className="text-gray-400">Cast information not available.</p>
+                    <p className="text-sm text-gray-400">Cast information not available.</p>
                   )}
                 </div>
               )}
@@ -610,14 +628,14 @@ export function MovieModal({
                     const services = getStreamingServices()
                     return services.length > 0 ? (
                       <div>
-                        <h3 className="text-lg font-semibold text-white mb-4">Available on these streaming services</h3>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <h3 className="text-base sm:text-lg font-semibold text-white mb-4">Available on these streaming services</h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
                           {services.map((service: any) => (
                             <div 
                               key={service.provider_id} 
-                              className="flex items-center gap-3 p-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
+                              className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
                             >
-                              <div className="w-12 h-12 bg-white rounded-lg overflow-hidden flex-shrink-0">
+                              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-lg overflow-hidden flex-shrink-0">
                                 <img
                                   src={service.logo_url}
                                   alt={service.provider_name}
@@ -629,7 +647,7 @@ export function MovieModal({
                                 />
                               </div>
                               <div className="min-w-0">
-                                <p className="text-white font-medium text-sm">{service.provider_name}</p>
+                                <p className="text-white font-medium text-xs sm:text-sm">{service.provider_name}</p>
                                 <p className="text-green-400 text-xs">Included with subscription</p>
                               </div>
                             </div>
@@ -638,43 +656,43 @@ export function MovieModal({
                         
                         {/* Add Emby Premium notice if available */}
                         {isWatchlistMovie && embyAvailable && (
-                          <div className="mt-4 p-3 bg-purple-900/20 border border-purple-500/20 rounded-lg">
+                          <div className="mt-3 sm:mt-4 p-2 sm:p-3 bg-purple-900/20 border border-purple-500/20 rounded-lg">
                             <div className="flex items-center gap-2 mb-2">
                               <Crown className="h-4 w-4 text-purple-400" />
                               <span className="text-purple-300 font-medium">Premium Access</span>
                             </div>
-                            <p className="text-purple-200 text-sm">
+                            <p className="text-purple-200 text-xs sm:text-sm">
                               This movie is available on your personal Emby server. Click the Premium button to watch instantly.
                             </p>
                           </div>
                         )}
                         
-                        <div className="mt-4 p-3 bg-blue-900/20 border border-blue-500/20 rounded-lg">
-                          <p className="text-blue-300 text-sm">
+                        <div className="mt-3 sm:mt-4 p-2 sm:p-3 bg-blue-900/20 border border-blue-500/20 rounded-lg">
+                          <p className="text-blue-300 text-xs sm:text-sm">
                             <strong>Note:</strong> Availability may vary by region and can change over time. 
                             Check the streaming service directly to confirm current availability.
                           </p>
                         </div>
                       </div>
                     ) : (
-                      <div className="text-center py-8">
-                        <div className="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <div className="text-center py-6 sm:py-8">
+                        <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
                           <span className="text-2xl">📺</span>
                         </div>
-                        <h3 className="text-lg font-semibold text-white mb-2">Not available on major streaming services</h3>
-                        <p className="text-gray-400 text-sm mb-4">
+                        <h3 className="text-base sm:text-lg font-semibold text-white mb-2">Not available on major streaming services</h3>
+                        <p className="text-gray-400 text-xs sm:text-sm mb-4">
                           This movie may be available for rent or purchase on digital platforms like 
                           Amazon Prime Video, Apple TV, Google Play, or Vudu.
                         </p>
                         
                         {/* Premium option notice */}
                         {isWatchlistMovie && embyAvailable && (
-                          <div className="mt-4 p-3 bg-purple-900/20 border border-purple-500/20 rounded-lg">
+                          <div className="mt-3 sm:mt-4 p-2 sm:p-3 bg-purple-900/20 border border-purple-500/20 rounded-lg">
                             <div className="flex items-center justify-center gap-2 mb-2">
                               <Crown className="h-5 w-5 text-purple-400" />
                               <span className="text-purple-300 font-medium">Good news!</span>
                             </div>
-                            <p className="text-purple-200 text-sm">
+                            <p className="text-purple-200 text-xs sm:text-sm">
                               This movie is available on your personal Emby server. Click the Premium button above to watch.
                             </p>
                           </div>
@@ -686,44 +704,44 @@ export function MovieModal({
               )}
 
               {activeTab === 'details' && (
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-white mb-3">Movie Details</h3>
+                <div className="space-y-3 sm:space-y-4">
+                  <h3 className="text-base sm:text-lg font-semibold text-white mb-3">Movie Details</h3>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     {movieDetails?.runtime && (
                       <div>
-                        <span className="text-gray-400 text-sm">Runtime:</span>
-                        <p className="text-white">{formatRuntime(movieDetails.runtime)}</p>
+                        <span className="text-gray-400 text-xs sm:text-sm">Runtime:</span>
+                        <p className="text-white text-sm sm:text-base">{formatRuntime(movieDetails.runtime)}</p>
                       </div>
                     )}
                     
                     {movieDetails?.budget && movieDetails.budget > 0 && (
                       <div>
-                        <span className="text-gray-400 text-sm">Budget:</span>
-                        <p className="text-white">{formatCurrency(movieDetails.budget)}</p>
+                        <span className="text-gray-400 text-xs sm:text-sm">Budget:</span>
+                        <p className="text-white text-sm sm:text-base">{formatCurrency(movieDetails.budget)}</p>
                       </div>
                     )}
                     
                     {movieDetails?.revenue && movieDetails.revenue > 0 && (
                       <div>
-                        <span className="text-gray-400 text-sm">Revenue:</span>
-                        <p className="text-white">{formatCurrency(movieDetails.revenue)}</p>
+                        <span className="text-gray-400 text-xs sm:text-sm">Revenue:</span>
+                        <p className="text-white text-sm sm:text-base">{formatCurrency(movieDetails.revenue)}</p>
                       </div>
                     )}
                     
                     {movieDetails?.spoken_languages && movieDetails.spoken_languages.length > 0 && (
                       <div>
-                        <span className="text-gray-400 text-sm">Languages:</span>
-                        <p className="text-white">
+                        <span className="text-gray-400 text-xs sm:text-sm">Languages:</span>
+                        <p className="text-white text-sm sm:text-base">
                           {movieDetails.spoken_languages.map(lang => lang.name).join(', ')}
                         </p>
                       </div>
                     )}
                     
                     {movieDetails?.production_companies && movieDetails.production_companies.length > 0 && (
-                      <div className="md:col-span-2">
-                        <span className="text-gray-400 text-sm">Production Companies:</span>
-                        <p className="text-white">
+                      <div className="sm:col-span-2">
+                        <span className="text-gray-400 text-xs sm:text-sm">Production Companies:</span>
+                        <p className="text-white text-sm sm:text-base">
                           {movieDetails.production_companies.map(company => company.name).join(', ')}
                         </p>
                       </div>
