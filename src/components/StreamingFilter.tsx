@@ -184,7 +184,7 @@ export function StreamingFilter({
             className="fixed inset-0 z-40" 
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute top-full left-0 right-0 sm:right-auto mt-2 w-full sm:w-96 bg-gray-800 border border-gray-700 rounded-xl shadow-xl z-50 max-h-[80vh] overflow-hidden">
+          <div className="absolute top-full left-0 right-0 sm:right-auto mt-2 w-full sm:w-96 bg-gray-800 border border-gray-700 rounded-xl shadow-xl z-[60] max-h-[80vh] overflow-hidden">
             {/* Header */}
             <div className="p-3 sm:p-4 border-b border-gray-700">
               <div className="flex items-center justify-between mb-3">
