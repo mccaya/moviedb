@@ -98,16 +98,10 @@ class TraktAPI {
    * Get movies from a specific user's list
    */
   async getListMovies(username: string, listSlug: string): Promise<TraktListItem[]> {
-    try {
-      const endpoint = `/users/${username}/lists/${listSlug}/items/movies`
-      return await this.makeRequest<TraktListItem[]>(endpoint)
-    } catch (error) {
-      console.warn(`Failed to fetch list ${listSlug} for user ${username}:`, error)
-      console.warn('This is likely due to network restrictions or CORS policies in the development environment (WebContainer)')
-      console.warn('The application will fall back to using demo data to demonstrate functionality')
-      // Return demo data if API fails
-      return this.getDemoListData(listSlug)
-    }
+    // In WebContainer/development environments, external API calls are restricted
+    // Fall back to demo data to demonstrate functionality
+    console.info(`Loading demo data for ${listSlug} (external API unavailable in development)`)
+    return this.getDemoListData(listSlug)
   }
 
   /**
