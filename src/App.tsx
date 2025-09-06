@@ -231,6 +231,21 @@ function App() {
     }
   }
 
+  const updatePersonalRating = async (id: string, rating: number | null) => {
+    try {
+      const { data, error } = await movieService.updatePersonalRating(id, rating)
+      if (error) throw error
+      if (data) {
+        setMovies(prev => prev.map(movie => 
+          movie.id === id ? { ...movie, personal_rating: rating } : movie
+        ))
+      }
+    } catch (error) {
+      console.error('Error updating personal rating:', error)
+      throw error
+    }
+  }
+
   const handleImport = async (importedMovies: TMDBMovie[]) => {
     let successCount = 0
     let failedCount = 0
@@ -376,7 +391,7 @@ function App() {
                   
                   <button
                     onClick={() => setShowImportModal(true)}
-                    className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+                    className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
                   >
                     <Upload className="h-4 w-4" />
                     <span className="hidden sm:inline">Import</span>
@@ -433,7 +448,6 @@ function App() {
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => {
-                      setAuthModalMode('signin')
                       setAuthModalMode('signup') 
                       setShowAuthModal(true)
                     }}
@@ -592,30 +606,72 @@ function App() {
               onRemove={removeFromWatchlist}
               onToggleWatched={toggleWatchedStatus}
               onUpdatePreference={updateUserPreference}
+              onUpdatePersonalRating={updatePersonalRating}
               movieStreamingData={movieStreamingData}
             />
           </>
         ) : (
-          <div className="text-center py-16">
-            <div className="relative mb-6">
-              <Film className="h-16 w-16 text-transparent bg-gradient-to-r from-red-500 via-purple-500 to-pink-500 bg-clip-text mx-auto" />
-              <div className="absolute inset-0 h-16 w-16 bg-gradient-to-r from-red-500 via-purple-500 to-pink-500 opacity-20 blur-xl rounded-full mx-auto"></div>
+          <div className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
+            {/* Video Background */}
+            <div className="absolute inset-0 overflow-hidden">
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover opacity-30"
+                poster="https://images.unsplash.com/photo-1489599511986-c2b8e5b1b5b5?w=1920&h=1080&fit=crop"
+              >
+                {/* High-quality cinematic video sources */}
+                <source 
+                  src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" 
+                  type="video/mp4" 
+                />
+                <source 
+                  src="https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4" 
+                  type="video/mp4" 
+                />
+                {/* Fallback for browsers that don't support video */}
+                Your browser does not support the video tag.
+              </video>
+              
+              {/* Video Overlay for Better Text Readability */}
+              <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-purple-900/40 to-black/60"></div>
+              
+              {/* Cinematic Vignette Effect */}
+              <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/80"></div>
+              
+              {/* Subtle Floating Particles for Extra Cinematic Feel */}
+              <div className="absolute inset-0">
+                <div className="absolute top-1/4 left-1/4 w-1 h-1 bg-white rounded-full opacity-40 animate-ping"></div>
+                <div className="absolute top-3/4 right-1/4 w-1 h-1 bg-purple-400 rounded-full opacity-30 animate-pulse"></div>
+                <div className="absolute top-1/2 left-3/4 w-1 h-1 bg-pink-400 rounded-full opacity-20 animate-bounce"></div>
+                <div className="absolute top-1/3 right-1/3 w-1 h-1 bg-white rounded-full opacity-30 animate-ping"></div>
+              </div>
             </div>
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent mb-4">
-              Welcome to FilmFolio
-            </h2>
-            <p className="text-gray-400 mb-8 max-w-md mx-auto text-lg">
-              Your personal movie collection manager with AI recommendations and media server integration!
-            </p>
-            <button
-              onClick={() => {
-                setAuthModalMode('signin')
-                setShowAuthModal(true)
-              }}
-              className="px-8 py-4 bg-gradient-to-r from-red-600 via-purple-600 to-pink-600 hover:from-red-500 hover:via-purple-500 hover:to-pink-500 text-white rounded-xl transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 font-semibold text-lg"
-            >
-              Get Started
-            </button>
+            
+            {/* Main Content */}
+            <div className="relative z-10 text-center py-16 px-4">
+              <div className="relative mb-8">
+                <Film className="h-24 w-24 text-transparent bg-gradient-to-r from-red-500 via-purple-500 to-pink-500 bg-clip-text mx-auto drop-shadow-2xl" />
+                <div className="absolute inset-0 h-24 w-24 bg-gradient-to-r from-red-500 via-purple-500 to-pink-500 opacity-40 blur-3xl rounded-full mx-auto animate-pulse"></div>
+              </div>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-black bg-gradient-to-r from-white via-red-300 via-purple-300 via-pink-300 to-white bg-clip-text text-transparent mb-8 drop-shadow-2xl text-shadow-ultra animate-glow-pulse tracking-wider leading-tight">
+                Welcome to FilmFolio
+              </h2>
+              <p className="text-white mb-12 max-w-3xl mx-auto text-xl md:text-2xl leading-relaxed drop-shadow-2xl text-shadow-ultra font-light bg-gradient-to-r from-gray-100 via-white to-gray-100 bg-clip-text text-transparent animate-fade-in-up tracking-wide">
+                Your personal movie collection manager with AI recommendations and media server integration!
+              </p>
+              <button
+                onClick={() => {
+                  setAuthModalMode('signin')
+                  setShowAuthModal(true)
+                }}
+                className="px-12 py-5 bg-gradient-to-r from-red-600 via-purple-600 to-pink-600 hover:from-red-500 hover:via-purple-500 hover:to-pink-500 text-white rounded-2xl transition-all duration-300 shadow-2xl hover:shadow-purple-500/50 hover:scale-110 font-bold text-xl transform hover:-translate-y-2 backdrop-blur-sm border border-white/10"
+              >
+                Get Started
+              </button>
+            </div>
           </div>
         )}
       </main>

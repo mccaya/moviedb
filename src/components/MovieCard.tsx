@@ -18,6 +18,7 @@ import { cn, formatDate, getGenreColor } from '../lib/utils'
 import { DeleteConfirmDialog } from './DeleteConfirmDialog'
 import { PlayButton, EmbyStatusIndicator } from './PlayButton'
 import { MovieModal } from './MovieModal'
+import { PersonalRatingStars } from './PersonalRatingStars'
 
 interface MovieCardProps {
   movie: Movie
@@ -25,6 +26,7 @@ interface MovieCardProps {
   onRemove: (id: string) => Promise<void>
   onToggleWatched: (id: string, watched: boolean) => Promise<void>
   onUpdatePreference: (id: string, preference: 'thumbs_up' | 'thumbs_down' | null) => Promise<void>
+  onUpdatePersonalRating: (id: string, rating: number | null) => Promise<void>
   streamingProviders: number[]
 }
 
@@ -34,6 +36,7 @@ export function MovieCard({
   onRemove, 
   onToggleWatched, 
   onUpdatePreference,
+  onUpdatePersonalRating,
   streamingProviders
 }: MovieCardProps) {
   const [showActions, setShowActions] = useState(false)
@@ -105,6 +108,17 @@ export function MovieCard({
     console.log('Update Emby status:', { id, embyItemId, available })
   }
 
+  const handlePersonalRatingChange = async (rating: number | null) => {
+    setLoading(true)
+    try {
+      await onUpdatePersonalRating(movie.id, rating)
+    } catch (error) {
+      console.error('Failed to update personal rating:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : 'TBA'
 
   if (viewMode === 'list') {
@@ -173,6 +187,16 @@ export function MovieCard({
                 <span>My Rating: {movie.personal_rating}/10</span>
               </div>
             )}
+          </div>
+
+          {/* Personal Rating */}
+          <div className="mb-2">
+            <PersonalRatingStars
+              rating={movie.personal_rating}
+              onRatingChange={handlePersonalRatingChange}
+              disabled={loading}
+              size="sm"
+            />
           </div>
 
           {/* Emby Status Indicator */}
@@ -415,15 +439,21 @@ export function MovieCard({
               <>
                 <span>•</span>
                 <div className="flex items-center gap-1">
-                  {movie.user_preference === 'thumbs_up' ? (
-                    <ThumbsUp className="h-3 w-3 text-green-400 fill-current" />
-                  ) : (
-                    <ThumbsDown className="h-3 w-3 text-red-400 fill-current" />
-                  )}
-                  <span>{movie.user_preference === 'thumbs_up' ? 'Liked' : 'Disliked'}</span>
+                  <Star className="h-3 w-3 text-yellow-400 fill-current" />
+                  <span>My Rating: {movie.personal_rating}/10</span>
                 </div>
               </>
             )}
+          </div>
+
+          {/* Personal Rating */}
+          <div className="mb-3">
+            <PersonalRatingStars
+              rating={movie.personal_rating}
+              onRatingChange={handlePersonalRatingChange}
+              disabled={loading}
+              size="sm"
+            />
           </div>
 
           {/* Emby Status in footer */}
@@ -464,6 +494,7 @@ export function MovieCard({
         onRemoveFromWatchlist={onRemove}
         onToggleWatched={onToggleWatched}
         onUpdatePreference={onUpdatePreference}
+        onUpdatePersonalRating={onUpdatePersonalRating}
         onUpdateEmbyStatus={handleUpdateEmbyStatus}
       />
       
