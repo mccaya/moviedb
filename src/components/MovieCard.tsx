@@ -252,7 +252,7 @@ export function MovieCard({
             <button
               onClick={() => setShowDeleteDialog(true)}
               disabled={loading}
-              className="p-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors flex items-center gap-2 text-sm"
+              className="p-2 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-500 hover:to-pink-500 text-white rounded-lg transition-all duration-300 flex items-center gap-2 text-sm shadow-lg hover:shadow-xl"
             >
               <Trash2 className="h-4 w-4" />
               Remove
@@ -285,7 +285,7 @@ export function MovieCard({
   return (
     <>
       <div 
-        className="group relative bg-gray-800 rounded-xl overflow-hidden hover:bg-gray-750 transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer"
+        className="group relative bg-black/40 backdrop-blur-sm border border-gray-700/30 rounded-xl overflow-hidden hover:bg-black/60 hover:border-purple-500/30 transition-all duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer"
         onClick={handleMovieClick}
       >
         <div className="aspect-[2/3] relative overflow-hidden">
@@ -300,20 +300,20 @@ export function MovieCard({
           />
           
           {/* Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-purple-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           
           {/* Top left indicators */}
           <div className="absolute top-3 left-3 flex flex-col gap-2">
             {/* Watched indicator */}
             {movie.watched && (
-              <div className="bg-green-600 rounded-full p-1">
+              <div className="bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full p-1 shadow-lg">
                 <Eye className="h-3 w-3 text-white" />
               </div>
             )}
 
             {/* Emby availability indicator */}
             {movie.emby_available && (
-              <div className="bg-purple-600 rounded-full p-1" title="Available on Emby">
+              <div className="bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full p-1 shadow-lg" title="Available on Emby">
                 <Play className="h-3 w-3 text-white fill-current" />
               </div>
             )}
@@ -321,7 +321,7 @@ export function MovieCard({
           
           {/* Rating badge */}
           {movie.rating && (
-            <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1">
+            <div className="absolute top-3 right-3 bg-black/70 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1 shadow-lg">
               <Star className="h-3 w-3 text-yellow-400 fill-current" />
               <span className="text-xs text-white font-medium">
                 {movie.rating.toFixed(1)}
@@ -343,11 +343,11 @@ export function MovieCard({
               <button
                 onClick={handleToggleWatched}
                 disabled={loading}
-                className={cn(
-                  "flex-1 p-2 rounded-lg transition-colors flex items-center justify-center gap-1 text-sm font-medium",
+                className={cn( 
+                  "flex-1 p-2 rounded-lg transition-all duration-300 flex items-center justify-center gap-1 text-sm font-medium shadow-lg hover:shadow-xl",
                   movie.watched
-                    ? "bg-orange-600 hover:bg-orange-700 text-white"
-                    : "bg-green-600 hover:bg-green-700 text-white"
+                    ? "bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 hover:to-red-400 text-white"
+                    : "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white"
                 )}
               >
                 {movie.watched ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
@@ -358,11 +358,11 @@ export function MovieCard({
             <button
               onClick={handleThumbsUp}
               disabled={loading}
-              className={cn(
-                "p-2 rounded-lg transition-colors",
+              className={cn( 
+                "p-2 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl",
                 movie.user_preference === 'thumbs_up'
-                  ? "bg-green-600 hover:bg-green-700 text-white"
-                  : "bg-gray-600 hover:bg-gray-500 text-white"
+                  ? "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white"
+                  : "bg-black/40 hover:bg-black/60 text-white border border-gray-600/30"
               )}
             >
               <ThumbsUp className="h-3 w-3" />
@@ -371,11 +371,11 @@ export function MovieCard({
             <button
               onClick={handleThumbsDown}
               disabled={loading}
-              className={cn(
-                "p-2 rounded-lg transition-colors",
+              className={cn( 
+                "p-2 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl",
                 movie.user_preference === 'thumbs_down'
-                  ? "bg-red-600 hover:bg-red-700 text-white"
-                  : "bg-gray-600 hover:bg-gray-500 text-white"
+                  ? "bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-400 hover:to-pink-400 text-white"
+                  : "bg-black/40 hover:bg-black/60 text-white border border-gray-600/30"
               )}
             >
               <ThumbsDown className="h-3 w-3" />

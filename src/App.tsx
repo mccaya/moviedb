@@ -321,18 +321,23 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       {/* Header */}
-      <header className="bg-gray-800 border-b border-gray-700">
+      <header className="bg-gradient-to-r from-gray-900 via-purple-900 to-gray-900 border-b border-purple-500/20 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
-              <Film className="h-8 w-8 text-blue-500" />
-              <h1 className="text-xl font-bold">FilmFolio</h1>
+              <div className="relative">
+                <Film className="h-8 w-8 text-transparent bg-gradient-to-r from-red-500 via-purple-500 to-pink-500 bg-clip-text" />
+                <div className="absolute inset-0 h-8 w-8 bg-gradient-to-r from-red-500 via-purple-500 to-pink-500 opacity-20 blur-sm rounded-full"></div>
+              </div>
+              <h1 className="text-xl font-bold bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent">
+                FilmFolio
+              </h1>
               
               {/* Emby Status Indicator */}
               {user && (
                 <div className="flex items-center gap-2 ml-4">
-                  <div className={`w-2 h-2 rounded-full ${embyConnected ? 'bg-green-400' : 'bg-red-400'}`} />
-                  <span className="text-xs text-gray-400">
+                  <div className={`w-2 h-2 rounded-full ${embyConnected ? 'bg-emerald-400 shadow-emerald-400/50 shadow-lg' : 'bg-red-400 shadow-red-400/50 shadow-lg'}`} />
+                  <span className="text-xs text-gray-300">
                     Emby {embyConnected ? 'Connected' : 'Disconnected'}
                   </span>
                 </div>
@@ -345,7 +350,7 @@ function App() {
                   {/* VIP Button */}
                   <button
                     onClick={() => setShowVipInfoModal(true)}
-                    className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-yellow-600 to-yellow-700 hover:from-yellow-700 hover:to-yellow-800 rounded-lg transition-colors"
+                    className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 hover:from-yellow-400 hover:via-orange-400 hover:to-red-400 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
                     title="VIP Features - Radarr Integration"
                   >
                     <span className="text-lg">👑</span>
@@ -356,7 +361,7 @@ function App() {
                   <button
                     onClick={handleManualEmbySync}
                     disabled={isChecking}
-                    className="flex items-center gap-2 px-3 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 rounded-lg transition-colors"
+                    className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 disabled:from-gray-600 disabled:to-gray-700 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
                     title={`Sync with Emby${!embyConnected ? ' (Server Disconnected)' : ''}`}
                   >
                     {isChecking ? (
@@ -371,7 +376,7 @@ function App() {
                   
                   <button
                     onClick={() => setShowImportModal(true)}
-                    className="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 rounded-lg transition-colors"
+                    className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
                   >
                     <Upload className="h-4 w-4" />
                     <span className="hidden sm:inline">Import</span>
@@ -379,22 +384,30 @@ function App() {
                   
                   <button
                     onClick={() => setShowExportModal(true)}
-                    className="flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+                    className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
                   >
                     <Download className="h-4 w-4" />
                     <span className="hidden sm:inline">Export</span>
                   </button>
                   
-                  <div className="flex items-center gap-1 bg-gray-700 rounded-lg p-1">
+                  <div className="flex items-center gap-1 bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg p-1">
                     <button
                       onClick={() => setViewMode('grid')}
-                      className={`p-2 rounded ${viewMode === 'grid' ? 'bg-blue-600' : 'hover:bg-gray-600'} transition-colors`}
+                      className={`p-2 rounded transition-all duration-300 ${
+                        viewMode === 'grid' 
+                          ? 'bg-gradient-to-r from-red-500 to-pink-500 shadow-lg' 
+                          : 'hover:bg-white/10'
+                      }`}
                     >
                       <Grid className="h-4 w-4" />
                     </button>
                     <button
                       onClick={() => setViewMode('list')}
-                      className={`p-2 rounded ${viewMode === 'list' ? 'bg-blue-600' : 'hover:bg-gray-600'} transition-colors`}
+                      className={`p-2 rounded transition-all duration-300 ${
+                        viewMode === 'list' 
+                          ? 'bg-gradient-to-r from-red-500 to-pink-500 shadow-lg' 
+                          : 'hover:bg-white/10'
+                      }`}
                     >
                       <List className="h-4 w-4" />
                     </button>
@@ -421,17 +434,17 @@ function App() {
                   <button
                     onClick={() => {
                       setAuthModalMode('signin')
-                      setAuthModalMode('signup')
+                      setAuthModalMode('signup') 
                       setShowAuthModal(true)
                     }}
-                    className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
                   >
                     <User className="h-4 w-4" />
                     Sign Up
                   </button>
                   <button
                     onClick={() => setShowAuthModal(true)}
-                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
                   >
                     <User className="h-4 w-4" />
                     Sign In
@@ -456,33 +469,36 @@ function App() {
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-8">
               <button 
                 onClick={() => setFilter('all')}
-                className={`bg-gray-800 hover:bg-gray-700 rounded-xl p-6 transition-colors text-left w-full ${
-                  filter === 'all' ? 'ring-2 ring-blue-500' : ''
+                className={`bg-gradient-to-br from-gray-800 to-gray-900 hover:from-gray-700 hover:to-gray-800 rounded-xl p-6 transition-all duration-300 text-left w-full border border-gray-700/50 hover:border-purple-500/50 hover:shadow-xl hover:scale-105 ${
+                  filter === 'all' ? 'ring-2 ring-purple-500 shadow-purple-500/25 shadow-xl' : ''
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-400">Total Movies</p>
+                    <p className="text-sm font-medium text-gray-300">Total Movies</p>
                     <p className="text-2xl font-bold text-white">{movies.length}</p>
                   </div>
-                  <Film className="h-8 w-8 text-blue-500" />
+                  <div className="relative">
+                    <Film className="h-8 w-8 text-purple-500" />
+                    <div className="absolute inset-0 h-8 w-8 bg-purple-500 opacity-20 blur-sm rounded-full"></div>
+                  </div>
                 </div>
               </button>
               
               <button 
                 onClick={() => setFilter('watched')}
-                className={`bg-gray-800 hover:bg-gray-700 rounded-xl p-6 transition-colors text-left w-full ${
-                  filter === 'watched' ? 'ring-2 ring-green-500' : ''
+                className={`bg-gradient-to-br from-gray-800 to-gray-900 hover:from-gray-700 hover:to-gray-800 rounded-xl p-6 transition-all duration-300 text-left w-full border border-gray-700/50 hover:border-emerald-500/50 hover:shadow-xl hover:scale-105 ${
+                  filter === 'watched' ? 'ring-2 ring-emerald-500 shadow-emerald-500/25 shadow-xl' : ''
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-400">Watched</p>
+                    <p className="text-sm font-medium text-gray-300">Watched</p>
                     <p className="text-2xl font-bold text-white">
                       {movies.filter(m => m.watched).length}
                     </p>
                   </div>
-                  <div className="h-8 w-8 bg-green-500 rounded-full flex items-center justify-center">
+                  <div className="h-8 w-8 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full flex items-center justify-center shadow-lg">
                     <span className="text-white text-sm font-bold">✓</span>
                   </div>
                 </div>
@@ -490,56 +506,56 @@ function App() {
               
               <button 
                 onClick={() => setFilter('unwatched')}
-                className={`bg-gray-800 hover:bg-gray-700 rounded-xl p-6 transition-colors text-left w-full ${
-                  filter === 'unwatched' ? 'ring-2 ring-orange-500' : ''
+                className={`bg-gradient-to-br from-gray-800 to-gray-900 hover:from-gray-700 hover:to-gray-800 rounded-xl p-6 transition-all duration-300 text-left w-full border border-gray-700/50 hover:border-orange-500/50 hover:shadow-xl hover:scale-105 ${
+                  filter === 'unwatched' ? 'ring-2 ring-orange-500 shadow-orange-500/25 shadow-xl' : ''
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-400">To Watch</p>
+                    <p className="text-sm font-medium text-gray-300">To Watch</p>
                     <p className="text-2xl font-bold text-white">
                       {movies.filter(m => !m.watched).length}
                     </p>
                   </div>
-                  <div className="h-8 w-8 bg-orange-500 rounded-full flex items-center justify-center">
+                  <div className="h-8 w-8 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center shadow-lg">
                     <span className="text-white text-sm font-bold">•</span>
                   </div>
                 </div>
               </button>
               
               {/* Emby Available */}
-              <div className="bg-gray-750 rounded-xl p-6">
+              <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 border border-gray-700/50 hover:border-purple-500/50 hover:shadow-xl hover:scale-105 transition-all duration-300">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-400">On Emby</p>
+                    <p className="text-sm font-medium text-gray-300">On Emby</p>
                     <p className="text-2xl font-bold text-white">
                       {movies.filter(m => m.emby_available).length}
                     </p>
                   </div>
-                  <div className="h-8 w-8 bg-purple-500 rounded-full flex items-center justify-center">
+                  <div className="h-8 w-8 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full flex items-center justify-center shadow-lg">
                     <Server className="h-4 w-4 text-white" />
                   </div>
                 </div>
               </div>
               
-              <div className="bg-gray-750 rounded-xl p-6">
+              <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 border border-gray-700/50 hover:border-blue-500/50 hover:shadow-xl hover:scale-105 transition-all duration-300">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-400">Watched %</p>
+                    <p className="text-sm font-medium text-gray-300">Watched %</p>
                     <p className="text-2xl font-bold text-white">
                       {movies.length > 0 ? Math.round((movies.filter(m => m.watched).length / movies.length) * 100) : 0}%
                     </p>
                   </div>
-                  <div className="h-8 w-8 bg-purple-500 rounded-full flex items-center justify-center">
+                  <div className="h-8 w-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center shadow-lg">
                     <span className="text-white text-sm font-bold">%</span>
                   </div>
                 </div>
               </div>
               
-              <div className="bg-gray-750 rounded-xl p-6">
+              <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 border border-gray-700/50 hover:border-yellow-500/50 hover:shadow-xl hover:scale-105 transition-all duration-300">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-400">Avg Rating</p>
+                    <p className="text-sm font-medium text-gray-300">Avg Rating</p>
                     <p className="text-2xl font-bold text-white">
                       {(() => {
                         const moviesWithRating = movies.filter(m => m.rating && m.rating > 0)
@@ -549,7 +565,7 @@ function App() {
                       })()}
                     </p>
                   </div>
-                  <div className="h-8 w-8 bg-yellow-500 rounded-full flex items-center justify-center">
+                  <div className="h-8 w-8 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
                     <span className="text-white text-sm font-bold">★</span>
                   </div>
                 </div>
@@ -581,11 +597,14 @@ function App() {
           </>
         ) : (
           <div className="text-center py-16">
-            <Film className="h-16 w-16 text-gray-600 mx-auto mb-6" />
-            <h2 className="text-2xl font-bold text-gray-300 mb-4">
+            <div className="relative mb-6">
+              <Film className="h-16 w-16 text-transparent bg-gradient-to-r from-red-500 via-purple-500 to-pink-500 bg-clip-text mx-auto" />
+              <div className="absolute inset-0 h-16 w-16 bg-gradient-to-r from-red-500 via-purple-500 to-pink-500 opacity-20 blur-xl rounded-full mx-auto"></div>
+            </div>
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent mb-4">
               Welcome to FilmFolio
             </h2>
-            <p className="text-gray-500 mb-8 max-w-md mx-auto">
+            <p className="text-gray-400 mb-8 max-w-md mx-auto text-lg">
               Your personal movie collection manager with AI recommendations and media server integration!
             </p>
             <button
@@ -593,7 +612,7 @@ function App() {
                 setAuthModalMode('signin')
                 setShowAuthModal(true)
               }}
-              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+              className="px-8 py-4 bg-gradient-to-r from-red-600 via-purple-600 to-pink-600 hover:from-red-500 hover:via-purple-500 hover:to-pink-500 text-white rounded-xl transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 font-semibold text-lg"
             >
               Get Started
             </button>
