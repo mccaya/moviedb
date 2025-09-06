@@ -3,6 +3,23 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
+// Validate environment variables
+if (!supabaseUrl || supabaseUrl === 'https://your-project.supabase.co') {
+  throw new Error(
+    'Missing or invalid VITE_SUPABASE_URL environment variable. ' +
+    'Please create a .env file in your project root and set VITE_SUPABASE_URL to your actual Supabase project URL. ' +
+    'You can find this URL in your Supabase dashboard at https://supabase.com/dashboard'
+  )
+}
+
+if (!supabaseAnonKey || supabaseAnonKey === 'your-supabase-anon-key') {
+  throw new Error(
+    'Missing or invalid VITE_SUPABASE_ANON_KEY environment variable. ' +
+    'Please create a .env file in your project root and set VITE_SUPABASE_ANON_KEY to your actual Supabase anonymous key. ' +
+    'You can find this key in your Supabase dashboard under Settings > API'
+  )
+}
+
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 export interface Movie {
