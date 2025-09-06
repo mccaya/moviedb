@@ -381,14 +381,14 @@ export function MovieCard({
                 onClick={handleToggleWatched}
                 disabled={loading}
                 className={cn( 
-                  "flex-1 p-2 rounded-lg transition-all duration-300 flex items-center justify-center gap-1 text-sm font-medium shadow-lg hover:shadow-xl",
+                  "flex-1 p-1.5 rounded-lg transition-all duration-300 flex items-center justify-center gap-1 text-xs font-medium shadow-lg hover:shadow-xl",
                   movie.watched
                     ? "bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 hover:to-red-400 text-white"
                     : "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white"
                 )}
               >
                 {movie.watched ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
-                {movie.watched ? 'Unwatch' : 'Watched'}
+                <span className="hidden sm:inline">{movie.watched ? 'Unwatch' : 'Watched'}</span>
               </button>
             )}
             
@@ -396,11 +396,12 @@ export function MovieCard({
               onClick={handleThumbsUp}
               disabled={loading}
               className={cn( 
-                "p-2 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl",
+                "p-1.5 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl",
                 movie.user_preference === 'thumbs_up'
                   ? "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white"
                   : "bg-black/40 hover:bg-black/60 text-white border border-gray-600/30"
               )}
+              title="Like this movie"
             >
               <ThumbsUp className="h-3 w-3" />
             </button>
@@ -409,11 +410,12 @@ export function MovieCard({
               onClick={handleThumbsDown}
               disabled={loading}
               className={cn( 
-                "p-2 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl",
+                "p-1.5 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl",
                 movie.user_preference === 'thumbs_down'
                   ? "bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-400 hover:to-pink-400 text-white"
                   : "bg-black/40 hover:bg-black/60 text-white border border-gray-600/30"
               )}
+              title="Dislike this movie"
             >
               <ThumbsDown className="h-3 w-3" />
             </button>
@@ -421,7 +423,8 @@ export function MovieCard({
             <button
               onClick={() => setShowDeleteDialog(true)}
               disabled={loading}
-              className="p-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+              className="p-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors shadow-lg hover:shadow-xl"
+              title="Remove from watchlist"
             >
               <Trash2 className="h-3 w-3" />
             </button>
