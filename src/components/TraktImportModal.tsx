@@ -4,6 +4,7 @@ import { X, List, Loader2, RefreshCw, Settings, Check, ChevronDown } from 'lucid
 import { traktAPI, TraktListItem } from '../lib/trakt'
 import { tmdbAPI, TMDBMovie } from '../lib/tmdb'
 import { MovieResult } from './MovieResult'
+import { CollectionModal } from './CollectionModal'
 
 interface Movie {
   id: string
@@ -54,6 +55,8 @@ export function TraktImportModal({
   const [importingMovies, setImportingMovies] = useState<Set<number>>(new Set())
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [showCollectionModal, setShowCollectionModal] = useState(false)
+  const [collectionMovie, setCollectionMovie] = useState<{ title: string; id: number } | null>(null)
 
   const predefinedLists = traktAPI.getPredefinedLists()
 
@@ -590,10 +593,11 @@ export function TraktImportModal({
                         <div className={`${isSelected ? 'ring-2 ring-blue-500' : ''} ${isImporting ? 'opacity-50' : ''} rounded-lg overflow-hidden`}>
                           <MovieResult
                             movie={movie}
-                            onAdd={() => {}} // Handled by selection system
+                            onAdd={handleIndividualMovieAdd}
                             isAdded={isAdded}
                             watchlistMovies={watchlistMovies}
                             onRemoveMovie={onRemoveMovie}
+                            onShowCollection={handleShowCollection}
                           />
                         </div>
                         
