@@ -15,7 +15,7 @@ export function PersonalRatingStars({
   onRatingChange, 
   disabled = false, 
   size = 'md',
-  showLabel = true 
+  showLabel = true
 }: PersonalRatingStarsProps) {
   const [hoverRating, setHoverRating] = useState<number | null>(null)
 
@@ -57,7 +57,7 @@ export function PersonalRatingStars({
   return (
     <div className="flex items-center gap-2">
       {showLabel && (
-        <span className={cn("text-gray-400 font-medium", textSizeClasses[size])}>
+        <span className={cn("text-gray-400 font-medium whitespace-nowrap", textSizeClasses[size])}>
           Your Personal Rating:
         </span>
       )}

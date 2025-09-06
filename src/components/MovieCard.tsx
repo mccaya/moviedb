@@ -192,12 +192,14 @@ export function MovieCard({
 
           {/* Personal Rating */}
           <div className="mb-2 hidden sm:block">
-            <PersonalRatingStars
-              rating={movie.personal_rating}
-              onRatingChange={handlePersonalRatingChange}
-              disabled={loading}
-              size="sm"
-            />
+            {movie.personal_rating ? (
+              <div className="flex items-center gap-1 text-xs text-blue-400">
+                <Star className="h-3 w-3 fill-current" />
+                <span>{movie.personal_rating} Stars</span>
+              </div>
+            ) : (
+              <span className="text-xs text-gray-500">No rating</span>
+            )}
           </div>
 
           {/* Emby Status Indicator */}
@@ -458,12 +460,14 @@ export function MovieCard({
 
           {/* Personal Rating */}
           <div className="mb-2 sm:mb-3 hidden sm:block">
-            <PersonalRatingStars
-              rating={movie.personal_rating}
-              onRatingChange={handlePersonalRatingChange}
-              disabled={loading}
-              size="sm"
-            />
+            {movie.personal_rating ? (
+              <div className="flex items-center gap-1 text-xs text-blue-400">
+                <Star className="h-3 w-3 fill-current" />
+                <span>{movie.personal_rating} Stars</span>
+              </div>
+            ) : (
+              <span className="text-xs text-gray-500">No rating</span>
+            )}
           </div>
 
           {/* Emby Status in footer */}
