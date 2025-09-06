@@ -193,22 +193,22 @@ export function ImportModal({
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-800 rounded-xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+      <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 backdrop-blur-xl border border-purple-500/20 rounded-xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
         {/* Header */}
-        <div className="p-6 border-b border-gray-700">
+        <div className="p-6 border-b border-purple-500/20 bg-gradient-to-r from-purple-900/20 to-blue-900/20">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-green-100 rounded-full">
-                <Upload className="h-6 w-6 text-green-600" />
+              <div className="p-2 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full shadow-lg">
+                <Upload className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white">Import Movies</h3>
+                <h3 className="text-lg font-semibold bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent">Import Movies</h3>
                 <p className="text-sm text-gray-400">Add movies to your watchlist from various sources</p>
               </div>
             </div>
             <button
               onClick={handleClose}
-              className="p-1 text-gray-400 hover:text-white transition-colors"
+              className="p-2 text-gray-400 hover:text-white transition-all duration-300 hover:bg-red-500/20 rounded-lg"
             >
               <X className="h-5 w-5" />
             </button>
@@ -224,15 +224,15 @@ export function ImportModal({
               {/* Trakt Lists Option */}
               <button
                 onClick={handleTraktImport}
-                className="w-full p-6 bg-gray-700 hover:bg-gray-600 rounded-xl transition-colors text-left group"
+                className="w-full p-6 bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-purple-500/20 hover:border-purple-500/40 rounded-xl transition-all duration-300 text-left group hover:scale-105 hover:shadow-xl"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="p-3 bg-purple-100 rounded-full">
-                      <List className="h-6 w-6 text-purple-600" />
+                    <div className="p-3 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full shadow-lg">
+                      <List className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h5 className="text-lg font-semibold text-white mb-1">Streaming Service Lists</h5>
+                      <h5 className="text-lg font-semibold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent mb-1">Streaming Service Lists</h5>
                       <p className="text-gray-400 text-sm">
                         Import from curated lists: Netflix, Disney+, Amazon Prime, Hulu, and Top Movies
                       </p>
@@ -252,15 +252,15 @@ export function ImportModal({
               {/* CSV Upload Option */}
               <button
                 onClick={() => setImportMethod('csv')}
-                className="w-full p-6 bg-gray-700 hover:bg-gray-600 rounded-xl transition-colors text-left group"
+                className="w-full p-6 bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-blue-500/20 hover:border-blue-500/40 rounded-xl transition-all duration-300 text-left group hover:scale-105 hover:shadow-xl"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="p-3 bg-blue-100 rounded-full">
-                      <FileText className="h-6 w-6 text-blue-600" />
+                    <div className="p-3 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full shadow-lg">
+                      <FileText className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h5 className="text-lg font-semibold text-white mb-1">CSV File Upload</h5>
+                      <h5 className="text-lg font-semibold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent mb-1">CSV File Upload</h5>
                       <p className="text-gray-400 text-sm">
                         Upload a CSV file with movie titles from IMDB lists or other sources
                       </p>

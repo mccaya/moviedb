@@ -73,14 +73,14 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-800 rounded-xl p-6 max-w-md w-full">
+      <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 backdrop-blur-xl border border-purple-500/20 rounded-xl p-6 max-w-md w-full shadow-2xl">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-xl font-semibold text-white">
+          <h3 className="text-xl font-semibold bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent">
             {isSignUp ? 'Create Account' : 'Sign In'}
           </h3>
           <button
             onClick={handleClose}
-            className="p-1 text-gray-400 hover:text-white transition-colors"
+            className="p-2 text-gray-400 hover:text-white transition-all duration-300 hover:bg-red-500/20 rounded-lg"
           >
             <X className="h-5 w-5" />
           </button>
@@ -88,16 +88,16 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-purple-200 mb-2">
               Email
             </label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-purple-400" />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-10 pr-4 py-3 bg-black/40 backdrop-blur-sm border border-purple-500/30 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500/50 transition-all duration-300"
                 placeholder="Enter your email"
                 required
               />
@@ -105,16 +105,16 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-purple-200 mb-2">
               Password
             </label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-purple-400" />
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-10 pr-4 py-3 bg-black/40 backdrop-blur-sm border border-purple-500/30 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500/50 transition-all duration-300"
                 placeholder="Enter your password"
                 required
                 minLength={6}
@@ -123,7 +123,7 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
           </div>
 
           {error && (
-            <div className="p-3 bg-red-900/50 border border-red-500/50 rounded-lg">
+            <div className="p-3 bg-gradient-to-r from-red-900/30 to-pink-900/30 backdrop-blur-sm border border-red-500/30 rounded-xl">
               <p className="text-sm text-red-300">{error}</p>
             </div>
           )}
@@ -131,7 +131,7 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
           <button
             type="submit"
             disabled={loading}
-            className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+            className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-500 hover:via-purple-500 hover:to-pink-500 disabled:from-gray-700 disabled:to-gray-800 disabled:cursor-not-allowed text-white rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center gap-2 font-semibold"
           >
             {loading ? (
               <>
@@ -150,7 +150,7 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
         <div className="mt-4 text-center">
           <button
             onClick={() => setIsSignUp(!isSignUp)}
-            className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+            className="text-sm text-purple-400 hover:text-purple-300 transition-colors font-medium"
           >
             {isSignUp 
               ? 'Already have an account? Sign in' 
@@ -160,8 +160,8 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
         </div>
 
         {isSignUp && (
-          <div className="mt-4 p-3 bg-blue-900/20 border border-blue-500/20 rounded-lg">
-            <p className="text-xs text-blue-300">
+          <div className="mt-4 p-3 bg-gradient-to-r from-purple-900/20 to-blue-900/20 backdrop-blur-sm border border-purple-500/20 rounded-xl">
+            <p className="text-xs text-purple-300">
               By creating an account, you'll be able to sync your FilmFolio across devices and access advanced features.
             </p>
           </div>
