@@ -10,6 +10,7 @@ import { WatchlistGrid } from './components/WatchlistGrid'
 import { FilterBar } from './components/FilterBar'
 import { AuthModal } from './components/AuthModal'
 import { ImportModal } from './components/ImportModal'
+import { EmbyInfoModal } from './components/EmbyInfoModal'
 
 function App() {
   const { user, loading: authLoading, signOut } = useAuth()
@@ -21,6 +22,7 @@ function App() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [showImportModal, setShowImportModal] = useState(false)
+  const [showEmbyInfoModal, setShowEmbyInfoModal] = useState(false)
   const [embyConnected, setEmbyConnected] = useState(false)
   const [selectedStreamingServices, setSelectedStreamingServices] = useState<number[]>([])
   const [movieStreamingData, setMovieStreamingData] = useState<Record<number, number[]>>({})
@@ -220,16 +222,8 @@ function App() {
   }
 
   const handleManualEmbySync = async () => {
-    if (!embyConnected) {
-      await checkEmbyConnection()
-      if (!embyConnected) {
-        alert('Cannot connect to Emby server. Please check your configuration.')
-        return
-      }
-    }
-
-    await checkAllMovies(movies)
-    await loadWatchlist() // Refresh to show updated statuses
+    // Show info modal instead of attempting connection in WebContainer
+    setShowEmbyInfoModal(true)
   }
 
   // Filter and sort movies
@@ -535,6 +529,11 @@ function App() {
         isOpen={showImportModal}
         onClose={() => setShowImportModal(false)}
         onImport={handleImport}
+      />
+      
+      <EmbyInfoModal
+        isOpen={showEmbyInfoModal}
+        onClose={() => setShowEmbyInfoModal(false)}
       />
     </div>
   )
