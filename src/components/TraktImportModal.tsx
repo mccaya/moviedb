@@ -470,7 +470,7 @@ export function TraktImportModal({
 
         <div className="flex flex-1 overflow-hidden">
           {/* Sidebar - List Selection */}
-          <div className={`${showMovieGrid ? 'hidden sm:block' : 'block'} w-full sm:w-80 bg-gradient-to-b from-gray-800/50 to-gray-900/50 backdrop-blur-sm border-r border-purple-500/20 flex flex-col h-full`}>
+          <div className={`${showMovieGrid ? 'hidden sm:block' : 'block'} w-full sm:w-80 bg-gradient-to-b from-gray-800/50 to-gray-900/50 backdrop-blur-sm border-r border-purple-500/20 flex flex-col`}>
             <div className="p-3 sm:p-4">
               <h4 className="text-xs sm:text-sm font-semibold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent mb-4">Available Lists</h4>
             </div>
@@ -549,7 +549,7 @@ export function TraktImportModal({
           </div>
 
           {/* Main Content - Movie Grid */}
-          <div className={`${showMovieGrid ? 'flex' : 'hidden sm:flex'} flex-1 overflow-y-auto flex-col`}>
+          <div className={`${showMovieGrid ? 'flex' : 'hidden sm:flex'} flex-1 flex-col overflow-hidden`}>
             {!selectedList ? (
               <div className="flex items-center justify-center h-full">
                 <div className="text-center">
@@ -582,7 +582,7 @@ export function TraktImportModal({
                 </div>
               </div>
             ) : (
-              <div className="p-4 sm:p-6">
+              <div className="flex-1 overflow-y-auto">
                 {/* Controls */}
                 {/* Mobile Back Button */}
                 <div className="flex sm:hidden items-center mb-4">
@@ -594,7 +594,7 @@ export function TraktImportModal({
                   </button>
                 </div>
                 
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center justify-between mb-6 px-4 sm:px-6">
                   <div className="flex items-center gap-4">
                     <h4 className="text-base sm:text-lg font-semibold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
                       {movies.length} Movies Found
@@ -637,7 +637,7 @@ export function TraktImportModal({
                 </div>
 
                 {/* Movie Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 p-4 sm:p-6">
                   {movies.map((movie) => {
                     const isSelected = selectedMovies.has(movie.id)
                     const isAdded = watchlistMovies.some(w => w.tmdb_id === movie.id)
