@@ -184,7 +184,7 @@ export function MovieCard({
             {movie.personal_rating && (
               <div className="flex items-center gap-1">
                 <Star className="h-3 w-3 text-blue-400 fill-current" />
-                <span className="hidden sm:inline">My Rating: {movie.personal_rating}/10</span>
+                <span className="hidden sm:inline text-yellow-400">My Rating: {movie.personal_rating}/10</span>
                 <span className="sm:hidden">{movie.personal_rating}/10</span>
               </div>
             )}
@@ -193,7 +193,7 @@ export function MovieCard({
           {/* Personal Rating */}
           <div className="mb-2 hidden sm:block">
             {movie.personal_rating ? (
-              <div className="flex items-center gap-1 text-xs text-blue-400">
+              <div className="flex items-center gap-1 text-xs text-yellow-400">
                 <Star className="h-3 w-3 fill-current" />
                 <span>{movie.personal_rating} Stars</span>
               </div>
@@ -461,7 +461,7 @@ export function MovieCard({
           {/* Personal Rating */}
           <div className="mb-2 sm:mb-3 hidden sm:block">
             {movie.personal_rating ? (
-              <div className="flex items-center gap-1 text-xs text-blue-400">
+              <div className="flex items-center gap-1 text-xs text-yellow-400">
                 <Star className="h-3 w-3 fill-current" />
                 <span>{movie.personal_rating} Stars</span>
               </div>
