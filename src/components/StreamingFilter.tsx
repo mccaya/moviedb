@@ -184,15 +184,15 @@ export function StreamingFilter({
             className="fixed inset-0 z-40" 
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute top-full left-0 right-0 sm:right-auto mt-2 w-full sm:w-96 bg-gray-800 border border-gray-700 rounded-xl shadow-2xl z-[99999] max-h-[80vh] overflow-hidden">
+          <div className="absolute top-full left-0 right-0 sm:right-auto mt-2 w-full sm:w-96 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 backdrop-blur-xl border border-purple-500/20 rounded-xl shadow-2xl z-[99999] max-h-[80vh] overflow-hidden">
             {/* Header */}
-            <div className="p-3 sm:p-4 border-b border-gray-700">
+            <div className="p-3 sm:p-4 border-b border-purple-500/20 bg-gradient-to-r from-purple-900/20 to-blue-900/20">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-white font-semibold text-sm sm:text-base">My Streaming Services</h3>
+                <h3 className="text-base sm:text-lg font-semibold bg-gradient-to-r from-white via-purple-200 to-indigo-200 bg-clip-text text-transparent">My Streaming Services</h3>
                 <div className="flex gap-2">
                   <button
                     onClick={clearAll}
-                    className="text-xs text-gray-400 hover:text-white transition-colors px-2 py-1 rounded hover:bg-gray-700"
+                    className="text-xs text-purple-400 hover:text-purple-300 transition-all duration-300 px-2 py-1 rounded-lg hover:bg-purple-500/20 backdrop-blur-sm"
                   >
                     Clear All
                   </button>
@@ -207,12 +207,12 @@ export function StreamingFilter({
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search streaming services..."
-                  className="w-full pl-10 pr-10 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs sm:text-sm"
+                  className="w-full pl-10 pr-10 py-2 bg-black/40 backdrop-blur-sm border border-purple-500/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500/50 transition-all duration-300 text-xs sm:text-sm"
                 />
                 {searchQuery && (
                   <button
                     onClick={clearSearch}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
                   >
                     <X className="h-4 w-4" />
                   </button>
@@ -229,14 +229,14 @@ export function StreamingFilter({
                 </div>
               ) : (
                 Object.entries(groupedServices).map(([category, services]) => (
-                  <div key={category} className="p-3 sm:p-4 border-b border-gray-700 last:border-b-0">
+                  <div key={category} className="p-3 sm:p-4 border-b border-purple-500/10 last:border-b-0">
                     <div className="flex items-center justify-between mb-3">
-                      <h4 className="text-xs sm:text-sm font-medium text-gray-300">
+                      <h4 className="text-xs sm:text-sm font-medium bg-gradient-to-r from-gray-200 to-purple-200 bg-clip-text text-transparent">
                         {CATEGORY_LABELS[category as keyof typeof CATEGORY_LABELS]}
                       </h4>
                       <button
                         onClick={() => selectCategory(category)}
-                        className="text-xs text-blue-400 hover:text-blue-300 transition-colors px-2 py-1 rounded hover:bg-gray-700"
+                        className="text-xs text-purple-400 hover:text-purple-300 transition-all duration-300 px-2 py-1 rounded-lg hover:bg-purple-500/20 backdrop-blur-sm"
                       >
                         Select All
                       </button>
@@ -252,8 +252,8 @@ export function StreamingFilter({
                             onClick={() => toggleService(service.id)}
                             className={`w-full flex items-center gap-2 sm:gap-3 p-2 sm:p-3 rounded-lg transition-all ${
                               isSelected 
-                                ? 'bg-blue-600/20 border border-blue-500/30 shadow-sm' 
-                                : 'bg-gray-700 hover:bg-gray-600'
+                                ? 'bg-gradient-to-r from-purple-600/20 to-blue-600/20 border border-purple-500/30 shadow-lg backdrop-blur-sm' 
+                                : 'bg-black/30 backdrop-blur-sm border border-gray-600/20 hover:bg-black/50 hover:border-purple-500/30'
                             }`}
                           >
                             <div className={`w-8 h-8 sm:w-10 sm:h-10 ${service.color} rounded-lg flex-shrink-0 flex items-center justify-center text-white font-bold text-xs sm:text-sm shadow-sm`}>
@@ -267,7 +267,7 @@ export function StreamingFilter({
                             
                             {isSelected && (
                               <div className="flex-shrink-0">
-                                <div className="w-4 h-4 sm:w-5 sm:h-5 bg-blue-500 rounded-full flex items-center justify-center">
+                                <div className="w-4 h-4 sm:w-5 sm:h-5 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center shadow-lg">
                                   <Check className="h-2 w-2 sm:h-3 sm:w-3 text-white" />
                                 </div>
                               </div>
@@ -282,13 +282,13 @@ export function StreamingFilter({
             </div>
 
             {/* Footer */}
-            <div className="p-3 sm:p-4 border-t border-gray-700 bg-gray-750">
+            <div className="p-3 sm:p-4 border-t border-purple-500/20 bg-gradient-to-r from-gray-800/50 to-gray-900/50 backdrop-blur-sm">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-400">
                   {selectedServices.length} selected
                 </span>
                 {selectedServices.length > 0 && (
-                  <span className="text-green-400 font-medium">
+                  <span className="text-emerald-400 font-medium bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
                     {availableMoviesCount} movies available
                   </span>
                 )}
