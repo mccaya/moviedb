@@ -162,6 +162,14 @@ class TraktAPI {
             ids: { trakt: 789012, slug: 'air-2023', tmdb: 964980 }
           },
           listed_at: '2024-01-14T15:30:00.000Z'
+        },
+        {
+          movie: {
+            title: 'The Boys in the Boat',
+            year: 2023,
+            ids: { trakt: 890123, slug: 'the-boys-in-the-boat-2023', tmdb: 1029575 }
+          },
+          listed_at: '2024-01-13T12:00:00.000Z'
         }
       ],
       'disney-movies': [
@@ -180,6 +188,14 @@ class TraktAPI {
             ids: { trakt: 456789, slug: 'luca-2021', tmdb: 508943 }
           },
           listed_at: '2024-01-14T18:00:00.000Z'
+        },
+        {
+          movie: {
+            title: 'Turning Red',
+            year: 2022,
+            ids: { trakt: 567123, slug: 'turning-red-2022', tmdb: 508947 }
+          },
+          listed_at: '2024-01-13T16:00:00.000Z'
         }
       ],
       'hulu-movies': [
@@ -190,6 +206,22 @@ class TraktAPI {
             ids: { trakt: 567890, slug: 'palm-springs-2020', tmdb: 630566 }
           },
           listed_at: '2024-01-15T14:00:00.000Z'
+        },
+        {
+          movie: {
+            title: 'The Bear',
+            year: 2022,
+            ids: { trakt: 678123, slug: 'the-bear-2022', tmdb: 840430 }
+          },
+          listed_at: '2024-01-14T10:00:00.000Z'
+        },
+        {
+          movie: {
+            title: 'Prey',
+            year: 2022,
+            ids: { trakt: 789234, slug: 'prey-2022', tmdb: 766507 }
+          },
+          listed_at: '2024-01-13T20:00:00.000Z'
         }
       ],
       'netflix-movies': [
@@ -200,6 +232,22 @@ class TraktAPI {
             ids: { trakt: 678901, slug: 'glass-onion-a-knives-out-mystery-2022', tmdb: 831405 }
           },
           listed_at: '2024-01-15T16:00:00.000Z'
+        },
+        {
+          movie: {
+            title: 'Red Notice',
+            year: 2021,
+            ids: { trakt: 890234, slug: 'red-notice-2021', tmdb: 512195 }
+          },
+          listed_at: '2024-01-14T14:00:00.000Z'
+        },
+        {
+          movie: {
+            title: 'The Adam Project',
+            year: 2022,
+            ids: { trakt: 901345, slug: 'the-adam-project-2022', tmdb: 696806 }
+          },
+          listed_at: '2024-01-13T11:00:00.000Z'
         }
       ],
       'top-movies-of-the-week': [
@@ -210,6 +258,22 @@ class TraktAPI {
             ids: { trakt: 789123, slug: 'dune-part-two-2024', tmdb: 693134 }
           },
           listed_at: '2024-01-15T20:00:00.000Z'
+        },
+        {
+          movie: {
+            title: 'Oppenheimer',
+            year: 2023,
+            ids: { trakt: 012456, slug: 'oppenheimer-2023', tmdb: 872585 }
+          },
+          listed_at: '2024-01-14T22:00:00.000Z'
+        },
+        {
+          movie: {
+            title: 'Barbie',
+            year: 2023,
+            ids: { trakt: 123567, slug: 'barbie-2023', tmdb: 346698 }
+          },
+          listed_at: '2024-01-13T19:00:00.000Z'
         }
       ]
     }
