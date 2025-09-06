@@ -470,12 +470,12 @@ export function TraktImportModal({
 
         <div className="flex flex-1 overflow-hidden min-h-0">
           {/* Sidebar - List Selection */}
-          <div className={`${showMovieGrid ? 'hidden sm:block' : 'block'} w-full sm:w-80 bg-gradient-to-b from-gray-800/50 to-gray-900/50 backdrop-blur-sm border-r border-purple-500/20 flex flex-col overflow-hidden`}>
+          <div className={`${showMovieGrid ? 'hidden sm:block' : 'block'} w-full sm:w-80 bg-gradient-to-b from-gray-800/50 to-gray-900/50 backdrop-blur-sm border-r border-purple-500/20 flex flex-col`}>
             <div className="p-3 sm:p-4">
               <h4 className="text-xs sm:text-sm font-semibold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent mb-4">Available Lists</h4>
             </div>
               
-            <div className="flex-1 overflow-y-auto px-3 sm:px-4 pb-6">
+            <div className="flex-1 overflow-y-auto px-3 sm:px-4 pb-6 min-h-0">
               <div className="space-y-2">
                 {predefinedLists.map((list) => {
                   const settings = listSettings[list.slug] || {}
